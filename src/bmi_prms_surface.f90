@@ -38,27 +38,27 @@
     procedure :: get_var_itemsize => prms_var_itemsize
     procedure :: get_var_nbytes => prms_var_nbytes
     procedure :: get_var_location => prms_var_location
-    !procedure :: get_value_int => prms_get_int
-    !procedure :: get_value_float => prms_get_float
-    !procedure :: get_value_double => prms_get_double
-    !generic :: get_value => &
-    !     get_value_int, &
-    !     get_value_float, &
-    !     get_value_double
-    !procedure :: get_value_ref_int => prms_get_ref_int
-    !procedure :: get_value_ref_float => prms_get_ref_float
-    !procedure :: get_value_ref_double => prms_get_ref_double
-    !generic :: get_value_ref => &
-    !     get_value_ref_int, &
-    !     get_value_ref_float, &
-    !     get_value_ref_double
-    !procedure :: get_value_at_indices_int => prms_get_at_indices_int
-    !procedure :: get_value_at_indices_float => prms_get_at_indices_float
-    !procedure :: get_value_at_indices_double => prms_get_at_indices_double
-    !generic :: get_value_at_indices => &
-    !     get_value_at_indices_int, &
-    !     get_value_at_indices_float, &
-    !     get_value_at_indices_double
+    procedure :: get_value_int => prms_get_int
+    procedure :: get_value_float => prms_get_float
+    procedure :: get_value_double => prms_get_double
+    generic :: get_value => &
+         get_value_int, &
+         get_value_float, &
+         get_value_double
+    procedure :: get_value_ptr_int => prms_get_ptr_int
+    procedure :: get_value_ptr_float => prms_get_ptr_float
+    procedure :: get_value_ptr_double => prms_get_ptr_double
+    generic :: get_value_ref => &
+         get_value_ptr_int, &
+         get_value_ptr_float, &
+         get_value_ptr_double
+    procedure :: get_value_at_indices_int => prms_get_at_indices_int
+    procedure :: get_value_at_indices_float => prms_get_at_indices_float
+    procedure :: get_value_at_indices_double => prms_get_at_indices_double
+    generic :: get_value_at_indices => &
+         get_value_at_indices_int, &
+         get_value_at_indices_float, &
+         get_value_at_indices_double
     !procedure :: set_value_int => prms_set_int
     !procedure :: set_value_float => prms_set_float
     !procedure :: set_value_double => prms_set_double
@@ -83,31 +83,19 @@
         component_name = "prms6-BMI"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 7
-    integer, parameter :: output_item_count = 11
+    integer, parameter :: input_item_count = 6
+    integer, parameter :: output_item_count = 46
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         'hru_ppt        ', &
         'hru_rain       ', &
         'hru_snow       ', &
-        'hru_actet      ', &
         'hortonian_lakes', &
         'lakein_sz      ', &
         'Gw2sm_grav     ' /)
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(output_item_count) :: &
-        output_items = (/ &
-        'hru_ppt        ', &
-        'hru_rain       ', &
-        'hru_snow       ', &
-        'hru_actet      ', &
-        'hortonian_lakes', &
-        'lakein_sz      ', &
-        'Gw2sm_grav     ', &
-        'seg_gwflow     ', &
-        'seg_inflow     ', &
-        'seg_outflow    ', &
-        'is_rain_day    '/)
+        output_items 
 
     contains
 
@@ -156,7 +144,60 @@
     class (bmi_prms_surface), intent(in) :: this
     character (*), pointer, intent(out) :: names(:)
     integer :: bmi_status
-
+    ! vars by nhru            
+    output_items(1) = 'soil_rechr_chg'
+    output_items(2) = 'soil_moist_chg'
+    output_items(3) = 'hru_imperv_evap'
+    output_items(4) = 'hru_frac_perv'
+    output_items(5) = 'hru_area_perv'
+    output_items(6) = 'active_mask'
+    output_items(7) = 'soil_moist_max'
+    output_items(8) = 'soil_moist'
+    output_items(9) = 'soil_rechr_max'
+    output_items(10) = 'soil_rechr'
+    output_items(11) = 'snowcov_area'
+    output_items(12) = 'snow_evap'
+    output_items(13) = 'hru_intcpevap'
+    output_items(14) = 'transp_on'
+    output_items(15) = 'potet'
+    output_items(16) = 'sroff'
+    output_items(17) = 'infil'
+    output_items(18) = 'dprst_seep_hru'
+    output_items(19) = 'dprst_evap_hru'
+    output_items(20) = 'hru_type'
+    output_items(21) = 'hru_area'
+    output_items(22) = 'cov_type'
+    output_items(23) = 'lakein_sz'
+    output_items(24) = 'hortonian_lakes'
+    output_items(25) = 'hru_snow'
+    output_items(26) = 'hru_rain'
+    output_items(27) = 'hru_ppt'
+    ! vars by nsegment  
+    output_items(28) = 'seg_outflow'
+    output_items(29) = 'seg_inflow'
+    output_items(30) = 'seg_gwflow'
+    output_items(31) = 'strm_seg_in'
+    ! vars by nhrucell
+    output_items(32) = 'Gw2sm_grav'
+    !vars by nhru_active
+    output_items(33) = 'hru_route_order'
+    ! vars dim by one    
+    output_items(34) = 'srunoff_updated_soil'
+    output_items(35) = 'basin_sroff'
+    output_items(36) = 'basin_area_inv'
+    output_items(37) = 'active_hrus'
+    output_items(38) = 'basin_potet'
+    output_items(39) = 'nlake'
+    output_items(40) = 'gsflow_mode'
+    output_items(41) = 'dprst_flag'
+    output_items(42) = 'cascade_flag'
+    ! var boolean    
+    output_items(43) = 'srunoff_updated_soil'
+    output_items(44) = 'soil_moist'
+    output_items(45) = 'soil_moist_max'
+    ! var time
+    output_items(46) = 'nowtime'
+    
     names => output_items
     bmi_status = BMI_SUCCESS
     end function prms_output_var_names
@@ -274,15 +315,22 @@
     integer :: bmi_status
 
     select case(name)
-    case('hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', 'hru_y', 'hru_elev')
+    case('hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', &
+        'hru_y', 'hru_elev', 'hru_actet', 'hortonian_lakes', &
+        'lakein_sz', 'cov_type', 'hru_area', 'hru_type', &
+        'dpsrt_evap_hru', 'dprst_seep_hru', 'infil', &
+        'sroff', 'potet', 'transp_on', 'hru_intcpevap', &
+        'snow_evap', 'snowcov_area', 'soil_rechr', &
+        'soil_rechr_max', 'soil_moist', 'soil_moist_max')
         grid = 0
         bmi_status = BMI_SUCCESS
-    case('seg_gwflow', 'seg_inflow', 'seg_outflow')
+    case('seg_gwflow', 'seg_inflow', 'seg_outflow', 'strm_seg_in')
         grid = 1
         bmi_status = BMI_SUCCESS
-        !case('model__identification_number')
-        !   type = 1
-        !   bmi_status = BMI_SUCCESS
+    case('cascade_flag', 'dprst_flag', 'gsflow_mode', &
+        'print_debug', 'nlake', 'basin_potet')
+        grid = 2
+        bmi_status = BMI_SUCCESS
         case default
         grid = -1
         bmi_status = BMI_FAILURE
@@ -298,12 +346,15 @@
 
     select case(grid)
     case(0)
-        type = "unstructured"
+        type = "uniform_rectilinear"
         bmi_status = BMI_SUCCESS
     case(1)
-        type = "unstructured"
+        type = "uniform_rectilinear"
         bmi_status = BMI_SUCCESS
-        case default
+    case(2)
+        type = 'scalar'
+        bmi_status = BMI_FAILURE
+    case default
         type = "-"
         bmi_status = BMI_FAILURE
     end select
@@ -556,179 +607,238 @@
            bmi_status = BMI_SUCCESS
         end select
     end function prms_var_location
-    !! Get a copy of a integer variable's values, flattened.
-    !function prms_get_int(this, name, dest) result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  integer, intent(inout) :: dest(:)
-    !  integer :: bmi_status
-    !
-    !  select case(name)
-    !  case("model__identification_number")
-    !     dest = [this%model%id]
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     dest = [-1]
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_int
-    !
-    !! Get a copy of a real variable's values, flattened.
-    !function prms_get_float(this, name, dest) result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  real, intent(inout) :: dest(:)
-    !  integer :: bmi_status
-    !
-    !  select case(name)
-    !  case("plate_surface__temperature")
-    !     ! This would be safe, but subject to indexing errors.
-    !     ! do j = 1, this%model%n_y
-    !     !    do i = 1, this%model%n_x
-    !     !       k = j + this%model%n_y*(i-1)
-    !     !       dest(k) = this%model%temperature(j,i)
-    !     !    end do
-    !     ! end do
-    !
-    !     ! This is an equivalent, elementwise copy into `dest`.
-    !     ! See https://stackoverflow.com/a/11800068/1563298
-    !     dest = reshape(this%model%temperature, [this%model%n_x*this%model%n_y])
-    !     bmi_status = BMI_SUCCESS
-    !  case("plate_surface__thermal_diffusivity")
-    !     dest = [this%model%alpha]
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     dest = [-1.0]
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_float
-    !
-    !! Get a copy of a double variable's values, flattened.
-    !function prms_get_double(this, name, dest) result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  double precision, intent(inout) :: dest(:)
-    !  integer :: bmi_status
-    !
-    !  select case(name)
-    !  case default
-    !     dest = [-1.d0]
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_double
-    !
-    !! Get a reference to an integer-valued variable, flattened.
-    !function prms_get_ref_int(this, name, dest) result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  integer, pointer, intent(inout) :: dest(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) :: src
-    !  integer :: n_elements
-    !
-    !  select case(name)
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_ref_int
-    !
-    !! Get a reference to a real-valued variable, flattened.
-    !function prms_get_ref_float(this, name, dest) result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  real, pointer, intent(inout) :: dest(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) :: src
-    !  integer :: n_elements
-    !
-    !  select case(name)
-    !  case("plate_surface__temperature")
-    !     src = c_loc(this%model%temperature(1,1))
-    !     n_elements = this%model%n_y * this%model%n_x
-    !     call c_f_pointer(src, dest, [n_elements])
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_ref_float
-    !
-    !! Get a reference to an double-valued variable, flattened.
-    !function prms_get_ref_double(this, name, dest) result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  double precision, pointer, intent(inout) :: dest(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) :: src
-    !  integer :: n_elements
-    !
-    !  select case(name)
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_ref_double
-    !
-    !! Get values of an integer variable at the given locations.
-    !function prms_get_at_indices_int(this, name, dest, indices) &
-    !     result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  integer, intent(inout) :: dest(:)
-    !  integer, intent(in) :: indices(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) src
-    !  integer, pointer :: src_flattened(:)
-    !  integer :: i, n_elements
-    !
-    !  select case(name)
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_at_indices_int
-    !
-    !! Get values of a real variable at the given locations.
-    !function prms_get_at_indices_float(this, name, dest, indices) &
-    !     result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  real, intent(inout) :: dest(:)
-    !  integer, intent(in) :: indices(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) src
-    !  real, pointer :: src_flattened(:)
-    !  integer :: i, n_elements
-    !
-    !  select case(name)
-    !  case("plate_surface__temperature")
-    !     src = c_loc(this%model%temperature(1,1))
-    !     call c_f_pointer(src, src_flattened, [this%model%n_y * this%model%n_x])
-    !     n_elements = size(indices)
-    !     do i = 1, n_elements
-    !        dest(i) = src_flattened(indices(i))
-    !     end do
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_at_indices_float
-    !
-    !! Get values of a double variable at the given locations.
-    !function prms_get_at_indices_double(this, name, dest, indices) &
-    !     result (bmi_status)
-    !  class (bmi_prms_surface), intent(in) :: this
-    !  character (len=*), intent(in) :: name
-    !  double precision, intent(inout) :: dest(:)
-    !  integer, intent(in) :: indices(:)
-    !  integer :: bmi_status
-    !  type (c_ptr) src
-    !  double precision, pointer :: src_flattened(:)
-    !  integer :: i, n_elements
-    !
-    !  select case(name)
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_get_at_indices_double
-    !
+    
+    ! Get a copy of a integer variable's values, flattened.
+    function prms_get_int(this, name, dest) result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      integer, intent(inout) :: dest(:)
+      integer :: bmi_status
+    
+      select case(name)
+      case("nlake")
+         dest = [this%model%model_simulation%model_basin%nlake]
+         bmi_status = BMI_SUCCESS
+      case('active_hrus')
+          dest = [this%model%model_simulation%model_basin%active_hrus]
+      case('nowtime')
+          dest = [this%model%model_simulation%model_time%nowtime]
+      case('cov_type')
+          dest = [this%model%model_simulation%model_basin%cov_type]
+      case('hru_type')
+          dest = [this%model%model_simulation%model_basin%hru_type]
+      case('hru_route_order')
+          dest = [this%model%model_simulation%model_basin%hru_route_order]
+      case('cascade_flag')
+          dest = [this%model%control_data%cascade_flag%value]
+      case('dprst_flag')
+          dest = [this%model%control_data%dprst_flag%value]
+      case('print_debug')
+          dest = [this%model%control_data%print_debug%value]
+      case('gsflow_mode')
+          dest = [this%model%control_data%gsflow_mode]
+      case('srunoff_updated_soil')
+          dest = [this%model%model_simulation%runoff%srunoff_updated_soil]
+      case('transp_on')
+          dest = [this%model%model_simulation%transpiration%transp_on]
+      case('active_mask')
+          dest = [this%model%model_simulation%model_basin%active_mask]
+
+          case default
+         dest = [-1]
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_int
+    
+    ! Get a copy of a real variable's values, flattened.
+    function prms_get_float(this, name, dest) result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      real, intent(inout) :: dest(:)
+      integer :: bmi_status
+    
+      select case(name)
+      !case("plate_surface__temperature")
+      !   ! This would be safe, but subject to indexing errors.
+      !   ! do j = 1, this%model%n_y
+      !   !    do i = 1, this%model%n_x
+      !   !       k = j + this%model%n_y*(i-1)
+      !   !       dest(k) = this%model%temperature(j,i)
+      !   !    end do
+      !   ! end do
+      !
+      !   ! This is an equivalent, elementwise copy into `dest`.
+      !   ! See https://stackoverflow.com/a/11800068/1563298
+      !   dest = reshape(this%model%temperature, [this%model%n_x*this%model%n_y])
+      !   bmi_status = BMI_SUCCESS
+      !case("plate_surface__thermal_diffusivity")
+      !   dest = [this%model%alpha]
+      !   bmi_status = BMI_SUCCESS
+      case('hru_ppt')
+          dest = [this%model%model_simulation%model_precip%hru_ppt]
+      case('hru_rain')
+          dest = [this%model%model_simulation%model_precip%hru_rain]
+      case('hru_snow')
+          dest = [this%model%model_simulation%model_precip%hru_snow]
+      case('hru_area')
+          dest = [this%model%model_simulation%model_basin%hru_area]
+      case('dprst_evap_hru')
+          dest = [this%model%model_simulation%runoff%dprst_evap_hru]
+      case('infil')
+          dest = [this%model%model_simulation%runoff%infil]
+      case('sroff')
+          dest = [this%model%model_simulation%runoff%sroff]
+      case('potet')
+          dest = [this%model%model_simulation%potet%potet]
+      case('hru_intcpevap')
+          dest = [this%model%model_simulation%intcp%hru_intcpevap]
+      case('snow_evap')
+          dest = [this%model%model_simulation%snow%snow_evap]
+      case('snowcov_area')
+          dest = [this%model%model_simulation%snow%snowcov_area]
+      case('soil_rechr')
+          dest = [this%model%model_simulation%climate%soil_rechr]
+      case('soil_rechr_max')
+          dest = [this%model%model_simulation%climate%soil_rechr_max]
+      case('soil_moist')
+          dest = [this%model%model_simulation%climate%soil_moist]
+      case('soil_moist_max')
+          dest = [this%model%model_simulation%climate%soil_moist_max]
+      case('hru_area_perv')
+          dest = [this%model%model_simulation%runoff%hru_area_perv]
+
+      case default
+         dest = [-1.0]
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_float
+    
+    ! Get a copy of a double variable's values, flattened.
+    function prms_get_double(this, name, dest) result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      double precision, intent(inout) :: dest(:)
+      integer :: bmi_status
+    
+      select case(name)
+      case default
+         dest = [-1.d0]
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_double
+    
+    ! Get a reference to an integer-valued variable, flattened.
+    function prms_get_ptr_int(this, name, dest_ptr) result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      integer, pointer, intent(inout) :: dest_ptr(:)
+      integer :: bmi_status
+      type (c_ptr) :: src
+      integer :: n_elements
+    
+      select case(name)
+      case default
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_ptr_int
+    
+    ! Get a reference to a real-valued variable, flattened.
+    function prms_get_ptr_float(this, name, dest_ptr) result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      real, pointer, intent(inout) :: dest_ptr(:)
+      integer :: bmi_status
+      type (c_ptr) :: src
+      integer :: n_elements
+    
+      select case(name)
+      !case("plate_surface__temperature")
+      !   src = c_loc(this%model%temperature(1,1))
+      !   n_elements = this%model%n_y * this%model%n_x
+      !   call c_f_pointer(src, dest, [n_elements])
+      !   bmi_status = BMI_SUCCESS
+      case default
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_ptr_float
+    
+    ! Get a reference to an double-valued variable, flattened.
+    function prms_get_ptr_double(this, name, dest_ptr) result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      double precision, pointer, intent(inout) :: dest_ptr(:)
+      integer :: bmi_status
+      type (c_ptr) :: src
+      integer :: n_elements
+    
+      select case(name)
+      case default
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_ptr_double
+    
+    ! Get values of an integer variable at the given locations.
+    function prms_get_at_indices_int(this, name, dest, inds) &
+         result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      integer, intent(inout) :: dest(:)
+      integer, intent(in) :: inds(:)
+      integer :: bmi_status
+      type (c_ptr) src
+      integer, pointer :: src_flattened(:)
+      integer :: i, n_elements
+    
+      select case(name)
+      case default
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_at_indices_int
+    
+    ! Get values of a real variable at the given locations.
+    function prms_get_at_indices_float(this, name, dest, inds) &
+         result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      real, intent(inout) :: dest(:)
+      integer, intent(in) :: inds(:)
+      integer :: bmi_status
+      type (c_ptr) src
+      real, pointer :: src_flattened(:)
+      integer :: i, n_elements
+    
+      select case(name)
+      !case("plate_surface__temperature")
+      !   src = c_loc(this%model%temperature(1,1))
+      !   call c_f_pointer(src, src_flattened, [this%model%n_y * this%model%n_x])
+      !   n_elements = size(indices)
+      !   do i = 1, n_elements
+      !      dest(i) = src_flattened(indices(i))
+      !   end do
+      !   bmi_status = BMI_SUCCESS
+      case default
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_at_indices_float
+    
+    ! Get values of a double variable at the given locations.
+    function prms_get_at_indices_double(this, name, dest, inds) &
+         result (bmi_status)
+      class (bmi_prms_surface), intent(in) :: this
+      character (len=*), intent(in) :: name
+      double precision, intent(inout) :: dest(:)
+      integer, intent(in) :: inds(:)
+      integer :: bmi_status
+      type (c_ptr) src
+      double precision, pointer :: src_flattened(:)
+      integer :: i, n_elements
+    
+      select case(name)
+      case default
+         bmi_status = BMI_FAILURE
+      end select
+    end function prms_get_at_indices_double
+    
     !! Set new integer values.
     !function prms_set_int(this, name, src) result (bmi_status)
     !  class (bmi_prms_surface), intent(inout) :: this
