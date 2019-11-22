@@ -706,6 +706,12 @@
           dest = [this%model%model_simulation%climate%soil_moist_max]
       case('hru_area_perv')
           dest = [this%model%model_simulation%runoff%hru_area_perv]
+      case('hru_impervevap')
+          dest = [this%model%model_simulation%runoff%hru_impervevap]
+      case('soil_moist_chg')
+          dest = [this%model%model_simulation%runoff%soil_moist_chg]
+      case('soil_rechr_chg')
+          dest = [this%model%model_simulation%runoff%soil_rechr_chg]
 
       case default
          dest = [-1.0]
@@ -721,6 +727,19 @@
       integer :: bmi_status
     
       select case(name)
+      case('basin_potet')
+          dest = [this%model%model_simulation%potet%basin_potet]
+      case('basin_area_inv')
+          dest = [this%model%model_simulation%model_basin%basin_area_inv]
+      case('basin_sroff')
+          dest = [this%model%model_simulation%runoff%basin_sroff]
+      case('hortonian_lakes')
+          dest = [this%model%model_simulation%runoff%hortonian_lakes]
+      case('dprst_seep_hru')
+          dest = [this%model%model_simulation%runoff%dprst_seep_hru]
+      case('strm_seg_in')
+          dest = [this%model%model_simulation%runoff%strm_seg_in]
+
       case default
          dest = [-1.d0]
          bmi_status = BMI_FAILURE
