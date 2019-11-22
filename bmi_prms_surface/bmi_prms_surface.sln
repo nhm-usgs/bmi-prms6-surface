@@ -15,6 +15,8 @@ Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "test_get_value", "test_get_
 		{915D4282-B8C2-4FF4-BBCD-1C904D9C8E77} = {915D4282-B8C2-4FF4-BBCD-1C904D9C8E77}
 	EndProjectSection
 EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "test_get_value_ptr", "test_get_value_ptr\test_get_value_ptr.vfproj", "{244BA269-7BF6-4251-A5BB-345AECB72088}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -45,6 +47,13 @@ Global
 		{EE375ECB-854D-4E29-801A-C50C62945AEC}.Release|x64.ActiveCfg = Release|Win32
 		{EE375ECB-854D-4E29-801A-C50C62945AEC}.Release|x86.ActiveCfg = Release|Win32
 		{EE375ECB-854D-4E29-801A-C50C62945AEC}.Release|x86.Build.0 = Release|Win32
+		{244BA269-7BF6-4251-A5BB-345AECB72088}.Debug|x64.ActiveCfg = Debug|x64
+		{244BA269-7BF6-4251-A5BB-345AECB72088}.Debug|x64.Build.0 = Debug|x64
+		{244BA269-7BF6-4251-A5BB-345AECB72088}.Debug|x86.ActiveCfg = Debug|Win32
+		{244BA269-7BF6-4251-A5BB-345AECB72088}.Debug|x86.Build.0 = Debug|Win32
+		{244BA269-7BF6-4251-A5BB-345AECB72088}.Release|x64.ActiveCfg = Release|Win32
+		{244BA269-7BF6-4251-A5BB-345AECB72088}.Release|x86.ActiveCfg = Release|Win32
+		{244BA269-7BF6-4251-A5BB-345AECB72088}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

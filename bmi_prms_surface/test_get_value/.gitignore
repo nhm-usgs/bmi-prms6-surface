@@ -1,0 +1,8 @@
+output/
+*.nc
+*.wbal
+*.txt
+*.out
+*.default
+*.simple1
+sf_data

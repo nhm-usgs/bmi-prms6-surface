@@ -48,7 +48,7 @@
     procedure :: get_value_ptr_int => prms_get_ptr_int
     procedure :: get_value_ptr_float => prms_get_ptr_float
     procedure :: get_value_ptr_double => prms_get_ptr_double
-    generic :: get_value_ref => &
+    generic :: get_value_ptr => &
          get_value_ptr_int, &
          get_value_ptr_float, &
          get_value_ptr_double
@@ -331,6 +331,8 @@
         'print_debug', 'nlake', 'basin_potet')
         grid = 2
         bmi_status = BMI_SUCCESS
+        case('hru_route_order')
+            grid = 3
         case default
         grid = -1
         bmi_status = BMI_FAILURE
@@ -411,7 +413,10 @@
     case(1)
         size = this%model%parameter_data%nsegment
         bmi_status = BMI_SUCCESS
-        case default
+    case(3)
+        size = count(this%model%model_simulation%model_basin%active_mask)
+        bmi_status = BMI_SUCCESS
+    case default
         size = -1
         bmi_status = BMI_FAILURE
     end select
@@ -621,28 +626,40 @@
          bmi_status = BMI_SUCCESS
       case('active_hrus')
           dest = [this%model%model_simulation%model_basin%active_hrus]
+          bmi_status = BMI_SUCCESS
       case('nowtime')
           dest = [this%model%model_simulation%model_time%nowtime]
+          bmi_status = BMI_SUCCESS
       case('cov_type')
           dest = [this%model%model_simulation%model_basin%cov_type]
+          bmi_status = BMI_SUCCESS
       case('hru_type')
           dest = [this%model%model_simulation%model_basin%hru_type]
+          bmi_status = BMI_SUCCESS
       case('hru_route_order')
           dest = [this%model%model_simulation%model_basin%hru_route_order]
+          bmi_status = BMI_SUCCESS
       case('cascade_flag')
           dest = [this%model%control_data%cascade_flag%value]
+          bmi_status = BMI_SUCCESS
       case('dprst_flag')
           dest = [this%model%control_data%dprst_flag%value]
+          bmi_status = BMI_SUCCESS
       case('print_debug')
           dest = [this%model%control_data%print_debug%value]
+          bmi_status = BMI_SUCCESS
       case('gsflow_mode')
           dest = [this%model%control_data%gsflow_mode]
+          bmi_status = BMI_SUCCESS
       case('srunoff_updated_soil')
           dest = [this%model%model_simulation%runoff%srunoff_updated_soil]
+          bmi_status = BMI_SUCCESS
       case('transp_on')
           dest = [this%model%model_simulation%transpiration%transp_on]
+          bmi_status = BMI_SUCCESS
       case('active_mask')
           dest = [this%model%model_simulation%model_basin%active_mask]
+          bmi_status = BMI_SUCCESS
 
           case default
          dest = [-1]
@@ -751,14 +768,93 @@
       class (bmi_prms_surface), intent(in) :: this
       character (len=*), intent(in) :: name
       integer, pointer, intent(inout) :: dest_ptr(:)
-      integer :: bmi_status
+      integer :: bmi_status, status
       type (c_ptr) :: src
-      integer :: n_elements
+      integer :: n_elements, gridid
     
       select case(name)
+      case("nlake")
+        src = c_loc(this%model%model_simulation%model_basin%nlake)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('active_hrus')
+        src = c_loc(this%model%model_simulation%model_basin%active_hrus)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('nowtime')
+        src = c_loc(this%model%model_simulation%model_time%nowtime(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('cov_type')
+        src = c_loc(this%model%model_simulation%model_basin%cov_type(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('hru_type')
+        src = c_loc(this%model%model_simulation%model_basin%hru_type(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('hru_route_order')
+        src = c_loc(this%model%model_simulation%model_basin%hru_route_order(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('cascade_flag')
+        src = c_loc(this%model%control_data%cascade_flag%value)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('dprst_flag')
+        src = c_loc(this%model%control_data%dprst_flag%value)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('print_debug')
+        src = c_loc(this%model%control_data%print_debug%value)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('gsflow_mode')
+        src = c_loc(this%model%control_data%gsflow_mode)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('srunoff_updated_soil')
+        src = c_loc(this%model%model_simulation%runoff%srunoff_updated_soil)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('transp_on')
+        src = c_loc(this%model%model_simulation%transpiration%transp_on(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+      case('active_mask')
+        src = c_loc(this%model%model_simulation%model_basin%active_mask(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
       case default
          bmi_status = BMI_FAILURE
       end select
+
     end function prms_get_ptr_int
     
     ! Get a reference to a real-valued variable, flattened.
