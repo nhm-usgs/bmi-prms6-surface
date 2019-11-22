@@ -669,229 +669,402 @@
     
     ! Get a copy of a real variable's values, flattened.
     function prms_get_float(this, name, dest) result (bmi_status)
-      class (bmi_prms_surface), intent(in) :: this
-      character (len=*), intent(in) :: name
-      real, intent(inout) :: dest(:)
-      integer :: bmi_status
-    
-      select case(name)
-      !case("plate_surface__temperature")
-      !   ! This would be safe, but subject to indexing errors.
-      !   ! do j = 1, this%model%n_y
-      !   !    do i = 1, this%model%n_x
-      !   !       k = j + this%model%n_y*(i-1)
-      !   !       dest(k) = this%model%temperature(j,i)
-      !   !    end do
-      !   ! end do
-      !
-      !   ! This is an equivalent, elementwise copy into `dest`.
-      !   ! See https://stackoverflow.com/a/11800068/1563298
-      !   dest = reshape(this%model%temperature, [this%model%n_x*this%model%n_y])
-      !   bmi_status = BMI_SUCCESS
-      !case("plate_surface__thermal_diffusivity")
-      !   dest = [this%model%alpha]
-      !   bmi_status = BMI_SUCCESS
-      case('hru_ppt')
-          dest = [this%model%model_simulation%model_precip%hru_ppt]
-      case('hru_rain')
-          dest = [this%model%model_simulation%model_precip%hru_rain]
-      case('hru_snow')
-          dest = [this%model%model_simulation%model_precip%hru_snow]
-      case('hru_area')
-          dest = [this%model%model_simulation%model_basin%hru_area]
-      case('dprst_evap_hru')
-          dest = [this%model%model_simulation%runoff%dprst_evap_hru]
-      case('infil')
-          dest = [this%model%model_simulation%runoff%infil]
-      case('sroff')
-          dest = [this%model%model_simulation%runoff%sroff]
-      case('potet')
-          dest = [this%model%model_simulation%potet%potet]
-      case('hru_intcpevap')
-          dest = [this%model%model_simulation%intcp%hru_intcpevap]
-      case('snow_evap')
-          dest = [this%model%model_simulation%snow%snow_evap]
-      case('snowcov_area')
-          dest = [this%model%model_simulation%snow%snowcov_area]
-      case('soil_rechr')
-          dest = [this%model%model_simulation%climate%soil_rechr]
-      case('soil_rechr_max')
-          dest = [this%model%model_simulation%climate%soil_rechr_max]
-      case('soil_moist')
-          dest = [this%model%model_simulation%climate%soil_moist]
-      case('soil_moist_max')
-          dest = [this%model%model_simulation%climate%soil_moist_max]
-      case('hru_area_perv')
-          dest = [this%model%model_simulation%runoff%hru_area_perv]
-      case('hru_impervevap')
-          dest = [this%model%model_simulation%runoff%hru_impervevap]
-      case('soil_moist_chg')
-          dest = [this%model%model_simulation%runoff%soil_moist_chg]
-      case('soil_rechr_chg')
-          dest = [this%model%model_simulation%runoff%soil_rechr_chg]
+    class (bmi_prms_surface), intent(in) :: this
+    character (len=*), intent(in) :: name
+    real, intent(inout) :: dest(:)
+    integer :: bmi_status
 
-      case default
-         dest = [-1.0]
-         bmi_status = BMI_FAILURE
-      end select
+    select case(name)
+        !case("plate_surface__temperature")
+        !   ! This would be safe, but subject to indexing errors.
+        !   ! do j = 1, this%model%n_y
+        !   !    do i = 1, this%model%n_x
+        !   !       k = j + this%model%n_y*(i-1)
+        !   !       dest(k) = this%model%temperature(j,i)
+        !   !    end do
+        !   ! end do
+        !
+        !   ! This is an equivalent, elementwise copy into `dest`.
+        !   ! See https://stackoverflow.com/a/11800068/1563298
+        !   dest = reshape(this%model%temperature, [this%model%n_x*this%model%n_y])
+        !   bmi_status = BMI_SUCCESS
+        !case("plate_surface__thermal_diffusivity")
+        !   dest = [this%model%alpha]
+        !   bmi_status = BMI_SUCCESS
+    case('hru_ppt')
+        dest = [this%model%model_simulation%model_precip%hru_ppt]
+        bmi_status = BMI_SUCCESS
+    case('hru_rain')
+        dest = [this%model%model_simulation%model_precip%hru_rain]
+        bmi_status = BMI_SUCCESS
+    case('hru_snow')
+        dest = [this%model%model_simulation%model_precip%hru_snow]
+        bmi_status = BMI_SUCCESS
+    case('hru_area')
+        dest = [this%model%model_simulation%model_basin%hru_area]
+        bmi_status = BMI_SUCCESS
+    case('dprst_evap_hru')
+        dest = [this%model%model_simulation%runoff%dprst_evap_hru]
+        bmi_status = BMI_SUCCESS
+    case('infil')
+        dest = [this%model%model_simulation%runoff%infil]
+        bmi_status = BMI_SUCCESS
+    case('sroff')
+        dest = [this%model%model_simulation%runoff%sroff]
+        bmi_status = BMI_SUCCESS
+    case('potet')
+        dest = [this%model%model_simulation%potet%potet]
+        bmi_status = BMI_SUCCESS
+    case('hru_intcpevap')
+        dest = [this%model%model_simulation%intcp%hru_intcpevap]
+        bmi_status = BMI_SUCCESS
+    case('snow_evap')
+        dest = [this%model%model_simulation%snow%snow_evap]
+        bmi_status = BMI_SUCCESS
+    case('snowcov_area')
+        dest = [this%model%model_simulation%snow%snowcov_area]
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr')
+        dest = [this%model%model_simulation%climate%soil_rechr]
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr_max')
+        dest = [this%model%model_simulation%climate%soil_rechr_max]
+        bmi_status = BMI_SUCCESS
+    case('soil_moist')
+        dest = [this%model%model_simulation%climate%soil_moist]
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_max')
+        dest = [this%model%model_simulation%climate%soil_moist_max]
+        bmi_status = BMI_SUCCESS
+    case('hru_area_perv')
+        dest = [this%model%model_simulation%runoff%hru_area_perv]
+        bmi_status = BMI_SUCCESS
+    case('hru_impervevap')
+        dest = [this%model%model_simulation%runoff%hru_impervevap]
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_chg')
+        dest = [this%model%model_simulation%runoff%soil_moist_chg]
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr_chg')
+        dest = [this%model%model_simulation%runoff%soil_rechr_chg]
+        bmi_status = BMI_SUCCESS
+        case default
+        dest = [-1.0]
+        bmi_status = BMI_FAILURE
+    end select
     end function prms_get_float
-    
+
     ! Get a copy of a double variable's values, flattened.
     function prms_get_double(this, name, dest) result (bmi_status)
-      class (bmi_prms_surface), intent(in) :: this
-      character (len=*), intent(in) :: name
-      double precision, intent(inout) :: dest(:)
-      integer :: bmi_status
-    
-      select case(name)
-      case('basin_potet')
-          dest = [this%model%model_simulation%potet%basin_potet]
-      case('basin_area_inv')
-          dest = [this%model%model_simulation%model_basin%basin_area_inv]
-      case('basin_sroff')
-          dest = [this%model%model_simulation%runoff%basin_sroff]
-      case('hortonian_lakes')
-          dest = [this%model%model_simulation%runoff%hortonian_lakes]
-      case('dprst_seep_hru')
-          dest = [this%model%model_simulation%runoff%dprst_seep_hru]
-      case('strm_seg_in')
-          dest = [this%model%model_simulation%runoff%strm_seg_in]
+    class (bmi_prms_surface), intent(in) :: this
+    character (len=*), intent(in) :: name
+    double precision, intent(inout) :: dest(:)
+    integer :: bmi_status
 
-      case default
-         dest = [-1.d0]
-         bmi_status = BMI_FAILURE
-      end select
+    select case(name)
+    case('basin_potet')
+        dest = [this%model%model_simulation%potet%basin_potet]
+        bmi_status = BMI_SUCCESS
+    case('basin_area_inv')
+        dest = [this%model%model_simulation%model_basin%basin_area_inv]
+        bmi_status = BMI_SUCCESS
+    case('basin_sroff')
+        dest = [this%model%model_simulation%runoff%basin_sroff]
+        bmi_status = BMI_SUCCESS
+    case('hortonian_lakes')
+        dest = [this%model%model_simulation%runoff%hortonian_lakes]
+        bmi_status = BMI_SUCCESS
+    case('dprst_seep_hru')
+        dest = [this%model%model_simulation%runoff%dprst_seep_hru]
+        bmi_status = BMI_SUCCESS
+    case('strm_seg_in')
+        dest = [this%model%model_simulation%runoff%strm_seg_in]
+        bmi_status = BMI_SUCCESS
+    case default
+        dest = [-1.d0]
+        bmi_status = BMI_FAILURE
+    end select
     end function prms_get_double
-    
+
     ! Get a reference to an integer-valued variable, flattened.
     function prms_get_ptr_int(this, name, dest_ptr) result (bmi_status)
-      class (bmi_prms_surface), intent(in) :: this
-      character (len=*), intent(in) :: name
-      integer, pointer, intent(inout) :: dest_ptr(:)
-      integer :: bmi_status, status
-      type (c_ptr) :: src
-      integer :: n_elements, gridid
-    
-      select case(name)
-      case("nlake")
+    class (bmi_prms_surface), intent(in) :: this
+    character (len=*), intent(in) :: name
+    integer, pointer, intent(inout) :: dest_ptr(:)
+    integer :: bmi_status, status
+    type (c_ptr) :: src
+    integer :: n_elements, gridid
+
+    select case(name)
+    case("nlake")
         src = c_loc(this%model%model_simulation%model_basin%nlake)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('active_hrus')
+    case('active_hrus')
         src = c_loc(this%model%model_simulation%model_basin%active_hrus)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('nowtime')
+    case('nowtime')
         src = c_loc(this%model%model_simulation%model_time%nowtime(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('cov_type')
+    case('cov_type')
         src = c_loc(this%model%model_simulation%model_basin%cov_type(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('hru_type')
+    case('hru_type')
         src = c_loc(this%model%model_simulation%model_basin%hru_type(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('hru_route_order')
+    case('hru_route_order')
         src = c_loc(this%model%model_simulation%model_basin%hru_route_order(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('cascade_flag')
+    case('cascade_flag')
         src = c_loc(this%model%control_data%cascade_flag%value)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('dprst_flag')
+    case('dprst_flag')
         src = c_loc(this%model%control_data%dprst_flag%value)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('print_debug')
+    case('print_debug')
         src = c_loc(this%model%control_data%print_debug%value)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('gsflow_mode')
+    case('gsflow_mode')
         src = c_loc(this%model%control_data%gsflow_mode)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('srunoff_updated_soil')
+    case('srunoff_updated_soil')
         src = c_loc(this%model%model_simulation%runoff%srunoff_updated_soil)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('transp_on')
+    case('transp_on')
         src = c_loc(this%model%model_simulation%transpiration%transp_on(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case('active_mask')
+    case('active_mask')
         src = c_loc(this%model%model_simulation%model_basin%active_mask(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-      case default
-         bmi_status = BMI_FAILURE
-      end select
+        case default
+        bmi_status = BMI_FAILURE
+    end select
 
     end function prms_get_ptr_int
-    
+
     ! Get a reference to a real-valued variable, flattened.
     function prms_get_ptr_float(this, name, dest_ptr) result (bmi_status)
-      class (bmi_prms_surface), intent(in) :: this
-      character (len=*), intent(in) :: name
-      real, pointer, intent(inout) :: dest_ptr(:)
-      integer :: bmi_status
-      type (c_ptr) :: src
-      integer :: n_elements
-    
-      select case(name)
-      !case("plate_surface__temperature")
-      !   src = c_loc(this%model%temperature(1,1))
-      !   n_elements = this%model%n_y * this%model%n_x
-      !   call c_f_pointer(src, dest, [n_elements])
-      !   bmi_status = BMI_SUCCESS
-      case default
-         bmi_status = BMI_FAILURE
-      end select
+    class (bmi_prms_surface), intent(in) :: this
+    character (len=*), intent(in) :: name
+    real, pointer, intent(inout) :: dest_ptr(:)
+    integer :: bmi_status
+    type (c_ptr) :: src
+    integer :: n_elements, gridid, status
+
+    select case(name)
+        !case("plate_surface__temperature")
+        !   src = c_loc(this%model%temperature(1,1))
+        !   n_elements = this%model%n_y * this%model%n_x
+        !   call c_f_pointer(src, dest, [n_elements])
+        !   bmi_status = BMI_SUCCESS
+    case('hru_ppt')
+        src = c_loc(this%model%model_simulation%model_precip%hru_ppt(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('hru_rain')
+        src = c_loc(this%model%model_simulation%model_precip%hru_rain(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('hru_snow')
+        src = c_loc(this%model%model_simulation%model_precip%hru_snow(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('hru_area')
+        src = c_loc(this%model%model_simulation%model_basin%hru_area(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('dprst_evap_hru')
+        src = c_loc(this%model%model_simulation%runoff%dprst_evap_hru(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('infil')
+        src = c_loc(this%model%model_simulation%runoff%infil(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('sroff')
+        src = c_loc(this%model%model_simulation%runoff%sroff(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('potet')
+        src = c_loc(this%model%model_simulation%potet%potet(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('hru_intcpevap')
+        src = c_loc(this%model%model_simulation%intcp%hru_intcpevap(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('snow_evap')
+        src = c_loc(this%model%model_simulation%snow%snow_evap(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('snowcov_area')
+        src = c_loc(this%model%model_simulation%snow%snowcov_area(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr')
+        src = c_loc(this%model%model_simulation%climate%soil_rechr(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr_max')
+        src = c_loc(this%model%model_simulation%climate%soil_rechr_max(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('soil_moist')
+        src = c_loc(this%model%model_simulation%climate%soil_moist(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_max')
+        src = c_loc(this%model%model_simulation%climate%soil_moist_max(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('hru_area_perv')
+        src = c_loc(this%model%model_simulation%runoff%hru_area_perv(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('hru_impervevap')
+        src = c_loc(this%model%model_simulation%runoff%hru_impervevap(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_chg')
+        src = c_loc(this%model%model_simulation%runoff%soil_moist_chg(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr_chg')
+        src = c_loc(this%model%model_simulation%runoff%soil_rechr_chg(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+        case default
+        bmi_status = BMI_FAILURE
+    end select
     end function prms_get_ptr_float
-    
+
     ! Get a reference to an double-valued variable, flattened.
     function prms_get_ptr_double(this, name, dest_ptr) result (bmi_status)
-      class (bmi_prms_surface), intent(in) :: this
-      character (len=*), intent(in) :: name
-      double precision, pointer, intent(inout) :: dest_ptr(:)
-      integer :: bmi_status
-      type (c_ptr) :: src
-      integer :: n_elements
-    
-      select case(name)
-      case default
-         bmi_status = BMI_FAILURE
-      end select
+    class (bmi_prms_surface), intent(in) :: this
+    character (len=*), intent(in) :: name
+    double precision, pointer, intent(inout) :: dest_ptr(:)
+    integer :: bmi_status
+    type (c_ptr) :: src
+    integer :: n_elements, status, gridid
+
+    select case(name)
+    case('basin_potet')
+        src = c_loc(this%model%model_simulation%potet%basin_potet)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('basin_area_inv')
+        src = c_loc(this%model%model_simulation%model_basin%basin_area_inv)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('basin_sroff')
+        src = c_loc(this%model%model_simulation%runoff%basin_sroff)
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('hortonian_lakes')
+        src = c_loc(this%model%model_simulation%runoff%hortonian_lakes(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('dprst_seep_hru')
+        src = c_loc(this%model%model_simulation%runoff%dprst_seep_hru(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('strm_seg_in')
+        src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case default
+        bmi_status = BMI_FAILURE
+    end select
     end function prms_get_ptr_double
-    
+
     ! Get values of an integer variable at the given locations.
     function prms_get_at_indices_int(this, name, dest, inds) &
          result (bmi_status)

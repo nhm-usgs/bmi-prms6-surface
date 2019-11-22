@@ -5,4 +5,5 @@ output/
 *.out
 *.default
 *.simple1
+*.msgs
 sf_data
