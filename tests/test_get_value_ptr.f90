@@ -35,8 +35,8 @@
     integer, pointer :: tptr(:)
     integer :: i, code, status
 
-    status = m%initialize(config_file)
-    status = m%get_value_ptr(var_name, tptr)
+    code = m%initialize(config_file)
+    code = m%get_value_ptr(var_name, tptr)
 
 
     ! Visual inspection.
@@ -72,12 +72,12 @@
     real, pointer :: tval(:)
     integer :: i, code
 
-    status = m%initialize(config_file)
+    code = m%initialize(config_file)
     do i =1,79
         status = m%update()
     enddo
     !status = m%update_until(68.0d0)
-    status = m%get_value_ptr(var_name, tval)
+    code = m%get_value_ptr(var_name, tval)
 
 
     ! Visual inspection.
@@ -94,7 +94,7 @@
             exit
         end if
     end do
-    status = m%finalize()
+    code = m%finalize()
     end function test2
 
   !function run_test() result(code)
