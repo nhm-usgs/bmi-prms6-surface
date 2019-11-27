@@ -603,12 +603,6 @@
     integer :: bmi_status
 
     select case(name)
-        !case("plate_surface__thermal_diffusivity")
-        !   var_size = sizeof(this%model%alpha)             ! 'sizeof' in gcc & ifort
-        !   bmi_status = BMI_SUCCESS
-        !case("model__identification_number")
-        !   var_size = sizeof(this%model%id)                ! 'sizeof' in gcc & ifort
-        !   bmi_status = BMI_SUCCESS
     case("nlake")
         size = sizeof(this%model%model_simulation%model_basin%nlake)
         bmi_status = BMI_SUCCESS
@@ -765,56 +759,55 @@
     
     ! Get a copy of a integer variable's values, flattened.
     function prms_get_int(this, name, dest) result (bmi_status)
-      class (bmi_prms_surface), intent(in) :: this
-      character (len=*), intent(in) :: name
-      integer, intent(inout) :: dest(:)
-      integer :: bmi_status
-    
-      select case(name)
-      case("nlake")
-         dest = [this%model%model_simulation%model_basin%nlake]
-         bmi_status = BMI_SUCCESS
-      case('active_hrus')
-          dest = [this%model%model_simulation%model_basin%active_hrus]
-          bmi_status = BMI_SUCCESS
-      case('nowtime')
-          dest = [this%model%model_simulation%model_time%nowtime]
-          bmi_status = BMI_SUCCESS
-      case('cov_type')
-          dest = [this%model%model_simulation%model_basin%cov_type]
-          bmi_status = BMI_SUCCESS
-      case('hru_type')
-          dest = [this%model%model_simulation%model_basin%hru_type]
-          bmi_status = BMI_SUCCESS
-      case('hru_route_order')
-          dest = [this%model%model_simulation%model_basin%hru_route_order]
-          bmi_status = BMI_SUCCESS
-      case('cascade_flag')
-          dest = [this%model%control_data%cascade_flag%value]
-          bmi_status = BMI_SUCCESS
-      case('dprst_flag')
-          dest = [this%model%control_data%dprst_flag%value]
-          bmi_status = BMI_SUCCESS
-      case('print_debug')
-          dest = [this%model%control_data%print_debug%value]
-          bmi_status = BMI_SUCCESS
-      case('gsflow_mode')
-          dest = [this%model%control_data%gsflow_mode]
-          bmi_status = BMI_SUCCESS
-      case('srunoff_updated_soil')
-          dest = [this%model%model_simulation%runoff%srunoff_updated_soil]
-          bmi_status = BMI_SUCCESS
-      case('transp_on')
-          dest = [this%model%model_simulation%transpiration%transp_on]
-          bmi_status = BMI_SUCCESS
-      case('active_mask')
-          dest = [this%model%model_simulation%model_basin%active_mask]
-          bmi_status = BMI_SUCCESS
+    class (bmi_prms_surface), intent(in) :: this
+    character (len=*), intent(in) :: name
+    integer, intent(inout) :: dest(:)
+    integer :: bmi_status
 
-          case default
-         dest = [-1]
-         bmi_status = BMI_FAILURE
-      end select
+    select case(name)
+    case("nlake")
+        dest = [this%model%model_simulation%model_basin%nlake]
+        bmi_status = BMI_SUCCESS
+    case('active_hrus')
+        dest = [this%model%model_simulation%model_basin%active_hrus]
+        bmi_status = BMI_SUCCESS
+    case('nowtime')
+        dest = [this%model%model_simulation%model_time%nowtime]
+        bmi_status = BMI_SUCCESS
+    case('cov_type')
+        dest = [this%model%model_simulation%model_basin%cov_type]
+        bmi_status = BMI_SUCCESS
+    case('hru_type')
+        dest = [this%model%model_simulation%model_basin%hru_type]
+        bmi_status = BMI_SUCCESS
+    case('hru_route_order')
+        dest = [this%model%model_simulation%model_basin%hru_route_order]
+        bmi_status = BMI_SUCCESS
+    case('cascade_flag')
+        dest = [this%model%control_data%cascade_flag%value]
+        bmi_status = BMI_SUCCESS
+    case('dprst_flag')
+        dest = [this%model%control_data%dprst_flag%value]
+        bmi_status = BMI_SUCCESS
+    case('print_debug')
+        dest = [this%model%control_data%print_debug%value]
+        bmi_status = BMI_SUCCESS
+    case('gsflow_mode')
+        dest = [this%model%control_data%gsflow_mode]
+        bmi_status = BMI_SUCCESS
+    case('srunoff_updated_soil')
+        dest = [this%model%model_simulation%runoff%srunoff_updated_soil]
+        bmi_status = BMI_SUCCESS
+    case('transp_on')
+        dest = [this%model%model_simulation%transpiration%transp_on]
+        bmi_status = BMI_SUCCESS
+    case('active_mask')
+        dest = [this%model%model_simulation%model_basin%active_mask]
+        bmi_status = BMI_SUCCESS
+        case default
+        dest = [-1]
+        bmi_status = BMI_FAILURE
+    end select
     end function prms_get_int
     
     ! Get a copy of a real variable's values, flattened.
@@ -898,7 +891,7 @@
     case('soil_rechr_chg')
         dest = [this%model%model_simulation%runoff%soil_rechr_chg]
         bmi_status = BMI_SUCCESS
-        case default
+    case default
         dest = [-1.0]
         bmi_status = BMI_FAILURE
     end select
@@ -930,7 +923,7 @@
     case('strm_seg_in')
         dest = [this%model%model_simulation%runoff%strm_seg_in]
         bmi_status = BMI_SUCCESS
-    case default
+        case default
         dest = [-1.d0]
         bmi_status = BMI_FAILURE
     end select
@@ -1024,7 +1017,7 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case default
+        case default
         bmi_status = BMI_FAILURE
     end select
 
@@ -1474,20 +1467,20 @@
         bmi_status = BMI_FAILURE
     end select
     end function prms_get_at_indices_float
-    
+
     ! Get values of a double variable at the given locations.
     function prms_get_at_indices_double(this, name, dest, inds) &
-         result (bmi_status)
-      class (bmi_prms_surface), intent(in) :: this
-      character (len=*), intent(in) :: name
-      double precision, intent(inout) :: dest(:)
-      integer, intent(in) :: inds(:)
-      integer :: bmi_status
-      type (c_ptr) src
-      double precision, pointer :: src_flattened(:)
-      integer :: i, n_elements, status, gridid
-    
-      select case(name)
+        result (bmi_status)
+    class (bmi_prms_surface), intent(in) :: this
+    character (len=*), intent(in) :: name
+    double precision, intent(inout) :: dest(:)
+    integer, intent(in) :: inds(:)
+    integer :: bmi_status
+    type (c_ptr) src
+    double precision, pointer :: src_flattened(:)
+    integer :: i, n_elements, status, gridid
+
+    select case(name)
     case('hortonian_lakes')
         src = c_loc(this%model%model_simulation%runoff%hortonian_lakes(1))
         status = this%get_var_grid(name,gridid)
@@ -1515,11 +1508,11 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-      case default
-         bmi_status = BMI_FAILURE
-      end select
+        case default
+        bmi_status = BMI_FAILURE
+    end select
     end function prms_get_at_indices_double
-    
+
     !! Set new integer values.
     !function prms_set_int(this, name, src) result (bmi_status)
     !  class (bmi_prms_surface), intent(inout) :: this

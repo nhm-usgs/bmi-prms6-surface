@@ -203,16 +203,16 @@
 
         ! print *, '8'
 
-        if (ctl_data%outVarON_OFF%value == 1) then
-          call this%model_summary%run(ctl_data, this%model_time, this%model_basin)
-        end if
-
-        if (ctl_data%print_debug%value == 1) then
-          call this%model_waterbal%run(ctl_data, this%model_basin, &
-                                       this%climate, this%groundwater, this%intcp, &
-                                       this%model_precip, this%snow, this%soil, &
-                                       this%runoff, this%model_time)
-        endif
+        !if (ctl_data%outVarON_OFF%value == 1) then
+        !  call this%model_summary%run(ctl_data, this%model_time, this%model_basin)
+        !end if
+        !
+        !if (ctl_data%print_debug%value == 1) then
+        !  call this%model_waterbal%run(ctl_data, this%model_basin, &
+        !                               this%climate, this%groundwater, this%intcp, &
+        !                               this%model_precip, this%snow, this%soil, &
+        !                               this%runoff, this%model_time)
+        !endif
         end associate
     end subroutine solve_prms
     end module m_prms_surface
