@@ -59,13 +59,13 @@
          get_value_at_indices_int, &
          get_value_at_indices_float, &
          get_value_at_indices_double
-    !procedure :: set_value_int => prms_set_int
-    !procedure :: set_value_float => prms_set_float
-    !procedure :: set_value_double => prms_set_double
-    !generic :: set_value => &
-    !     set_value_int, &
-    !     set_value_float, &
-    !     set_value_double
+    procedure :: set_value_int => prms_set_int
+    procedure :: set_value_float => prms_set_float
+    procedure :: set_value_double => prms_set_double
+    generic :: set_value => &
+         set_value_int, &
+         set_value_float, &
+         set_value_double
     !procedure :: set_value_at_indices_int => prms_set_at_indices_int
     !procedure :: set_value_at_indices_float => prms_set_at_indices_float
     !procedure :: set_value_at_indices_double => prms_set_at_indices_double
@@ -147,7 +147,7 @@
     ! vars by nhru            
     output_items(1) = 'soil_rechr_chg'
     output_items(2) = 'soil_moist_chg'
-    output_items(3) = 'hru_imperv_evap'
+    output_items(3) = 'hru_impervevap'
     output_items(4) = 'hru_frac_perv'
     output_items(5) = 'hru_area_perv'
     output_items(6) = 'active_mask'
@@ -193,10 +193,8 @@
     output_items(42) = 'cascade_flag'
     ! var boolean    
     output_items(43) = 'srunoff_updated_soil'
-    output_items(44) = 'soil_moist'
-    output_items(45) = 'soil_moist_max'
     ! var time
-    output_items(46) = 'nowtime'
+    output_items(44) = 'nowtime'
     
     names => output_items
     bmi_status = BMI_SUCCESS
@@ -318,7 +316,7 @@
     case('hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', &
         'hru_y', 'hru_elev', 'hru_actet', 'hortonian_lakes', &
         'lakein_sz', 'cov_type', 'hru_area', 'hru_type', &
-        'dpsrt_evap_hru', 'dprst_seep_hru', 'infil', &
+        'dprst_evap_hru', 'dprst_seep_hru', 'infil', &
         'sroff', 'potet', 'transp_on', 'hru_intcpevap', &
         'snow_evap', 'snowcov_area', 'soil_rechr', &
         'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
@@ -1513,53 +1511,96 @@
     end select
     end function prms_get_at_indices_double
 
-    !! Set new integer values.
-    !function prms_set_int(this, name, src) result (bmi_status)
-    !  class (bmi_prms_surface), intent(inout) :: this
-    !  character (len=*), intent(in) :: name
-    !  integer, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !
-    !  select case(name)
-    !  case("model__identification_number")
-    !     this%model%id = src(1)
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_set_int
-    !
-    !! Set new real values.
-    !function prms_set_float(this, name, src) result (bmi_status)
-    !  class (bmi_prms_surface), intent(inout) :: this
-    !  character (len=*), intent(in) :: name
-    !  real, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !
-    !  select case(name)
-    !  case("plate_surface__temperature")
-    !     this%model%temperature = reshape(src, [this%model%n_y, this%model%n_x])
-    !     bmi_status = BMI_SUCCESS
-    !  case("plate_surface__thermal_diffusivity")
-    !     this%model%alpha = src(1)
-    !     bmi_status = BMI_SUCCESS
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_set_float
-    !
-    !! Set new double values.
-    !function prms_set_double(this, name, src) result (bmi_status)
-    !  class (bmi_prms_surface), intent(inout) :: this
-    !  character (len=*), intent(in) :: name
-    !  double precision, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !
-    !  select case(name)
-    !  case default
-    !     bmi_status = BMI_FAILURE
-    !  end select
-    !end function prms_set_double
+    ! Set new integer values.
+    function prms_set_int(this, name, src) result (bmi_status)
+    class (bmi_prms_surface), intent(inout) :: this
+    character (len=*), intent(in) :: name
+    integer, intent(in) :: src(:)
+    integer :: bmi_status
+
+    select case(name)
+      case('srunoff_updated_soil')
+          this%model%model_simulation%runoff%srunoff_updated_soil = src(1)
+          bmi_status = BMI_SUCCESS
+        case default
+        bmi_status = BMI_FAILURE
+    end select
+    end function prms_set_int
+
+    ! Set new real values.
+    function prms_set_float(this, name, src) result (bmi_status)
+    class (bmi_prms_surface), intent(inout) :: this
+    character (len=*), intent(in) :: name
+    real, intent(in) :: src(:)
+    integer :: bmi_status
+
+    select case(name)
+    case('dprst_evap_hru')
+        this%model%model_simulation%runoff%dprst_evap_hru = src
+        bmi_status = BMI_SUCCESS
+    case('hru_area_perv')
+        this%model%model_simulation%runoff%hru_area_perv = src
+        bmi_status = BMI_SUCCESS
+    case('hru_impervevap')
+        this%model%model_simulation%runoff%hru_impervevap = src
+        bmi_status = BMI_SUCCESS
+    case('infil')
+        this%model%model_simulation%runoff%infil = src
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_chg')
+        this%model%model_simulation%runoff%soil_moist_chg = src
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr_chg')
+        this%model%model_simulation%runoff%soil_rechr_chg = src
+        bmi_status = BMI_SUCCESS
+    case('sroff')
+        this%model%model_simulation%runoff%sroff = src
+        bmi_status = BMI_SUCCESS
+    case('potet')
+        this%model%model_simulation%potet%potet = src
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr')
+        this%model%model_simulation%climate%soil_rechr = src
+        bmi_status = BMI_SUCCESS
+    case('soil_rechr_max')
+        this%model%model_simulation%climate%soil_rechr_max = src
+        bmi_status = BMI_SUCCESS
+    case('soil_moist')
+        this%model%model_simulation%climate%soil_moist = src
+        bmi_status = BMI_SUCCESS
+    case('soil_moist_max')
+        this%model%model_simulation%climate%soil_moist_max = src
+        bmi_status = BMI_SUCCESS
+        case default
+        bmi_status = BMI_FAILURE
+    end select
+    end function prms_set_float
+
+    ! Set new double values.
+    function prms_set_double(this, name, src) result (bmi_status)
+    class (bmi_prms_surface), intent(inout) :: this
+    character (len=*), intent(in) :: name
+    double precision, intent(in) :: src(:)
+    integer :: bmi_status
+
+    select case(name)
+     case('basin_sroff')
+        this%model%model_simulation%runoff%basin_sroff = src(1)
+        bmi_status = BMI_SUCCESS
+    case('dprst_seep_hru')
+        this%model%model_simulation%runoff%dprst_seep_hru = src
+        bmi_status = BMI_SUCCESS
+    case('strm_seg_in')
+        this%model%model_simulation%runoff%strm_seg_in = src
+        bmi_status = BMI_SUCCESS
+    case('basin_potet')
+        this%model%model_simulation%potet%basin_potet = src(1)
+        bmi_status = BMI_SUCCESS
+        
+        case default
+        bmi_status = BMI_FAILURE
+    end select
+    end function prms_set_double
     !
     !! Set integer values at particular locations.
     !function prms_set_at_indices_int(this, name, indices, src) &

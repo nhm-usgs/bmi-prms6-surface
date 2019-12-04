@@ -59,9 +59,9 @@ module bmif_2_0
            get_value_at_indices_double
 
       ! Setters, by type
-      !procedure(bmif_set_value_int), deferred :: set_value_int
-      !procedure(bmif_set_value_float), deferred :: set_value_float
-      !procedure(bmif_set_value_double), deferred :: set_value_double
+      procedure(bmif_set_value_int), deferred :: set_value_int
+      procedure(bmif_set_value_float), deferred :: set_value_float
+      procedure(bmif_set_value_double), deferred :: set_value_double
       !procedure(bmif_set_value_at_indices_int), deferred :: &
       !     set_value_at_indices_int
       !procedure(bmif_set_value_at_indices_float), deferred :: &
@@ -357,24 +357,24 @@ module bmif_2_0
       integer :: bmi_status
     end function bmif_set_value_int
     
-    !! Set new values for a real model variable.
-    !function bmif_set_value_float(this, name, src) result(bmi_status)
-    !  import :: bmi
-    !  class(bmi), intent(inout) :: this
-    !  character(len=*), intent(in) :: name
-    !  real, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !end function bmif_set_value_float
-    !
-    !! Set new values for a double model variable.
-    !function bmif_set_value_double(this, name, src) result(bmi_status)
-    !  import :: bmi
-    !  class(bmi), intent(inout) :: this
-    !  character(len=*), intent(in) :: name
-    !  double precision, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !end function bmif_set_value_double
-    !
+    ! Set new values for a real model variable.
+    function bmif_set_value_float(this, name, src) result(bmi_status)
+      import :: bmi
+      class(bmi), intent(inout) :: this
+      character(len=*), intent(in) :: name
+      real, intent(in) :: src(:)
+      integer :: bmi_status
+    end function bmif_set_value_float
+    
+    ! Set new values for a double model variable.
+    function bmif_set_value_double(this, name, src) result(bmi_status)
+      import :: bmi
+      class(bmi), intent(inout) :: this
+      character(len=*), intent(in) :: name
+      double precision, intent(in) :: src(:)
+      integer :: bmi_status
+    end function bmif_set_value_double
+    
     !! Set integer values at particular (one-dimensional) indices.
     !function bmif_set_value_at_indices_int(this, name, inds, src) &
     !  result(bmi_status)
