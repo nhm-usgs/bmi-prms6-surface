@@ -889,6 +889,9 @@
     case('soil_rechr_chg')
         dest = [this%model%model_simulation%runoff%soil_rechr_chg]
         bmi_status = BMI_SUCCESS
+    case('hru_frac_perv')
+        dest = [this%model%model_simulation%runoff%hru_frac_perv]
+        bmi_status = BMI_SUCCESS
     case default
         dest = [-1.0]
         bmi_status = BMI_FAILURE
