@@ -47,13 +47,13 @@ program irf_test
   !s = m%get_current_time(time1)
   !write (*,"(a30, f8.2)") "Stop time: ", time1
 
-  !s = m%get_end_time(time)
-  !write (*,"(a, f8.2)") "Running until... ", time
-  !s = m%get_current_time(time0)
-  !write (*,"(a30, f8.2)") "Start time: ", time0
-  !s = m%update_until(time)
-  !s = m%get_current_time(time1)
-  !write (*,"(a30, f8.2)") "Stop time: ", time1
+  s = m%get_end_time(time)
+  write (*,"(a, f8.2)") "Running until... ", time
+  s = m%get_current_time(time0)
+  write (*,"(a30, f8.2)") "Start time: ", time0
+  s = m%update_until(time)
+  s = m%get_current_time(time1)
+  write (*,"(a30, f8.2)") "Stop time: ", time1
 
   write (*,"(a)", advance="no") "Finalizing..."
   s = m%finalize()

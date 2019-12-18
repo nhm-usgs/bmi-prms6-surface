@@ -128,6 +128,7 @@
             write(output_unit, fmt='(a, 1x, f16.4, 1x, a)') 'Elapsed system clock:', delta_rtc_sec, 'seconds.'
             write(output_unit, fmt='(a, 1x, f16.4, 1x, a)') 'Elapsed cpu time:', end_ct - start_ct, 'seconds.'
         endif
+        
     end associate
     end subroutine cleanup
 
@@ -205,7 +206,7 @@
         if (ctl_data%outVarON_OFF%value == 1) then
           call this%model_summary%run(ctl_data, this%model_time, this%model_basin)
         end if
-
+        
         if (ctl_data%print_debug%value == 1) then
           call this%model_waterbal%run(ctl_data, this%model_basin, &
                                        this%climate, this%groundwater, this%intcp, &
