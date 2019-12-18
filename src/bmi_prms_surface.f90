@@ -353,19 +353,19 @@
 
     select case(grid)
     case(0)
-        type = "uniform_rectilinear"
+        type = "vector"
         bmi_status = BMI_SUCCESS
     case(1)
-        type = "uniform_rectilinear"
+        type = "vector"
         bmi_status = BMI_SUCCESS
     case(2)
         type = 'scalar'
         bmi_status = BMI_FAILURE
     case(3)
-        type = "uniform_rectilinear"
+        type = "vector"
         bmi_status = BMI_SUCCESS
     case(4)
-        type = "uniform_rectilinear"
+        type = "vector"
         bmi_status = BMI_SUCCESS
     case default
         type = "-"
