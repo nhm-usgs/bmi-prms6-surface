@@ -620,16 +620,16 @@
         size = sizeof(this%model%model_simulation%model_basin%active_hrus)
         bmi_status = BMI_SUCCESS
     case('nowtime')
-        size = sizeof(this%model%model_simulation%model_time%nowtime(1))
+        size = sizeof(this%model%model_simulation%model_time%nowtime)
         bmi_status = BMI_SUCCESS
     case('cov_type')
-        size = sizeof(this%model%model_simulation%model_basin%cov_type(1))
+        size = sizeof(this%model%model_simulation%model_basin%cov_type)
         bmi_status = BMI_SUCCESS
     case('hru_type')
-        size = sizeof(this%model%model_simulation%model_basin%hru_type(1))
+        size = sizeof(this%model%model_simulation%model_basin%hru_type)
         bmi_status = BMI_SUCCESS
     case('hru_route_order')
-        size = sizeof(this%model%model_simulation%model_basin%hru_route_order(1))
+        size = sizeof(this%model%model_simulation%model_basin%hru_route_order)
         bmi_status = BMI_SUCCESS
     case('cascade_flag')
         size = sizeof(this%model%control_data%cascade_flag%value)
@@ -647,67 +647,67 @@
         size = sizeof(this%model%model_simulation%runoff%srunoff_updated_soil)
         bmi_status = BMI_SUCCESS
     case('transp_on')
-        size = sizeof(this%model%model_simulation%transpiration%transp_on(1))
+        size = sizeof(this%model%model_simulation%transpiration%transp_on)
         bmi_status = BMI_SUCCESS
     case('active_mask')
-        size = sizeof(this%model%model_simulation%model_basin%active_mask(1))
+        size = sizeof(this%model%model_simulation%model_basin%active_mask)
         bmi_status = BMI_SUCCESS
     case('hru_ppt')
-        size = sizeof(this%model%model_simulation%model_precip%hru_ppt(1))
+        size = sizeof(this%model%model_simulation%model_precip%hru_ppt)
         bmi_status = BMI_SUCCESS
     case('hru_rain')
-        size = sizeof(this%model%model_simulation%model_precip%hru_rain(1))
+        size = sizeof(this%model%model_simulation%model_precip%hru_rain)
         bmi_status = BMI_SUCCESS
     case('hru_snow')
-        size = sizeof(this%model%model_simulation%model_precip%hru_snow(1))
+        size = sizeof(this%model%model_simulation%model_precip%hru_snow)
         bmi_status = BMI_SUCCESS
     case('hru_area')
-        size = sizeof(this%model%model_simulation%model_basin%hru_area(1))
+        size = sizeof(this%model%model_simulation%model_basin%hru_area)
         bmi_status = BMI_SUCCESS
     case('dprst_evap_hru')
-        size = sizeof(this%model%model_simulation%runoff%dprst_evap_hru(1))
+        size = sizeof(this%model%model_simulation%runoff%dprst_evap_hru)
         bmi_status = BMI_SUCCESS
     case('infil')
-        size = sizeof(this%model%model_simulation%runoff%infil(1))
+        size = sizeof(this%model%model_simulation%runoff%infil)
         bmi_status = BMI_SUCCESS
     case('sroff')
-        size = sizeof(this%model%model_simulation%runoff%sroff(1))
+        size = sizeof(this%model%model_simulation%runoff%sroff)
         bmi_status = BMI_SUCCESS
     case('potet')
-        size = sizeof(this%model%model_simulation%potet%potet(1))
+        size = sizeof(this%model%model_simulation%potet%potet)
         bmi_status = BMI_SUCCESS
     case('hru_intcpevap')
-        size = sizeof(this%model%model_simulation%intcp%hru_intcpevap(1))
+        size = sizeof(this%model%model_simulation%intcp%hru_intcpevap)
         bmi_status = BMI_SUCCESS
     case('snow_evap')
-        size = sizeof(this%model%model_simulation%snow%snow_evap(1))
+        size = sizeof(this%model%model_simulation%snow%snow_evap)
         bmi_status = BMI_SUCCESS
     case('snowcov_area')
-        size = sizeof(this%model%model_simulation%snow%snowcov_area(1))
+        size = sizeof(this%model%model_simulation%snow%snowcov_area)
         bmi_status = BMI_SUCCESS
     case('soil_rechr')
-        size = sizeof(this%model%model_simulation%climate%soil_rechr(1))
+        size = sizeof(this%model%model_simulation%climate%soil_rechr)
         bmi_status = BMI_SUCCESS
     case('soil_rechr_max')
-        size = sizeof(this%model%model_simulation%climate%soil_rechr_max(1))
+        size = sizeof(this%model%model_simulation%climate%soil_rechr_max)
         bmi_status = BMI_SUCCESS
     case('soil_moist')
-        size = sizeof(this%model%model_simulation%climate%soil_moist(1))
+        size = sizeof(this%model%model_simulation%climate%soil_moist)
         bmi_status = BMI_SUCCESS
     case('soil_moist_max')
-        size = sizeof(this%model%model_simulation%climate%soil_moist_max(1))
+        size = sizeof(this%model%model_simulation%climate%soil_moist_max)
         bmi_status = BMI_SUCCESS
     case('hru_area_perv')
-        size = sizeof(this%model%model_simulation%runoff%hru_area_perv(1))
+        size = sizeof(this%model%model_simulation%runoff%hru_area_perv)
         bmi_status = BMI_SUCCESS
     case('hru_impervevap')
-        size = sizeof(this%model%model_simulation%runoff%hru_impervevap(1))
+        size = sizeof(this%model%model_simulation%runoff%hru_impervevap)
         bmi_status = BMI_SUCCESS
     case('soil_moist_chg')
-        size = sizeof(this%model%model_simulation%runoff%soil_moist_chg(1))
+        size = sizeof(this%model%model_simulation%runoff%soil_moist_chg)
         bmi_status = BMI_SUCCESS
     case('soil_rechr_chg')
-        size = sizeof(this%model%model_simulation%runoff%soil_rechr_chg(1))
+        size = sizeof(this%model%model_simulation%runoff%soil_rechr_chg)
         bmi_status = BMI_SUCCESS
     case('basin_potet')
         size = sizeof(this%model%model_simulation%potet%basin_potet)
@@ -719,21 +719,21 @@
         size = sizeof(this%model%model_simulation%runoff%basin_sroff)
         bmi_status = BMI_SUCCESS
     case('hortonian_lakes')
-        size = sizeof(this%model%model_simulation%runoff%hortonian_lakes(1))
+        size = sizeof(this%model%model_simulation%runoff%hortonian_lakes)
         bmi_status = BMI_SUCCESS
     case('dprst_seep_hru')
-        size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
+        size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru)
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
+        size = sizeof(this%model%model_simulation%runoff%strm_seg_in)
     case('pkwater_equiv') 
-        size = sizeof(this%model%model_simulation%climate%pkwater_equiv(1))
+        size = sizeof(this%model%model_simulation%climate%pkwater_equiv)
     case('hru_intcpstor') 
-        size = sizeof(this%model%model_simulation%intcp%hru_intcpstor(1))
+        size = sizeof(this%model%model_simulation%intcp%hru_intcpstor)
     case('dprst_stor_hru') 
-        size = sizeof(this%model%model_simulation%runoff%dprst_stor_hru(1))
+        size = sizeof(this%model%model_simulation%runoff%dprst_stor_hru)
     case('hru_impervstor') 
-        size = sizeof(this%model%model_simulation%runoff%hru_impervstor(1))
+        size = sizeof(this%model%model_simulation%runoff%hru_impervstor)
 
     case default
         size = -1
