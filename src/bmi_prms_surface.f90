@@ -84,7 +84,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 6
-    integer, parameter :: output_item_count = 48
+    integer, parameter :: output_item_count = 49
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         'hru_ppt        ', &
@@ -202,6 +202,9 @@
     output_items(46) = 'hru_intcpstor' !r32
     output_items(47) = 'dprst_stor_hru' !r64
     output_items(48) = 'hru_impervstor' !r32
+    
+    ! new items for streamflow module not already covered. dim by hru
+    output_items(49) = 'swrad' ! r32
     
 
     
@@ -332,7 +335,8 @@
         'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'active_mask', 'hru_area_perv', 'hru_frac_perv', &
         'hru_impervevap', 'soil_moist_chg', 'soil_rechr_chg', &
-        'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', 'hru_impervstor')
+        'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', &
+        'hru_impervstor', 'swrad')
         grid = 0
         bmi_status = BMI_SUCCESS
     case('seg_gwflow', 'seg_inflow', 'seg_outflow', 'strm_seg_in')
@@ -557,7 +561,7 @@
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', 'snowcov_area', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'hru_area_perv', 'hru_frac_perv', 'hru_impervevap', 'soil_moist_chg', &
-        'soil_rech_chg', 'gw2sm_grav', 'hru_intcpstor', 'hru_impervstor')
+        'soil_rech_chg', 'gw2sm_grav', 'hru_intcpstor', 'hru_impervstor', 'swrad')
         type = "real"
         bmi_status = BMI_SUCCESS
     case("seg_gwflow", "seg_inflow", "seg_outflow", 'basin_potet', &
@@ -593,7 +597,8 @@
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav', 'basin_potet', &
         'basin_sroff', 'lakein_sz', 'dprst_seep_hru', &
-        'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', 'hru_impervstor')
+        'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', 'hru_impervstor', &
+        'swrad')
         units = "in"
         bmi_status = BMI_SUCCESS
     case("seg_inflow", "seg_outflow", 'strm_seg_in', 'hru_area')
@@ -734,7 +739,8 @@
         size = sizeof(this%model%model_simulation%runoff%dprst_stor_hru)
     case('hru_impervstor') 
         size = sizeof(this%model%model_simulation%runoff%hru_impervstor)
-
+    case('swrad')
+        size = sizeof(this%model%model_simulation%solrad%swrad)
     case default
         size = -1
         bmi_status = BMI_FAILURE
@@ -919,7 +925,9 @@
     case('hru_impervstor')
         dest = [this%model%model_simulation%runoff%hru_impervstor]
         bmi_status = BMI_SUCCESS
-
+    case('swrad')
+        dest = [this%model%model_simulation%solrad%swrad]
+        bmi_status = BMI_SUCCESS
     case default
         dest = [-1.0]
         bmi_status = BMI_FAILURE
@@ -1196,6 +1204,12 @@
         bmi_status = BMI_SUCCESS
     case('hru_impervstor')
         src = c_loc(this%model%model_simulation%runoff%hru_impervstor(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('swrad')
+        src = c_loc(this%model%model_simulation%solrad%swrad(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
@@ -1541,7 +1555,15 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-
+    case('swrad')
+        src = c_loc(this%model%model_simulation%solrad%swrad(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
         case default
         bmi_status = BMI_FAILURE
     end select
