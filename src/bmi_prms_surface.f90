@@ -206,6 +206,28 @@
     ! new items for streamflow module not already covered. dim by hru
     output_items(49) = 'swrad' ! r32
     
+    ! new items for water-balance module
+    ! basin module
+    output_items(50) = 'cascadegw_flag' !int by 1
+    output_items(51) = 'nhru' !i32 by 1
+    output_items(52) = 'hru_area_dble' ! r64 by nhru
+    ! intercep module
+    output_items(53) = 'use_transfer_intcp' ! logical by 1
+    output_items(54) = 'canopy_covden' ! r32 by nhru
+    output_items(55) = 'gain_inches' ! r32 by nhru
+    output_items(56) = 'intcp_changeover' !r32 by hru
+    output_items(57) = 'intcp_evap' !r32 by hru
+    output_items(58) = 'intcp_stor'  !r32 by hru
+    output_items(59) = 'intcp_stor_ante' !r32 by hru
+    output_items(60) = 'net_apply' !r32 by hru
+    output_items(61) = 'net_ppt' !r32 by hru
+    output_items(62) = 'net_rain' !r32 by hru
+    output_items(63) = 'net_snow' !r32 by hru
+    output_items(64) = 'snow_intcp' !r32 by hru
+    output_items(65) = 'srain_intcp' !r32 by hru
+    output_items(66) = 'wrain_intcp' !r32 by hru
+    output_items(67) = 'last_intcp_stor' !r64 by 1
+    
 
     
     
