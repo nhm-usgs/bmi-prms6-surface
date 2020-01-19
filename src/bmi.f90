@@ -62,12 +62,12 @@ module bmif_2_0
       procedure(bmif_set_value_int), deferred :: set_value_int
       procedure(bmif_set_value_float), deferred :: set_value_float
       procedure(bmif_set_value_double), deferred :: set_value_double
-      !procedure(bmif_set_value_at_indices_int), deferred :: &
-      !     set_value_at_indices_int
-      !procedure(bmif_set_value_at_indices_float), deferred :: &
-      !     set_value_at_indices_float
-      !procedure(bmif_set_value_at_indices_double), deferred :: &
-      !     set_value_at_indices_double
+      procedure(bmif_set_value_at_indices_int), deferred :: &
+           set_value_at_indices_int
+      procedure(bmif_set_value_at_indices_float), deferred :: &
+           set_value_at_indices_float
+      procedure(bmif_set_value_at_indices_double), deferred :: &
+           set_value_at_indices_double
 
       ! Grid information
       procedure(bmif_get_grid_rank), deferred :: get_grid_rank
@@ -375,38 +375,38 @@ module bmif_2_0
       integer :: bmi_status
     end function bmif_set_value_double
     
-    !! Set integer values at particular (one-dimensional) indices.
-    !function bmif_set_value_at_indices_int(this, name, inds, src) &
-    !  result(bmi_status)
-    !  import :: bmi
-    !  class(bmi), intent(inout) :: this
-    !  character(len=*), intent(in) :: name
-    !  integer, intent(in) :: inds(:)
-    !  integer, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !end function bmif_set_value_at_indices_int
-    !
-    !! Set real values at particular (one-dimensional) indices.
-    !function bmif_set_value_at_indices_float(this, name, inds, src) &
-    !  result(bmi_status)
-    !  import :: bmi
-    !  class(bmi), intent(inout) :: this
-    !  character(len=*), intent(in) :: name
-    !  integer, intent(in) :: inds(:)
-    !  real, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !end function bmif_set_value_at_indices_float
-    !
-    !! Set double values at particular (one-dimensional) indices.
-    !function bmif_set_value_at_indices_double(this, name, inds, src) &
-    !  result(bmi_status)
-    !  import :: bmi
-    !  class(bmi), intent(inout) :: this
-    !  character(len=*), intent(in) :: name
-    !  integer, intent(in) :: inds(:)
-    !  double precision, intent(in) :: src(:)
-    !  integer :: bmi_status
-    !end function bmif_set_value_at_indices_double
+    ! Set integer values at particular (one-dimensional) indices.
+    function bmif_set_value_at_indices_int(this, name, inds, src) &
+      result(bmi_status)
+      import :: bmi
+      class(bmi), intent(inout) :: this
+      character(len=*), intent(in) :: name
+      integer, intent(in) :: inds(:)
+      integer, intent(in) :: src(:)
+      integer :: bmi_status
+    end function bmif_set_value_at_indices_int
+    
+    ! Set real values at particular (one-dimensional) indices.
+    function bmif_set_value_at_indices_float(this, name, inds, src) &
+      result(bmi_status)
+      import :: bmi
+      class(bmi), intent(inout) :: this
+      character(len=*), intent(in) :: name
+      integer, intent(in) :: inds(:)
+      real, intent(in) :: src(:)
+      integer :: bmi_status
+    end function bmif_set_value_at_indices_float
+    
+    ! Set double values at particular (one-dimensional) indices.
+    function bmif_set_value_at_indices_double(this, name, inds, src) &
+      result(bmi_status)
+      import :: bmi
+      class(bmi), intent(inout) :: this
+      character(len=*), intent(in) :: name
+      integer, intent(in) :: inds(:)
+      double precision, intent(in) :: src(:)
+      integer :: bmi_status
+    end function bmif_set_value_at_indices_double
 
     ! Get number of dimensions of the computational grid.
     function bmif_get_grid_rank(this, grid, rank) result(bmi_status)
