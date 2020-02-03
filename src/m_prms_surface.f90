@@ -5,6 +5,7 @@
     use, intrinsic :: iso_fortran_env, only: output_unit
     use Control_class, only: Control
     use Simulation_class, only: Simulation
+    use SOLAR_RADIATION_DEGDAY, only: Solrad_degday
     use PRMS_BASIN, only: Basin
     ! use ieee_arithmetic
     ! use ieee_features
@@ -19,6 +20,8 @@
         type(Simulation) :: model_simulation
         !! PRMS model simulation class
 
+        !! test for accessing Solrad_degday
+        type(Solrad_degday) :: model_solrad_deg_day
         integer(i64) :: start_rtc
         !! Starting system clock value
         integer(i64) :: end_rtc

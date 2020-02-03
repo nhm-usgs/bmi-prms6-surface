@@ -84,7 +84,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 52
-    integer, parameter :: output_item_count = 87
+    integer, parameter :: output_item_count = 90
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !potentially used for gsflow implementation?
@@ -268,7 +268,10 @@
         'nowtime', & !i32(6)
             
         !solrad
-        'swrad' & ! r32 by nhru
+        'swrad', & ! r32 by nhru
+        'dday_slope', & ! r32 by nhru:nmonths
+        'dday_intcp', & ! r32 by nhru:nmonths
+        'tmax_index' &! r32 by nhru:nmonths
         /)
 
 
@@ -1195,15 +1198,26 @@
         size = sizeof(this%model%model_simulation%solrad%radmax)
         bmi_status = BMI_SUCCESS
         !solar_radition_degday module
-    !case('dday_slope')
-    !    size = sizeof(this%model%model_simulation%solrad%dday_slope)
-    !    bmi_status = BMI_SUCCESS
-    !case('dday_intcp')
-    !    size = sizeof(this%model%model_simulation%solrad%dday_intcp)
-    !    bmi_status = BMI_SUCCESS
-    !case('tmax_index')
-    !    size = sizeof(this%model%model_simulation%solrad%tmax_index)
-    !    bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        !size = sizeof(this%model%model_simulation%solrad%dday_slope)
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                size = sizeof(solrad%dday_slope)
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_intcp')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                size = sizeof(solrad%dday_intcp)
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        !size = sizeof(this%model%model_simulation%solrad%tmax_index)
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                size = sizeof(solrad%tmax_index)
+        end select
+        bmi_status = BMI_SUCCESS
         !temperature module
     !case('tmax_cbh_adj')
     !    size = sizeof(this%model%model_simulation%model_temp_hru%tmax_cbh_adj)
@@ -1525,7 +1539,24 @@
     case('swrad')
         dest = [this%model%model_simulation%solrad%swrad]
         bmi_status = BMI_SUCCESS
-
+    case('dday_intcp')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                dest = [solrad%dday_intcp]
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                dest = [solrad%dday_slope]
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                dest = [solrad%tmax_index]
+        end select
+        bmi_status = BMI_SUCCESS
     case default
         dest = [-1.0]
         bmi_status = BMI_FAILURE
@@ -2658,7 +2689,42 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-
+    case('dday_intcp')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            src = c_loc(solrad%dday_intcp(1,1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            src = c_loc(solrad%dday_slope(1,1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            src = c_loc(solrad%tmax_index(1,1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
     case default
         bmi_status = BMI_FAILURE
     end select
@@ -2978,15 +3044,27 @@
         bmi_status = BMI_SUCCESS
         
         !solar_radition_degday module
-    !case('dday_slope')
-    !    this%model%model_simulation%solrad%dday_slope = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-    !case('dday_intcp')
-    !    this%model%model_simulation%solrad%dday_intcp = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-            !case('tmax_index')
-    !    this%model%model_simulation%solrad%tmax_index = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        !this%model%model_simulation%solrad%dday_slope = reshape(src, [nhru, nmonths])
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                solrad%dday_slope = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_intcp')
+        !this%model%model_simulation%solrad%dday_intcp = reshape(src, [nhru, nmonths])
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                solrad%dday_intcp = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        !this%model%model_simulation%solrad%tmax_index = reshape(src, [nhru, nmonths])
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                solrad%tmax_index = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
         
         !temperature module
     !case('tmax_cbh_adj')
@@ -3452,33 +3530,42 @@
         bmi_status = BMI_SUCCESS
         
         !solar_radition_degday module
-    !case('dday_slope')
-    !    dest = c_loc(this%model%model_simulation%solrad%dday_slope(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
-    !case('dday_intcp')
-    !    dest = c_loc(this%model%model_simulation%solrad%dday_intcp(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
-    !case('tmax_index')
-    !    dest = c_loc(this%model%model_simulation%solrad%tmax_index(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            dest = c_loc(solrad%dday_slope(1,1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_intcp')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            dest = c_loc(solrad%dday_intcp(1,1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            dest = c_loc(solrad%tmax_index(1,1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
         
         !temperature module
     !case('tmax_cbh_adj')

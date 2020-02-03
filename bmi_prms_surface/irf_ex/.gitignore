@@ -1,8 +1,10 @@
 output/
-*.nc
-*.wbal
-*.txt
 *.out
-*.default
-*.simple1
+*.wbal
+*.bak
+*.txt
+*.swo
+*.nc
+*.msgs
+control*.*
 sf_data
