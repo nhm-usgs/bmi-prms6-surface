@@ -1,4 +1,4 @@
-program test_get_value_at_indices
+﻿program test_get_value_at_indices
 
     use bmif_2_0, only: BMI_SUCCESS, BMI_FAILURE
     use bmiprmssurface
@@ -21,7 +21,11 @@ program test_get_value_at_indices
     if (retcode.ne.BMI_SUCCESS) then
         stop BMI_FAILURE
     end if
-
+    
+    retcode = test6()
+    if (retcode.ne.BMI_SUCCESS) then
+        stop BMI_FAILURE
+    end if
     contains
 
 ! Test getting i32 hru_type.
@@ -88,7 +92,7 @@ program test_get_value_at_indices
 
 
     ! Visual inspection.
-    write(*,*) "Test 6"
+    write(*,*) "Test 2"
     call print_1darray(tval, shape)
     do i = 1, size
         write(*,*) expected(i)
@@ -102,7 +106,39 @@ program test_get_value_at_indices
         end if
     end do
     end function test2
+  function test6() result(code)
+    character (len=*), parameter :: var_name = "dday_intcp"
+    integer, parameter :: rank = 2
+    !integer, parameter :: size = ‭168‬
+    integer, parameter, dimension(rank) :: shape = (/ 14, 12 /)
+    integer, parameter, dimension(shape(2)) :: &
+       indices = (/ 1, 15, 29, 43, 57, 71, 85, 99, 113, 127, 141, 155 /)
+    real, parameter, dimension(shape(2)) :: &
+         expected = (/ -10.0, -11.0, -13.0, -16.0, -20.0, -25.0, -30.0, &
+                       -25.0, -20.0, -16.0, -13.0, -11.0 /)
+    real :: tval(shape(2))
+    integer :: i, code
 
+    status = m%initialize(config_file)
+    status = m%update()
+    status = m%get_value_at_indices(var_name, tval, indices)
+    status = m%finalize()
+
+    ! Visual inspection.
+    write(*,*) "Test 6 get values"
+    call print_1darray(tval, shape(2))
+    write(*,*) "Test 6 expected values"
+    call print_1darray(expected, shape(2))
+
+    code = BMI_SUCCESS
+    do i = 1, shape(2)
+       if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
+          code = BMI_FAILURE
+          exit
+       end if
+    end do
+  end function test6
+  
   !function run_test() result(code)
   !  type (bmi_heat) :: m
   !  real, allocatable :: tval(:)

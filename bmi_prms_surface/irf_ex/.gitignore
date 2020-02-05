@@ -4,7 +4,8 @@ output/
 *.bak
 *.txt
 *.swo
-*.nc
-*.msgs
 control*.*
+*.nc
 sf_data
+*.msgs
+

@@ -229,12 +229,17 @@ contains
     status = m%finalize()
 
     ! Visual inspection.
-    write(*,*) "Test 6"
+    write(*,*) "Test 6 get values"
     call print_array(tval, shape)
-    do i = 1, shape(2)
-       write(*,*) expected((i-1)*shape(1)+1)
-    end do
-
+    write(*,*) "Test 6 expected values"
+    call print_array(expected, shape)
+    !do j = 1, shape(1)
+    !   do i = 1, shape(2)
+    !      write (*,"(f6.1)", advance="no") expected(j + shape(1)*(i-1))
+    !   end do
+    !   write (*,*)
+    !end do
+    !
     code = BMI_SUCCESS
     do i = 1, shape(1)
        if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
