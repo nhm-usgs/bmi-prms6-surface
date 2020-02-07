@@ -7,5 +7,4 @@ output/
 control.*
 sf_data
 *.msgs
-*.swo
 

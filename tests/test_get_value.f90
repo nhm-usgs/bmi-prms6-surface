@@ -16,7 +16,7 @@
   !test r32 hru_area
   retcode = test1()
   if (retcode.ne.BMI_SUCCESS) then
-     stop BMI_FAILURE
+    stop BMI_FAILURE
   end if
 
   ! test logical value
@@ -37,12 +37,10 @@
      stop BMI_FAILURE
   end if
 
-      !test r64 value dprst_stor_hru
-  ! Delete Basin variables are going away in prms6
-  !retcode = test5()
-  !if (retcode.ne.BMI_SUCCESS) then
-  !   stop BMI_FAILURE
-  !end if
+  retcode = test5()
+  if (retcode.ne.BMI_SUCCESS) then
+     stop BMI_FAILURE
+  end if
   
   retcode = test6()
   if (retcode.ne.BMI_SUCCESS) then
@@ -169,9 +167,6 @@ contains
     end do
   end function test4
 
-  ! Test getting r64 basin_area_inv.
-  ! basin variable are going away in prms6 so this test should be changed
-  ! commented out above.
   function test5() result(code)
     character (len=*), parameter :: &
          var_name = "dprst_stor_hru"
@@ -202,7 +197,6 @@ contains
     end do
   end function test5
 
-    ! Test getting r32 hru_area.
   function test6() result(code)
     character (len=*), parameter :: var_name = "dday_intcp"
     integer, parameter :: rank = 2
@@ -236,13 +230,7 @@ contains
     call print_array(tval, shape)
     write(*,*) "Test 6 expected values"
     call print_array(expected, shape)
-    !do j = 1, shape(1)
-    !   do i = 1, shape(2)
-    !      write (*,"(f6.1)", advance="no") expected(j + shape(1)*(i-1))
-    !   end do
-    !   write (*,*)
-    !end do
-    !
+
     code = BMI_SUCCESS
     do i = 1, shape(1)
        if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
