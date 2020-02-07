@@ -84,7 +84,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 52
-    integer, parameter :: output_item_count = 90
+    integer, parameter :: output_item_count = 87
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !potentially used for gsflow implementation?
@@ -172,7 +172,6 @@
         'hru_area', & !r32 by nhru
         'cov_type', & !i32 by nhru
         'hru_route_order', & !i32 by count(active_mask)
-        'basin_area_inv', & !r64 by 1
         'active_hrus', & !i32 by 1
         'nlake', & !i32 by 1
         'nhru', & !i32 by 1
@@ -225,7 +224,6 @@
         'use_sroff_transfer', & !logical by 1
         'hortonian_lakes', & !r64 by nhru
         'strm_seg_in', & !r64 by nsegment
-        'basin_sroff', & !r64 by 1
         'srunoff_updated_soil', & !logical by 1
             
         !snow
@@ -262,7 +260,6 @@
         'hru_ppt', & !r32 by hru
             
         !potet
-        'basin_potet', & !r64 by 1
             
         !prms_time
         'nowtime', & !i32(6)
@@ -480,8 +477,8 @@
         grid = 0
         bmi_status = BMI_SUCCESS
     case('cascade_flag', 'dprst_flag', 'gsflow_mode', &
-        'print_debug', 'nlake', 'basin_potet', 'active_hrus', &
-        'srunoff_updated_soil', 'basin_area_inv','basin_sroff', &
+        'print_debug', 'nlake', 'active_hrus', &
+        'srunoff_updated_soil', &
         'cascadegw_flag', 'nhru', 'use_transfer_intcp', 'last_intcp_stor', &
         'use_sroff_transfer', 'nmonths')
         grid = 2
@@ -739,8 +736,8 @@
         'transp_tmax')
         type = "real"
         bmi_status = BMI_SUCCESS
-        case('basin_potet', &
-        'basin_area_inv', 'basin_sroff', "hortonian_lakes", &
+        case( &
+        "hortonian_lakes", &
         'dprst_seep_hru', 'strm_seg_in', 'pkwater_equiv', 'dprst_stor_hru', &
         'last_intcp_stor', 'hru_area_dble', 'pkwater_ante', 'dprst_in', &
         'dprst_sroff_hru','dprst_stor_ante','dprst_vol_clos','dprst_vol_open', &
@@ -775,8 +772,8 @@
         "hru_actet","seg_gwflow", 'dprst_evap_hru', 'infil', &
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
-        'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav', 'basin_potet', &
-        'basin_sroff', 'dprst_seep_hru', &
+        'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav',  &
+        'dprst_seep_hru', &
         'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', 'hru_impervstor', &
         'swrad', 'last_intcp_stor','gain_inches', 'intcp_changeover', 'intcp_evap', &
         'intcp_stor', 'intcp_stor_ante', 'net_apply', 'net_ppt', 'net_rain', &
@@ -824,9 +821,6 @@
         bmi_status = BMI_SUCCESS
     case('dday_intcp')
         units = 'degree-day'
-        bmi_status = BMI_SUCCESS
-    case('basin_area_inv')
-        units = '1/acres'
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
@@ -986,15 +980,6 @@
         bmi_status = BMI_SUCCESS
     case('soil_rechr_chg')
         size = sizeof(this%model%model_simulation%runoff%soil_rechr_chg)
-        bmi_status = BMI_SUCCESS
-    case('basin_potet')
-        size = sizeof(this%model%model_simulation%potet%basin_potet)
-        bmi_status = BMI_SUCCESS
-    case('basin_area_inv')
-        size = sizeof(this%model%model_simulation%model_basin%basin_area_inv)
-        bmi_status = BMI_SUCCESS
-    case('basin_sroff')
-        size = sizeof(this%model%model_simulation%runoff%basin_sroff)
         bmi_status = BMI_SUCCESS
     case('hortonian_lakes')
         size = sizeof(this%model%model_simulation%runoff%hortonian_lakes)
@@ -1607,14 +1592,8 @@
         bmi_status = BMI_SUCCESS
        
         !potet
-    case('basin_potet')
-        dest = [this%model%model_simulation%potet%basin_potet]
-        bmi_status = BMI_SUCCESS
         
         !runoff
-    case('basin_sroff')
-        dest = [this%model%model_simulation%runoff%basin_sroff]
-        bmi_status = BMI_SUCCESS
     case('hortonian_lakes')
         dest = [this%model%model_simulation%runoff%hortonian_lakes]
         bmi_status = BMI_SUCCESS
@@ -2064,12 +2043,6 @@
         !basin
         
         !runoff
-    case('basin_sroff')
-        src = c_loc(this%model%model_simulation%runoff%basin_sroff)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
     case('hortonian_lakes')
         src = c_loc(this%model%model_simulation%runoff%hortonian_lakes(1))
         status = this%get_var_grid(name,gridid)
@@ -2138,12 +2111,6 @@
         bmi_status = BMI_SUCCESS
         
         !potet
-    case('basin_potet')
-        src = c_loc(this%model%model_simulation%potet%basin_potet)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
 
         
         !climate
