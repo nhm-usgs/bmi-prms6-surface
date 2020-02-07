@@ -37,10 +37,12 @@
      stop BMI_FAILURE
   end if
 
-  retcode = test5()
-  if (retcode.ne.BMI_SUCCESS) then
-     stop BMI_FAILURE
-  end if
+      !test r64 value dprst_stor_hru
+  ! Delete Basin variables are going away in prms6
+  !retcode = test5()
+  !if (retcode.ne.BMI_SUCCESS) then
+  !   stop BMI_FAILURE
+  !end if
   
   retcode = test6()
   if (retcode.ne.BMI_SUCCESS) then
@@ -167,6 +169,9 @@ contains
     end do
   end function test4
 
+  ! Test getting r64 basin_area_inv.
+  ! basin variable are going away in prms6 so this test should be changed
+  ! commented out above.
   function test5() result(code)
     character (len=*), parameter :: &
          var_name = "dprst_stor_hru"

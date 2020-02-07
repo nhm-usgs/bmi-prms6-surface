@@ -259,9 +259,7 @@
         'hru_snow            ', & !r32 by hru
         'hru_rain            ', & !r32 by hru
         'hru_ppt             ', & !r32 by hru
-            
-        !potet
-            
+
         !prms_time
         'nowtime             ', & !i32(6)
             
