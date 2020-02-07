@@ -7,4 +7,5 @@ output/
 control.*
 sf_data
 *.msgs
+.tmax.cbh.swo
 
