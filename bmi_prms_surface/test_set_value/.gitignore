@@ -3,8 +3,9 @@ output/
 *.wbal
 *.bak
 *.txt
+*.swo
+control*.*
 *.nc
-control.*
 sf_data
 *.msgs
 .tmax.cbh.swo

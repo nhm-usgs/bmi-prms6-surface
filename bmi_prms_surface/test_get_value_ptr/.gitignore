@@ -8,4 +8,5 @@ control*.*
 *.nc
 sf_data
 *.msgs
+.tmax.cbh.swo
 
