@@ -88,71 +88,70 @@
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !potentially used for gsflow implementation?
-        'hortonian_lakes', &
+        'hortonian_lakes     ', &
         !climateflow
-        'soil_moist_max', &
+        'soil_moist_max      ', &
         'soil_rechr_init_frac', &
         'soil_moist_init_frac', &
-        'soil_rechr_max_frac', &
-
+        'soil_rechr_max_frac ', &
         !intcp
-        'covden_sum', &
-        'snow_intcp', &
-        'covden_win', &
-        'wrain_intcp', &
-        'srain_intcp', &
+        'covden_sum          ', &
+        'snow_intcp          ', &
+        'covden_win          ', &
+        'wrain_intcp         ', &
+        'srain_intcp         ', &
         !potet
-        'epan_coef', &
+        'epan_coef           ', &
         !potet_jh
-        'jh_coef_hru', &
-        'jh_coef', &
+        'jh_coef_hru         ', &
+        'jh_coef             ', &
         !precipitation
-        'tmax_allrain_offset', &
-        'tmax_allsnow', &
-        'hru_ppt', &
-        'hru_rain', &
-        'hru_snow', &
+        'tmax_allrain_offset ', &
+        'tmax_allsnow        ', &
+        'hru_ppt             ', &
+        'hru_rain            ', &
+        'hru_snow            ', &
         !precipitation_hru
-        'adjmix_rain', &
-        'rain_cbh_adj', &
-        'snow_cbh_adj', &
+        'adjmix_rain         ', &
+        'rain_cbh_adj        ', &
+        'snow_cbh_adj        ', &
         !runoff
-        'va_open_exp', &
-        'va_clos_exp', &
-        'smidx_coef', &
-        'smidx_exp', &
-        'snowinfil_max', &
-        'carea_max', &
-        'imperv_stor_max', &
-        'dprst_flow_coef', &
+        'va_open_exp         ', &
+        'va_clos_exp         ', &
+        'smidx_coef          ', &
+        'smidx_exp           ', &
+        'snowinfil_max       ', &
+        'carea_max           ', &
+        'imperv_stor_max     ', &
+        'dprst_flow_coef     ', &
         'dprst_seep_rate_clos', &
-        'dprst_depth_avg', &
-        'dprst_area_max', &
-        'dprst_frac', &
-        'dprst_vol_clos', &
-        'dprst_vol_open', &
-        'hru_percent_imperv', &
+        'dprst_depth_avg     ', &
+        'dprst_area_max      ', &
+        'dprst_frac          ', &
+        'dprst_vol_clos      ', &
+        'dprst_vol_open      ', &
+        'hru_percent_imperv  ', &
         !snowcomp
-        'snarea_curve', &
-        'rad_trncf', &
-        'cecn_coef', &
-        'snarea_thresh', &
+        'snarea_curve        ', &
+        'rad_trncf           ', &
+        'cecn_coef           ', &
+        'snarea_thresh       ', &
         !solar_radiation
-        'radmax', &
+        'radmax              ', &
         !solar_radiation_degday
-        'dday_slope', &
-        'tmax_index', &
-        'dday_intcp', &
+        'dday_slope          ', &
+        'tmax_index          ', &
+        'dday_intcp          ', &
         !temperature
-        'tmax_cbh_adj', &
-        'tmin_cbh_adj', &
-        'transp_tmax', &
+        'tmax_cbh_adj        ', &
+        'tmin_cbh_adj        ', &
+        'transp_tmax         ', &
         !for soil2surfac
-        'infil', &
-        'sroff', &
-        'soil_rechr', &
-        'soil_moist', &
-        'strm_seg_in'/) ! this one not yet implemented in prms6 gwflow and soilzone
+        'infil               ', &
+        'sroff               ', &
+        'soil_rechr          ', &
+        'soil_moist          ', &
+        'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
     
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(output_item_count) :: &
@@ -160,12 +159,12 @@
         !misc
 
         !control
-        'gsflow_mode', & !logical by 1
-        'dprst_flag', & !iscalar by 1
-        'cascade_flag', & !iscalar by 1
-        'cascadegw_flag', & !iscalar by 1
-        'cascadegw_flag', & !int by 1
-        'print_debug', & !iscalar by 1
+        'gsflow_mode         ', & !logical by 1
+        'dprst_flag          ', & !iscalar by 1
+        'cascade_flag        ', & !iscalar by 1
+        'cascadegw_flag      ', & !iscalar by 1
+        'cascadegw_flag      ', & !int by 1
+        'print_debug         ', & !iscalar by 1
 
         !basin
         'hru_type', & !i32by nhru
@@ -180,17 +179,17 @@
         'active_mask', & !logical by nhru
 
         !climateflow
-        'soil_moist_max', & !r32 by nhru
-        'soil_moist', & !r32 by nhru
-        'soil_rechr', & !r32 by nhru
-        'soil_rechr_max', & !r32 by nhru
-        'pkwater_equiv', & !r64 by nhru
+        'soil_moist_max      ', & !r32 by nhru
+        'soil_moist          ', & !r32 by nhru
+        'soil_rechr          ', & !r32 by nhru
+        'soil_rechr_max      ', & !r32 by nhru
+        'pkwater_equiv       ', & !r64 by nhru
     
         !potet
-        'potet', & !r32 by nhru
+        'potet               ', & !r32 by nhru
 
         !transpiration
-        'transp_on', & !logical by nhru
+        'transp_on           ', & !logical by nhru
 
         !runoff
         'soil_rechr_chg', & !r32 by nhru
@@ -227,44 +226,45 @@
         'srunoff_updated_soil', & !logical by 1
             
         !snow
-        'snowcov_area', & !r32 by hru
-        'snow_evap', & !r32 by hru
-        'newsnow', & !i32 by hru
-        'pkwater_ante', & !r64 by hru
-        'pptmix', & !i32 by hru
-        'pptmix_nopack', & !logical by hru
-        'snowmelt', & !r32 by hru
+        'snowcov_area        ', & !r32 by hru
+        'snow_evap           ', & !r32 by hru
+        'newsnow             ', & !i32 by hru
+        'pkwater_ante        ', & !r64 by hru
+        'pptmix              ', & !i32 by hru
+        'pptmix_nopack       ', & !logical by hru
+        'snowmelt            ', & !r32 by hru
 
         !intcp
-        'hru_intcpevap', & !r32 by hru
-        'hru_intcpstor', & !r32 by hru
-        'use_transfer_intcp', & ! logical by 1
-        'canopy_covden', & ! r32 by nhru
-        'gain_inches', & ! r32 by nhru
-        'intcp_changeover', & !r32 by hru
-        'intcp_evap', & !r32 by hru
-        'intcp_stor', &  !r32 by hru
-        'intcp_stor_ante', & !r32 by hru
-        'net_apply', & !r32 by hru
-        'net_ppt', & !r32 by hru
-        'net_rain', & !r32 by hru
-        'net_snow', & !r32 by hru
-        'snow_intcp', & !r32 by hru
-        'srain_intcp' , &!r32 by hru
-        'wrain_intcp', & !r32 by hru
-        'last_intcp_stor', & !r64 by 1
+        'hru_intcpevap       ', & !r32 by hru
+        'hru_intcpstor       ', & !r32 by hru
+        'use_transfer_intcp  ', & ! logical by 1
+        'canopy_covden       ', & ! r32 by nhru
+        'gain_inches         ', & ! r32 by nhru
+        'intcp_changeover    ', & !r32 by hru
+        'intcp_evap          ', & !r32 by hru
+        'intcp_stor          ', &  !r32 by hru
+        'intcp_stor_ante     ', & !r32 by hru
+        'net_apply           ', & !r32 by hru
+        'net_ppt             ', & !r32 by hru
+        'net_rain            ', & !r32 by hru
+        'net_snow            ', & !r32 by hru
+        'snow_intcp          ', & !r32 by hru
+        'srain_intcp         ', &!r32 by hru
+        'wrain_intcp         ', & !r32 by hru
+        'last_intcp_stor     ', & !r64 by 1
     
         !precip
-        'hru_snow', & !r32 by hru
-        'hru_rain', & !r32 by hru
-        'hru_ppt', & !r32 by hru
+        'hru_snow            ', & !r32 by hru
+        'hru_rain            ', & !r32 by hru
+        'hru_ppt             ', & !r32 by hru
             
         !potet
             
         !prms_time
-        'nowtime', & !i32(6)
+        'nowtime             ', & !i32(6)
             
         !solrad
+
         'swrad', & ! r32 by nhru
         'dday_slope', & ! r32 by nhru:nmonths
         'dday_intcp', & ! r32 by nhru:nmonths
