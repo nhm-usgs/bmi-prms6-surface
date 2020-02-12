@@ -94,6 +94,7 @@
         'soil_rechr_init_frac', &
         'soil_moist_init_frac', &
         'soil_rechr_max_frac ', &
+
         !intcp
         'covden_sum          ', &
         'snow_intcp          ', &
@@ -167,16 +168,16 @@
         'print_debug         ', & !iscalar by 1
 
         !basin
-        'hru_type', & !i32by nhru
-        'hru_area', & !r32 by nhru
-        'cov_type', & !i32 by nhru
-        'hru_route_order', & !i32 by count(active_mask)
-        'active_hrus', & !i32 by 1
-        'nlake', & !i32 by 1
-        'nhru', & !i32 by 1
-        'hru_area_dble', & ! r64 by nhru
-        'nmonths', & !i32 by 1
-        'active_mask', & !logical by nhru
+        'hru_type            ', & !i32by nhru
+        'hru_area            ', & !r32 by nhru
+        'cov_type            ', & !i32 by nhru
+        'hru_route_order     ', & !i32 by count(active_mask)
+        'active_hrus         ', & !i32 by 1
+        'nlake               ', & !i32 by 1
+        'nhru                ', & !i32 by 1
+        'hru_area_dble       ', & ! r64 by nhru
+        'nmonths             ', & !i32 by 1
+        'active_mask         ', & !logical by nhru
 
         !climateflow
         'soil_moist_max      ', & !r32 by nhru
@@ -192,37 +193,37 @@
         'transp_on           ', & !logical by nhru
 
         !runoff
-        'soil_rechr_chg', & !r32 by nhru
-        'soil_moist_chg', & !r32 by nhru
-        'hru_impervevap', & !r32 by nhru
-        'hru_frac_perv', & !r32 by nhru
-        'hru_area_perv', & !r32 by nhru
-        'hru_hortn_cascflow', & !r64 by hru
-        'hru_percent_imperv', & !r32 by hru
-        'hru_sroffi', & !r32 by hru
-        'hru_sroffp', & !r32 by hru
-        'hru_impervstor', & !r32 by nhru
-        'infil', & !r32 by nhru
-        'sroff', & !r32 by nhru
-        'dprst_evap_hru', &  !r32 by nhru
-        'dprst_seep_hru', & !r64 by nhru
-        'dprst_area_clos', & !r32 by hru
-        'dprst_area_max', & !r32 by hru
-        'dprst_frac', & !r32 by hru
-        'dprst_in', & !r64 by hru
-        'dprst_insroff_hru', & !r32 by hru
-        'dprst_sroff_hru', & !r64 by hru
-        'dprst_stor_ante', & !r64 by hru
-        'dprst_vol_clos', & !r64 by hru
-        'dprst_vol_open', & !r64 by hru
-        'dprst_stor_hru', & !r64 by nhru
-        'imperv_stor_ante', & !r32 by hru
-        'sro_to_dprst_perv', & !r32 by hru
-        'upslope_hortonian', & !r64 by hru
-        'hortonian_flow', & !r32 by hru
-        'use_sroff_transfer', & !logical by 1
-        'hortonian_lakes', & !r64 by nhru
-        'strm_seg_in', & !r64 by nsegment
+        'soil_rechr_chg      ', & !r32 by nhru
+        'soil_moist_chg      ', & !r32 by nhru
+        'hru_impervevap      ', & !r32 by nhru
+        'hru_frac_perv       ', & !r32 by nhru
+        'hru_area_perv       ', & !r32 by nhru
+        'hru_hortn_cascflow  ', & !r64 by hru
+        'hru_percent_imperv  ', & !r32 by hru
+        'hru_sroffi          ', & !r32 by hru
+        'hru_sroffp          ', & !r32 by hru
+        'hru_impervstor      ', & !r32 by nhru
+        'infil               ', & !r32 by nhru
+        'sroff               ', & !r32 by nhru
+        'dprst_evap_hru      ', &  !r32 by nhru
+        'dprst_seep_hru      ', & !r64 by nhru
+        'dprst_area_clos     ', & !r32 by hru
+        'dprst_area_max      ', & !r32 by hru
+        'dprst_frac          ', & !r32 by hru
+        'dprst_in            ', & !r64 by hru
+        'dprst_insroff_hru   ', & !r32 by hru
+        'dprst_sroff_hru     ', & !r64 by hru
+        'dprst_stor_ante     ', & !r64 by hru
+        'dprst_vol_clos      ', & !r64 by hru
+        'dprst_vol_open      ', & !r64 by hru
+        'dprst_stor_hru      ', & !r64 by nhru
+        'imperv_stor_ante    ', & !r32 by hru
+        'sro_to_dprst_perv   ', & !r32 by hru
+        'upslope_hortonian   ', & !r64 by hru
+        'hortonian_flow      ', & !r32 by hru
+        'use_sroff_transfer  ', & !logical by 1
+        'hortonian_lakes     ', & !r64 by nhru
+        'strm_seg_in         ', & !r64 by nsegment
         'srunoff_updated_soil', & !logical by 1
             
         !snow
@@ -250,6 +251,7 @@
         'net_snow            ', & !r32 by hru
         'snow_intcp          ', & !r32 by hru
         'srain_intcp         ', &!r32 by hru
+
         'wrain_intcp         ', & !r32 by hru
         'last_intcp_stor     ', & !r64 by 1
     
@@ -265,10 +267,10 @@
             
         !solrad
 
-        'swrad', & ! r32 by nhru
-        'dday_slope', & ! r32 by nhru:nmonths
-        'dday_intcp', & ! r32 by nhru:nmonths
-        'tmax_index' &! r32 by nhru:nmonths
+        'swrad               ', & ! r32 by nhru
+        'dday_slope          ', & ! r32 by nhru:nmonths
+        'dday_intcp          ', & ! r32 by nhru:nmonths
+        'tmax_index          ' &! r32 by nhru:nmonths
         /)
 
 
