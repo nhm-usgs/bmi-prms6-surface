@@ -1,28 +1,23 @@
 program test_get_output_var_names
 
-  use bmif_1_2, only: BMI_FAILURE, BMI_MAX_VAR_NAME
-  use bmiheatf
+  use bmif_2_0, only: BMI_FAILURE, BMI_MAX_VAR_NAME
+  use bmiprmssurface
   use fixtures, only: status
 
   implicit none
 
-  integer, parameter :: n_outputs = 1
-  character (len=*), parameter, dimension(n_outputs) :: &
-       expected = (/ "plate_surface__temperature" /)
-
-  type (bmi_heat) :: m
+  type (bmi_prms_surface) :: m
   character (len=BMI_MAX_VAR_NAME), pointer :: names(:)
   integer :: i
   
   status = m%get_output_var_names(names)
 
   ! Visualize
-  write(*,*) names
-  write(*,*) expected
-  
-  do i=1, size(names)
-     if (names(i).ne.expected(i)) then
-        stop BMI_FAILURE
-     end if
+  do i = 1, size(names)
+     write(*,*) trim(names(i))
   end do
+  
+  if (status == BMI_FAILURE) then
+     stop BMI_FAILURE
+  end if
 end program test_get_output_var_names
