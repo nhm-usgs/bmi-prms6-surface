@@ -28,3 +28,6 @@ message(STATUS "prms include: ${prmslibmod}")
 message(STATUS "coretran include: ${coretranmod}")
 
 add_subdirectory(src)
+add_subdirectory(tests)
+
+include(CTest)
