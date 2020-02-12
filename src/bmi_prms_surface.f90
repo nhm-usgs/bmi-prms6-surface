@@ -250,7 +250,8 @@
         'net_rain            ', & !r32 by hru
         'net_snow            ', & !r32 by hru
         'snow_intcp          ', & !r32 by hru
-        'srain_intcp         ' , &!r32 by hru
+        'srain_intcp         ', &!r32 by hru
+
         'wrain_intcp         ', & !r32 by hru
         'last_intcp_stor     ', & !r64 by 1
     
@@ -265,6 +266,7 @@
         'nowtime             ', & !i32(6)
             
         !solrad
+
         'swrad               ', & ! r32 by nhru
         'dday_slope          ', & ! r32 by nhru:nmonths
         'dday_intcp          ', & ! r32 by nhru:nmonths
