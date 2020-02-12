@@ -12,7 +12,7 @@ module fixtures
     public :: isReal8EqualReal8
 
     real(real32), parameter :: delta4 = 0.1
-    real(real64), parameter :: delta8 = 0.0000000001
+    real(real64), parameter :: delta8 = 0.000001
 
 contains
 
@@ -28,8 +28,21 @@ contains
        write (*,*)
     end do
   end subroutine print_array
+    
+  subroutine print_i_array(array, dims)
+    integer :: dims(2)
+    integer, dimension(product(dims)) :: array
+    integer :: i, j
 
-    subroutine print_1darray(array, dims)
+    do j = 1, dims(1)
+       do i = 1, dims(2)
+          write (*,"(i2)", advance="no") array(j + dims(1)*(i-1))
+       end do
+       write (*,*)
+    end do
+  end subroutine print_i_array
+
+  subroutine print_1darray(array, dims)
     integer :: dims(1)
     real, dimension(dims(1)) :: array
     integer :: i, j
@@ -80,4 +93,11 @@ contains
             real(real64), intent(in) :: rhs
             equal = (dabs(lhs - rhs) .le. delta8)
         end function isReal8EqualReal8
+        
+        logical function isintEqualint(lhs, rhs) result(equal)
+            integer, intent(in) :: lhs
+            integer, intent(in) :: rhs
+            equal = ((lhs - rhs) .eq. 0)
+        end function isintEqualint
+
 end module fixtures

@@ -167,17 +167,16 @@
         'print_debug         ', & !iscalar by 1
 
         !basin
-        'hru_type            ', & !i32by nhru
-        'hru_area            ', & !r32 by nhru
-        'cov_type            ', & !i32 by nhru
-        'hru_route_order     ', & !i32 by count(active_mask)
-        'basin_area_inv      ', & !r64 by 1
-        'active_hrus         ', & !i32 by 1
-        'nlake               ', & !i32 by 1
-        'nhru                ', & !i32 by 1
-        'hru_area_dble       ', & ! r64 by nhru
-        'nmonths             ', & !i32 by 1
-        'active_mask         ', & !logical by nhru
+        'hru_type', & !i32by nhru
+        'hru_area', & !r32 by nhru
+        'cov_type', & !i32 by nhru
+        'hru_route_order', & !i32 by count(active_mask)
+        'active_hrus', & !i32 by 1
+        'nlake', & !i32 by 1
+        'nhru', & !i32 by 1
+        'hru_area_dble', & ! r64 by nhru
+        'nmonths', & !i32 by 1
+        'active_mask', & !logical by nhru
 
         !climateflow
         'soil_moist_max      ', & !r32 by nhru
@@ -193,38 +192,37 @@
         'transp_on           ', & !logical by nhru
 
         !runoff
-        'soil_rechr_chg      ', & !r32 by nhru
-        'soil_moist_chg      ', & !r32 by nhru
-        'hru_impervevap      ', & !r32 by nhru
-        'hru_frac_perv       ', & !r32 by nhru
-        'hru_area_perv       ', & !r32 by nhru
-        'hru_hortn_cascflow  ', & !r64 by hru
-        'hru_percent_imperv  ', & !r32 by hru
-        'hru_sroffi          ', & !r32 by hru
-        'hru_sroffp          ', & !r32 by hru
-        'hru_impervstor      ', & !r32 by nhru
-        'infil               ', & !r32 by nhru
-        'sroff               ', & !r32 by nhru
-        'dprst_evap_hru      ', &  !r32 by nhru
-        'dprst_seep_hru      ', & !r64 by nhru
-        'dprst_area_clos     ', & !r32 by hru
-        'dprst_area_max      ', & !r32 by hru
-        'dprst_frac          ', & !r32 by hru
-        'dprst_in            ', & !r64 by hru
-        'dprst_insroff_hru   ', & !r32 by hru
-        'dprst_sroff_hru     ', & !r64 by hru
-        'dprst_stor_ante     ', & !r64 by hru
-        'dprst_vol_clos      ', & !r64 by hru
-        'dprst_vol_open      ', & !r64 by hru
-        'dprst_stor_hru      ', & !r64 by nhru
-        'imperv_stor_ante    ', & !r32 by hru
-        'sro_to_dprst_perv   ', & !r32 by hru
-        'upslope_hortonian   ', & !r64 by hru
-        'hortonian_flow      ', & !r32 by hru
-        'use_sroff_transfer  ', & !logical by 1
-        'hortonian_lakes     ', & !r64 by nhru
-        'strm_seg_in         ', & !r64 by nsegment
-        'basin_sroff         ', & !r64 by 1
+        'soil_rechr_chg', & !r32 by nhru
+        'soil_moist_chg', & !r32 by nhru
+        'hru_impervevap', & !r32 by nhru
+        'hru_frac_perv', & !r32 by nhru
+        'hru_area_perv', & !r32 by nhru
+        'hru_hortn_cascflow', & !r64 by hru
+        'hru_percent_imperv', & !r32 by hru
+        'hru_sroffi', & !r32 by hru
+        'hru_sroffp', & !r32 by hru
+        'hru_impervstor', & !r32 by nhru
+        'infil', & !r32 by nhru
+        'sroff', & !r32 by nhru
+        'dprst_evap_hru', &  !r32 by nhru
+        'dprst_seep_hru', & !r64 by nhru
+        'dprst_area_clos', & !r32 by hru
+        'dprst_area_max', & !r32 by hru
+        'dprst_frac', & !r32 by hru
+        'dprst_in', & !r64 by hru
+        'dprst_insroff_hru', & !r32 by hru
+        'dprst_sroff_hru', & !r64 by hru
+        'dprst_stor_ante', & !r64 by hru
+        'dprst_vol_clos', & !r64 by hru
+        'dprst_vol_open', & !r64 by hru
+        'dprst_stor_hru', & !r64 by nhru
+        'imperv_stor_ante', & !r32 by hru
+        'sro_to_dprst_perv', & !r32 by hru
+        'upslope_hortonian', & !r64 by hru
+        'hortonian_flow', & !r32 by hru
+        'use_sroff_transfer', & !logical by 1
+        'hortonian_lakes', & !r64 by nhru
+        'strm_seg_in', & !r64 by nsegment
         'srunoff_updated_soil', & !logical by 1
             
         !snow
@@ -261,13 +259,16 @@
         'hru_ppt             ', & !r32 by hru
             
         !potet
-        'basin_potet         ', & !r64 by 1
             
         !prms_time
         'nowtime             ', & !i32(6)
             
         !solrad
-        'swrad               ' & ! r32 by nhru
+
+        'swrad', & ! r32 by nhru
+        'dday_slope', & ! r32 by nhru:nmonths
+        'dday_intcp', & ! r32 by nhru:nmonths
+        'tmax_index' &! r32 by nhru:nmonths
         /)
 
 
@@ -476,8 +477,8 @@
         grid = 0
         bmi_status = BMI_SUCCESS
     case('cascade_flag', 'dprst_flag', 'gsflow_mode', &
-        'print_debug', 'nlake', 'basin_potet', 'active_hrus', &
-        'srunoff_updated_soil', 'basin_area_inv','basin_sroff', &
+        'print_debug', 'nlake', 'active_hrus', &
+        'srunoff_updated_soil', &
         'cascadegw_flag', 'nhru', 'use_transfer_intcp', 'last_intcp_stor', &
         'use_sroff_transfer', 'nmonths')
         grid = 2
@@ -735,8 +736,8 @@
         'transp_tmax')
         type = "real"
         bmi_status = BMI_SUCCESS
-        case('basin_potet', &
-        'basin_area_inv', 'basin_sroff', "hortonian_lakes", &
+        case( &
+        "hortonian_lakes", &
         'dprst_seep_hru', 'strm_seg_in', 'pkwater_equiv', 'dprst_stor_hru', &
         'last_intcp_stor', 'hru_area_dble', 'pkwater_ante', 'dprst_in', &
         'dprst_sroff_hru','dprst_stor_ante','dprst_vol_clos','dprst_vol_open', &
@@ -771,8 +772,8 @@
         "hru_actet","seg_gwflow", 'dprst_evap_hru', 'infil', &
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
-        'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav', 'basin_potet', &
-        'basin_sroff', 'dprst_seep_hru', &
+        'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav',  &
+        'dprst_seep_hru', &
         'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', 'hru_impervstor', &
         'swrad', 'last_intcp_stor','gain_inches', 'intcp_changeover', 'intcp_evap', &
         'intcp_stor', 'intcp_stor_ante', 'net_apply', 'net_ppt', 'net_rain', &
@@ -820,9 +821,6 @@
         bmi_status = BMI_SUCCESS
     case('dday_intcp')
         units = 'degree-day'
-        bmi_status = BMI_SUCCESS
-    case('basin_area_inv')
-        units = '1/acres'
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
@@ -983,15 +981,6 @@
     case('soil_rechr_chg')
         size = sizeof(this%model%model_simulation%runoff%soil_rechr_chg)
         bmi_status = BMI_SUCCESS
-    case('basin_potet')
-        size = sizeof(this%model%model_simulation%potet%basin_potet)
-        bmi_status = BMI_SUCCESS
-    case('basin_area_inv')
-        size = sizeof(this%model%model_simulation%model_basin%basin_area_inv)
-        bmi_status = BMI_SUCCESS
-    case('basin_sroff')
-        size = sizeof(this%model%model_simulation%runoff%basin_sroff)
-        bmi_status = BMI_SUCCESS
     case('hortonian_lakes')
         size = sizeof(this%model%model_simulation%runoff%hortonian_lakes)
         bmi_status = BMI_SUCCESS
@@ -1119,13 +1108,18 @@
         size = sizeof(this%model%model_simulation%potet%epan_coef)
         bmi_status = BMI_SUCCESS
     !    !potet_jh - !not implemented yet
-    !case('jh_coef_hru ')
-    !    size = sizeof(this%model%model_simulation%potet_jh%jh_coef_hru)
-    !    bmi_status = BMI_SUCCESS
-    !case('jh_coef ')
-    !    size = sizeof(this%model%model_simulation%potet_jh%jh_coef_hru)
-    !    bmi_status = BMI_SUCCESS
-        
+    case('jh_coef_hru ')
+        select type(potet => this%model%model_simulation%potet)
+            type is(Potet_jh)
+                size = sizeof(potet%jh_coef_hru)
+        end select
+        bmi_status = BMI_SUCCESS
+    case('jh_coef ')
+        select type(potet => this%model%model_simulation%potet)
+            type is(Potet_jh)
+                size = sizeof(potet%jh_coef)
+        end select
+        bmi_status = BMI_SUCCESS
         !precipitation
     case('tmax_allrain_offset')
         size = sizeof(this%model%model_simulation%model_precip%tmax_allrain_offset)
@@ -1134,15 +1128,24 @@
         size = sizeof(this%model%model_simulation%model_precip%tmax_allsnow)
         bmi_status = BMI_SUCCESS
         !precipitation_hru - !not implemented yet
-    !case('adjmix_rain')
-    !    size = sizeof(this%model%model_simulation%model_precip%adjmix_rain)
-    !    bmi_status = BMI_SUCCESS
-    !case('rain_cbh_adj')
-    !    size = sizeof(this%model%model_simulation%model_precip%rain_cbh_adj)
-    !    bmi_status = BMI_SUCCESS
-    !case('snow_cbh_adj')
-    !    size = sizeof(this%model%model_simulation%model_precip%snow_cbh_adj)
-    !    bmi_status = BMI_SUCCESS
+    case('adjmix_rain')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                size = sizeof(model_precip%adjmix_rain)
+        end select
+        bmi_status = BMI_SUCCESS
+    case('rain_cbh_adj')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                size = sizeof(model_precip%rain_cbh_adj)
+        end select
+        bmi_status = BMI_SUCCESS
+    case('snow_cbh_adj')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                size = sizeof(model_precip%snow_cbh_adj)
+        end select
+        bmi_status = BMI_SUCCESS
         
         !runoff
     case('va_open_exp')
@@ -1194,22 +1197,39 @@
         size = sizeof(this%model%model_simulation%solrad%radmax)
         bmi_status = BMI_SUCCESS
         !solar_radition_degday module
-    !case('dday_slope')
-    !    size = sizeof(this%model%model_simulation%solrad%dday_slope)
-    !    bmi_status = BMI_SUCCESS
-    !case('dday_intcp')
-    !    size = sizeof(this%model%model_simulation%solrad%dday_intcp)
-    !    bmi_status = BMI_SUCCESS
-    !case('tmax_index')
-    !    size = sizeof(this%model%model_simulation%solrad%tmax_index)
-    !    bmi_status = BMI_SUCCESS
-        !temperature module
-    !case('tmax_cbh_adj')
-    !    size = sizeof(this%model%model_simulation%model_temp_hru%tmax_cbh_adj)
-    !    bmi_status = BMI_SUCCESS
-    !case('tmin_cbh_adj')
-    !    size = sizeof(this%model%model_simulation%model_temp_hru%tmin_cbh_adj)
-    !    bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        !size = sizeof(this%model%model_simulation%solrad%dday_slope)
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                size = sizeof(solrad%dday_slope)
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_intcp')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                size = sizeof(solrad%dday_intcp)
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        !size = sizeof(this%model%model_simulation%solrad%tmax_index)
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                size = sizeof(solrad%tmax_index)
+        end select
+        bmi_status = BMI_SUCCESS
+        !temperature_hru module
+    case('tmax_cbh_adj')
+        select type(model_temp => this%model%model_simulation%model_temp)
+            type is(Temperature_Hru)
+                size = sizeof(model_temp%tmax_cbh_adj)
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmin_cbh_adj')
+        select type(model_temp => this%model%model_simulation%model_temp)
+            type is(Temperature_Hru)
+                size = sizeof(model_temp%tmin_cbh_adj)
+        end select
+        bmi_status = BMI_SUCCESS
     case default
         size = -1
         bmi_status = BMI_FAILURE
@@ -1524,7 +1544,24 @@
     case('swrad')
         dest = [this%model%model_simulation%solrad%swrad]
         bmi_status = BMI_SUCCESS
-
+    case('dday_intcp')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                dest = [solrad%dday_intcp]
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                dest = [solrad%dday_slope]
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                dest = [solrad%tmax_index]
+        end select
+        bmi_status = BMI_SUCCESS
     case default
         dest = [-1.0]
         bmi_status = BMI_FAILURE
@@ -1555,14 +1592,8 @@
         bmi_status = BMI_SUCCESS
        
         !potet
-    case('basin_potet')
-        dest = [this%model%model_simulation%potet%basin_potet]
-        bmi_status = BMI_SUCCESS
         
         !runoff
-    case('basin_sroff')
-        dest = [this%model%model_simulation%runoff%basin_sroff]
-        bmi_status = BMI_SUCCESS
     case('hortonian_lakes')
         dest = [this%model%model_simulation%runoff%hortonian_lakes]
         bmi_status = BMI_SUCCESS
@@ -2012,12 +2043,6 @@
         !basin
         
         !runoff
-    case('basin_sroff')
-        src = c_loc(this%model%model_simulation%runoff%basin_sroff)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
     case('hortonian_lakes')
         src = c_loc(this%model%model_simulation%runoff%hortonian_lakes(1))
         status = this%get_var_grid(name,gridid)
@@ -2086,12 +2111,6 @@
         bmi_status = BMI_SUCCESS
         
         !potet
-    case('basin_potet')
-        src = c_loc(this%model%model_simulation%potet%basin_potet)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
 
         
         !climate
@@ -2657,7 +2676,42 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-
+    case('dday_intcp')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            src = c_loc(solrad%dday_intcp(1,1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            src = c_loc(solrad%dday_slope(1,1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            src = c_loc(solrad%tmax_index(1,1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
     case default
         bmi_status = BMI_FAILURE
     end select
@@ -2879,14 +2933,20 @@
     case('epan_coef')
         this%model%model_simulation%potet%epan_coef = reshape(src, [nhru, nmonths])
         bmi_status = BMI_SUCCESS
-        !potet_jh module not yet implemented so commented out
-        
-    !case('jh_coef')
-    !    this%model%model_simulation%potet_jh%jh_coef = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-    !case('jh_coef')
-    !    this%model%model_simulation%potet_jh%jh_coef = src
-    !    bmi_status = BMI_SUCCESS
+
+        !potet_jh module 
+    case('jh_coef')
+        select type(potet => this%model%model_simulation%potet)
+            type is(Potet_jh)
+                potet%jh_coef = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case('jh_coef_hru')
+        select type(potet => this%model%model_simulation%potet)
+            type is(Potet_jh)
+                potet%jh_coef_hru = src
+        end select
+        bmi_status = BMI_SUCCESS
         
         ! precipitation module
     case('tmax_allrain_offset')
@@ -2906,15 +2966,24 @@
         bmi_status = BMI_SUCCESS
         
         !precipitaion_hru not yet implemented
-    !case('adjmix_rain')
-    !    this%model%model_simulation%model_precip%adjmix_rain = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-    !case('rain_cbh_adj')
-    !    this%model%model_simulation%model_precip%rain_cbh_adj = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-    !case('snow_cbh_adj')
-    !    this%model%model_simulation%model_precip%snow_cbh_adj = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
+    case('adjmix_rain')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                model_precip%adjmix_rain = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case('rain_cbh_adj')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                model_precip%rain_cbh_adj = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case('snow_cbh_adj')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                model_precip%snow_cbh_adj = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
         
         !runoff
     case('va_open_exp')
@@ -2977,24 +3046,42 @@
         bmi_status = BMI_SUCCESS
         
         !solar_radition_degday module
-    !case('dday_slope')
-    !    this%model%model_simulation%solrad%dday_slope = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-    !case('dday_intcp')
-    !    this%model%model_simulation%solrad%dday_intcp = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-            !case('tmax_index')
-    !    this%model%model_simulation%solrad%tmax_index = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        !this%model%model_simulation%solrad%dday_slope = reshape(src, [nhru, nmonths])
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                solrad%dday_slope = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_intcp')
+        !this%model%model_simulation%solrad%dday_intcp = reshape(src, [nhru, nmonths])
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                solrad%dday_intcp = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        !this%model%model_simulation%solrad%tmax_index = reshape(src, [nhru, nmonths])
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+                solrad%tmax_index = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
         
         !temperature module
-    !case('tmax_cbh_adj')
-    !    this%model%model_simulation%model_temp_hru%tmax_cbh_adj = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-    !case('tmin_cbh_adj')
-    !    this%model%model_simulation%model_temp_hru%tmin_cbh_adj = reshape(src, [nhru, nmonths])
-    !    bmi_status = BMI_SUCCESS
-       case default
+    case('tmax_cbh_adj')
+        select type(model_temp => this%model%model_simulation%model_temp)
+            type is(Temperature_Hru)
+                model_temp%tmax_cbh_adj = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmin_cbh_adj')
+        select type(model_temp => this%model%model_simulation%model_temp)
+            type is(Temperature_Hru)
+                model_temp%tmin_cbh_adj = reshape(src, [nhru, nmonths])
+        end select
+        bmi_status = BMI_SUCCESS
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_set_float
@@ -3186,25 +3273,31 @@
         end do
         bmi_status = BMI_SUCCESS
         
-        !potet_jh module not yet implemented so commented out
-    !case('jh_coef')
-    !    dest = c_loc(this%model%model_simulation%potet_jh%jh_coef = reshape(src, [nhru, nmonths])
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
-    !case('jh_coef')
-    !    dest = c_loc(this%model%model_simulation%potet_jh%jh_coef(1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
+        !potet_jh module 
+    case('jh_coef')
+        select type(potet => this%model%model_simulation%potet)
+            type is(Potet_jh)
+                dest = c_loc(potet%jh_coef(1,1))
+                status = this%get_var_grid(name, gridid)
+                status = this%get_grid_size(gridid, n_elements)
+                call c_f_pointer(dest, dest_flattened, [n_elements])
+                do i = 1, size(inds)
+                    dest_flattened(inds(i)) = src(i)
+                end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('jh_coef_hru')
+        select type(potet => this%model%model_simulation%potet)
+            type is(Potet_jh)
+                dest = c_loc(potet%jh_coef_hru(1))
+                status = this%get_var_grid(name, gridid)
+                status = this%get_grid_size(gridid, n_elements)
+                call c_f_pointer(dest, dest_flattened, [n_elements])
+                do i = 1, size(inds)
+                    dest_flattened(inds(i)) = src(i)
+                end do
+        end select
+        bmi_status = BMI_SUCCESS
         
         ! precipitation module
     case('tmax_allrain_offset')
@@ -3254,33 +3347,42 @@
         bmi_status = BMI_SUCCESS
         
         !precipitaion_hru not yet implemented
-    !case('adjmix_rain')
-    !    dest = c_loc(this%model%model_simulation%model_precip%adjmix_rain(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
-    !case('rain_cbh_adj')
-    !    dest = c_loc(this%model%model_simulation%model_precip%rain_cbh_adj(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
-    !case('snow_cbh_adj')
-    !    dest = c_loc(this%model%model_simulation%model_precip%snow_cbh_adj(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
+    case('adjmix_rain')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                dest = c_loc(model_precip%adjmix_rain(1, 1))
+                status = this%get_var_grid(name, gridid)
+                status = this%get_grid_size(gridid, n_elements)
+                call c_f_pointer(dest, dest_flattened, [n_elements])
+                do i = 1, size(inds)
+                    dest_flattened(inds(i)) = src(i)
+                end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('rain_cbh_adj')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                dest = c_loc(model_precip%rain_cbh_adj(1, 1))
+                status = this%get_var_grid(name, gridid)
+                status = this%get_grid_size(gridid, n_elements)
+                call c_f_pointer(dest, dest_flattened, [n_elements])
+                do i = 1, size(inds)
+                    dest_flattened(inds(i)) = src(i)
+                end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('snow_cbh_adj')
+        select type(model_precip => this%model%model_simulation%model_precip)
+            type is(Precipitation_hru)
+                dest = c_loc(model_precip%snow_cbh_adj(1, 1))
+                status = this%get_var_grid(name, gridid)
+                status = this%get_grid_size(gridid, n_elements)
+                call c_f_pointer(dest, dest_flattened, [n_elements])
+                do i = 1, size(inds)
+                    dest_flattened(inds(i)) = src(i)
+                end do
+        end select
+        bmi_status = BMI_SUCCESS
         
         !runoff
     case('va_open_exp')
@@ -3451,53 +3553,68 @@
         bmi_status = BMI_SUCCESS
         
         !solar_radition_degday module
-    !case('dday_slope')
-    !    dest = c_loc(this%model%model_simulation%solrad%dday_slope(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
-    !case('dday_intcp')
-    !    dest = c_loc(this%model%model_simulation%solrad%dday_intcp(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
-    !case('tmax_index')
-    !    dest = c_loc(this%model%model_simulation%solrad%tmax_index(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
+    case('dday_slope')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            dest = c_loc(solrad%dday_slope(1,1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('dday_intcp')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            dest = c_loc(solrad%dday_intcp(1,1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmax_index')
+        select type(solrad => this%model%model_simulation%solrad)
+            type is(Solrad_degday)
+            dest = c_loc(solrad%tmax_index(1,1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
         
         !temperature module
-    !case('tmax_cbh_adj')
-    !    dest = c_loc(this%model%model_simulation%model_temp_hru%tmax_cbh_adj(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
-    !case('tmin_cbh_adj')
-    !    dest = c_loc(this%model%model_simulation%model_temp_hru%tmin_cbh_adj(1,1))
-        !status = this%get_var_grid(name, gridid)
-        !status = this%get_grid_size(gridid, n_elements)
-        !call c_f_pointer(dest, dest_flattened, [n_elements])
-        !do i = 1, size(inds)
-        !    dest_flattened(inds(i)) = src(i)
-        !end do
-        !bmi_status = BMI_SUCCESS
+    case('tmax_cbh_adj')
+        select type(model_temp => this%model%model_simulation%model_temp)
+            type is(Temperature_Hru)
+            dest = c_loc(model_temp%tmax_cbh_adj(1,1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+    case('tmin_cbh_adj')
+        select type(model_temp => this%model%model_simulation%model_temp)
+            type is(Temperature_Hru)
+            dest = c_loc(model_temp%tmin_cbh_adj(1,1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
     case default
         bmi_status = BMI_FAILURE
     end select
