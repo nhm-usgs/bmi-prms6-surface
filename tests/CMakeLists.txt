@@ -18,6 +18,11 @@ make_test(test_initialize)
 make_test(test_finalize)
 make_test(test_update)
 make_test(test_update_until)
+make_test(test_get_start_time)
+make_test(test_get_end_time)
+make_test(test_get_current_time)
+make_test(test_get_time_step)
+make_test(test_get_time_units)
 
 file(
   COPY ${CMAKE_SOURCE_DIR}/projects/pipestem/
