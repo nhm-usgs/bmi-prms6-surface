@@ -4,6 +4,8 @@ module fixtures
 
   character (len=*), parameter :: config_file = "control.default"
 
+  character (len=*), parameter :: var_name = "hru_ppt"
+
   integer :: status
   
     public :: isReal4EqualReal4
