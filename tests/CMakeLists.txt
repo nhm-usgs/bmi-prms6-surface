@@ -14,3 +14,11 @@ make_test(test_get_input_item_count)
 make_test(test_get_output_item_count)
 make_test(test_get_input_var_names)
 make_test(test_get_output_var_names)
+make_test(test_initialize)
+make_test(test_finalize)
+make_test(test_update)
+make_test(test_update_until)
+
+file(
+  COPY ${CMAKE_SOURCE_DIR}/projects/pipestem/
+  DESTINATION ${CMAKE_BINARY_DIR}/tests)
