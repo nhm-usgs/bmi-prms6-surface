@@ -23,6 +23,12 @@ make_test(test_get_end_time)
 make_test(test_get_current_time)
 make_test(test_get_time_step)
 make_test(test_get_time_units)
+make_test(test_get_var_grid)
+make_test(test_get_var_type)
+make_test(test_get_var_units)
+make_test(test_get_var_itemsize)
+make_test(test_get_var_nbytes)
+make_test(test_get_var_location)
 
 file(
   COPY ${CMAKE_SOURCE_DIR}/projects/pipestem/
