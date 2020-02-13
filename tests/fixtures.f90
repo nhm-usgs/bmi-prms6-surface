@@ -2,7 +2,7 @@ module fixtures
     use iso_fortran_env
   implicit none
 
-  character (len=*), parameter :: config_file = ""
+  character (len=*), parameter :: config_file = "control.default"
 
   integer :: status
   
