@@ -2,12 +2,11 @@
 
     use bmif_2_0, only: BMI_SUCCESS, BMI_FAILURE
     use bmiprmssurface
-    use fixtures, only: status, print_1darray, isReal4EqualReal4, &
+    use fixtures, only: config_file, status, print_1darray, isReal4EqualReal4, &
         isReal8EqualReal8, print_i_1darray, print_array, isintEqualint
 
     implicit none
 
-    character (len=*), parameter :: config_file = "control.simple1"
     type (bmi_prms_surface) :: m
     integer :: retcode
 
@@ -54,7 +53,7 @@
 
     code = BMI_SUCCESS
     do i = 1, shape(1)
-       if (isreal4equalreal4(setv(i), tval(i)).ne..TRUE.) then
+       if (isreal4equalreal4(setv(i), tval(i)).neqv..TRUE.) then
           code = BMI_FAILURE
           exit
        end if
@@ -64,7 +63,7 @@
   function test2() result(code)
     character (len=*), parameter :: &
          var_name = "dprst_vol_open"
-    double precision, parameter :: size = 14
+    integer, parameter :: size = 14
     double precision, parameter :: expected(size) = (/ &
         41558.0385172600, 149.940656219223, 5545.71725420578, 5371.99384589330, &
         3514.98316578602, 7243.20487164950, 3220.60291601327, 169.012200283425, &
@@ -89,7 +88,7 @@
 
     code = BMI_SUCCESS
     do i = 1, size
-       if (isreal8equalreal8(setv(i), val(i)).ne..TRUE.) then
+       if (isreal8equalreal8(setv(i), val(i)).neqv..TRUE.) then
           code = BMI_FAILURE
        end if
     end do

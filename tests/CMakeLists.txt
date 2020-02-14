@@ -45,6 +45,11 @@ make_test(test_get_grid_size)
 # make_test(test_get_grid_face_edges)
 # make_test(test_get_grid_face_nodes)
 # make_test(test_get_grid_nodes_per_face)
+make_test(test_get_value)
+make_test(test_get_value_ptr)
+make_test(test_get_value_at_indices)
+make_test(test_set_value)
+make_test(test_set_value_at_indices)
 
 file(
   COPY ${CMAKE_SOURCE_DIR}/projects/pipestem/
