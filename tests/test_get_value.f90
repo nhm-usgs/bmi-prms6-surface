@@ -92,6 +92,7 @@ contains
     integer, parameter :: size = 1
     logical, parameter :: expected(size) = (/ .FALSE. /)
     integer :: val(size)
+    logical :: val_logical(size)
     integer :: i, code
 
     status = m%initialize(config_file)
@@ -105,7 +106,13 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, size
-       if (val(i).ne.expected(i)) then
+       if (val(i) == 0) then
+          val_logical(i) = .false.
+       else
+          val_logical(i) = .true.
+       end if
+
+       if (val_logical(i).neqv.expected(i)) then
           code = BMI_FAILURE
        end if
     end do
