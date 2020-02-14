@@ -175,7 +175,7 @@ contains
   function test5() result(code)
     character (len=*), parameter :: &
          var_name = "dprst_stor_hru"
-    double precision, parameter :: size = 14
+    integer, parameter :: size = 14
     double precision, parameter :: expected(size) = (/ &
         0.277953696836656, 2.656665943150712E-002, 0.153268867485187, &
         0.141798932546227, 0.128282493483124, 0.214119862005884, &
@@ -249,7 +249,7 @@ contains
   function test7() result(code)
     character (len=*), parameter :: &
          var_name = "dprst_stor_hru"
-    double precision, parameter :: size = 14
+    integer, parameter :: size = 14
     double precision, parameter :: expected(size) = (/ &
         0.277953696836656, 2.656665943150712E-002, 0.153268867485187, &
         0.141798932546227, 0.128282493483124, 0.214119862005884, &
