@@ -2,14 +2,11 @@
 
   use bmif_2_0, only: BMI_SUCCESS, BMI_FAILURE
   use bmiprmssurface
-  use fixtures, only: status, print_1darray, isReal4EqualReal4, &
+  use fixtures, only: config_file, status, print_1darray, isReal4EqualReal4, &
       isReal8EqualReal8, print_i_1darray, print_array, isintEqualint
 
   implicit none
 
-  ! this config resides in bmi-test-projects repo in 
-  ! bmi-test-projects\bmi-prms6-surface\pipestem
-  character (len=*), parameter :: config_file = "control.simple1"
   type (bmi_prms_surface) :: m
   integer :: retcode
 
