@@ -78,7 +78,7 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, shape(1)
-       if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
+       if (isreal4equalreal4(expected(i), tval(i)).neqv..TRUE.) then
           code = BMI_FAILURE
           exit
        end if
@@ -196,7 +196,7 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, size
-       if (isreal8equalreal8(expected(i), val(i)).ne..TRUE.) then
+       if (isreal8equalreal8(expected(i), val(i)).neqv..TRUE.) then
           code = BMI_FAILURE
        end if
     end do
@@ -238,7 +238,7 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, shape(1)
-       if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
+       if (isreal4equalreal4(expected(i), tval(i)).neqv..TRUE.) then
           code = BMI_FAILURE
           exit
        end if
@@ -270,7 +270,7 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, size
-       if (isreal8equalreal8(expected(i), val(i)).ne..TRUE.) then
+       if (isreal8equalreal8(expected(i), val(i)).neqv..TRUE.) then
           code = BMI_FAILURE
        end if
     end do
