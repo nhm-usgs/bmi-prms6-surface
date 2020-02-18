@@ -1,4 +1,4 @@
-program test_get_grid_shape
+program test_get_grid_edge_nodes
 
   use bmif_2_0, only: BMI_FAILURE
   use bmiprmssurface
@@ -8,20 +8,20 @@ program test_get_grid_shape
 
   integer, parameter :: grid_id = 0
   integer, parameter :: rank = 1
-  integer, dimension(rank), parameter :: expected_shape = [-1]
+  integer, dimension(rank), parameter :: expected = [-1]
 
   type (bmi_prms_surface) :: m
-  integer, dimension(rank) :: grid_shape
+  integer, dimension(rank) :: edge_nodes
   integer :: i
 
   status = m%initialize(config_file)
-  status = m%get_grid_shape(grid_id, grid_shape)
+  status = m%get_grid_edge_nodes(grid_id, edge_nodes)
   status = m%finalize()
 
   do i = 1, rank
-     if (grid_shape(i) /= expected_shape(i)) then
-        write(*,*) grid_shape
+     if (edge_nodes(i) /= expected(i)) then
+        write(*,*) edge_nodes
         stop BMI_FAILURE
      end if
   end do
-end program test_get_grid_shape
+end program test_get_grid_edge_nodes
