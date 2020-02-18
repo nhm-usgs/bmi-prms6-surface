@@ -1,26 +1,17 @@
 program test_initialize
 
-  use bmif_1_2, only: BMI_SUCCESS
-  use bmiheatf
-  use fixtures, only: status
+  use bmif_2_0, only: BMI_SUCCESS, BMI_FAILURE
+  use bmiprmssurface
+  use fixtures, only: status, config_file
 
   implicit none
 
-  character (len=*), parameter :: config_file1 = ""
-  character (len=*), parameter :: config_file2 = "sample.cfg"
+  type (bmi_prms_surface) :: m
+  integer :: check_status
 
-  type (bmi_heat) :: m
-  integer :: status1, status2
-
-  status1 = m%initialize(config_file1)
+  check_status = m%initialize(config_file)
   status = m%finalize()
-  if (status1.ne.BMI_SUCCESS) then
-     stop 1
-  end if
-
-  status2 = m%initialize(config_file2)
-  status = m%finalize()
-  if (status2.ne.BMI_SUCCESS) then
-     stop 2
+  if (check_status /= BMI_SUCCESS) then
+     stop BMI_FAILURE
   end if
 end program test_initialize

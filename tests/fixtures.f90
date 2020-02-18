@@ -2,7 +2,9 @@ module fixtures
     use iso_fortran_env
   implicit none
 
-  character (len=*), parameter :: config_file = ""
+  character (len=*), parameter :: config_file = "control.default"
+
+  character (len=*), parameter :: var_name = "hru_ppt"
 
   integer :: status
   

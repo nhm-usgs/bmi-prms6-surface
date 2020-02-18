@@ -2,12 +2,11 @@
 
     use bmif_2_0, only: BMI_SUCCESS, BMI_FAILURE
     use bmiprmssurface
-    use fixtures, only: status, print_1darray, print_i_1darray, &
+    use fixtures, only: config_file, status, print_1darray, print_i_1darray, &
         isreal4equalreal4
 
     implicit none
 
-    character (len=*), parameter :: config_file = "control.simple1"
     type (bmi_prms_surface) :: m
     integer :: retcode
 
@@ -89,7 +88,7 @@
 
     code = BMI_SUCCESS
     do i = 1, shape(1)
-        if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
+        if (isreal4equalreal4(expected(i), tval(i)).neqv..TRUE.) then
             code = BMI_FAILURE
             exit
         end if

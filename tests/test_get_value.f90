@@ -2,14 +2,11 @@
 
   use bmif_2_0, only: BMI_SUCCESS, BMI_FAILURE
   use bmiprmssurface
-  use fixtures, only: status, print_1darray, isReal4EqualReal4, &
+  use fixtures, only: config_file, status, print_1darray, isReal4EqualReal4, &
       isReal8EqualReal8, print_i_1darray, print_array, isintEqualint
 
   implicit none
 
-  ! this config resides in bmi-test-projects repo in 
-  ! bmi-test-projects\bmi-prms6-surface\pipestem
-  character (len=*), parameter :: config_file = "control.simple1"
   type (bmi_prms_surface) :: m
   integer :: retcode
 
@@ -37,10 +34,12 @@
      stop BMI_FAILURE
   end if
 
-  retcode = test5()
-  if (retcode.ne.BMI_SUCCESS) then
-     stop BMI_FAILURE
-  end if
+      !test r64 value dprst_stor_hru
+  ! Delete Basin variables are going away in prms6
+  !retcode = test5()
+  !if (retcode.ne.BMI_SUCCESS) then
+  !   stop BMI_FAILURE
+  !end if
   
   retcode = test6()
   if (retcode.ne.BMI_SUCCESS) then
@@ -76,7 +75,7 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, shape(1)
-       if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
+       if (isreal4equalreal4(expected(i), tval(i)).neqv..TRUE.) then
           code = BMI_FAILURE
           exit
        end if
@@ -90,6 +89,7 @@ contains
     integer, parameter :: size = 1
     logical, parameter :: expected(size) = (/ .FALSE. /)
     integer :: val(size)
+    logical :: val_logical(size)
     integer :: i, code
 
     status = m%initialize(config_file)
@@ -103,7 +103,13 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, size
-       if (val(i).ne.expected(i)) then
+       if (val(i) == 0) then
+          val_logical(i) = .false.
+       else
+          val_logical(i) = .true.
+       end if
+
+       if (val_logical(i).neqv.expected(i)) then
           code = BMI_FAILURE
        end if
     end do
@@ -167,10 +173,13 @@ contains
     end do
   end function test4
 
+  ! Test getting r64 basin_area_inv.
+  ! basin variable are going away in prms6 so this test should be changed
+  ! commented out above.
   function test5() result(code)
     character (len=*), parameter :: &
          var_name = "dprst_stor_hru"
-    double precision, parameter :: size = 14
+    integer, parameter :: size = 14
     double precision, parameter :: expected(size) = (/ &
         0.277953696836656, 2.656665943150712E-002, 0.153268867485187, &
         0.141798932546227, 0.128282493483124, 0.214119862005884, &
@@ -191,7 +200,7 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, size
-       if (isreal8equalreal8(expected(i), val(i)).ne..TRUE.) then
+       if (isreal8equalreal8(expected(i), val(i)).neqv..TRUE.) then
           code = BMI_FAILURE
        end if
     end do
@@ -233,7 +242,7 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, shape(1)
-       if (isreal4equalreal4(expected(i), tval(i)).ne..TRUE.) then
+       if (isreal4equalreal4(expected(i), tval(i)).neqv..TRUE.) then
           code = BMI_FAILURE
           exit
        end if
@@ -244,7 +253,7 @@ contains
   function test7() result(code)
     character (len=*), parameter :: &
          var_name = "dprst_stor_hru"
-    double precision, parameter :: size = 14
+    integer, parameter :: size = 14
     double precision, parameter :: expected(size) = (/ &
         0.277953696836656, 2.656665943150712E-002, 0.153268867485187, &
         0.141798932546227, 0.128282493483124, 0.214119862005884, &
@@ -265,7 +274,7 @@ contains
 
     code = BMI_SUCCESS
     do i = 1, size
-       if (isreal8equalreal8(expected(i), val(i)).ne..TRUE.) then
+       if (isreal8equalreal8(expected(i), val(i)).neqv..TRUE.) then
           code = BMI_FAILURE
        end if
     end do
