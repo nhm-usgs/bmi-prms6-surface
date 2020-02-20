@@ -11,6 +11,7 @@
     use PRMS_POTET_JH, only: Potet_jh
     use PRMS_PRECIPITATION_HRU, only: Precipitation_hru
     use PRMS_BASIN, only: Basin
+    use PRMS_TRANSP_TINDEX, only: Transp_tindex
     ! use ieee_arithmetic
     ! use ieee_features
     implicit none

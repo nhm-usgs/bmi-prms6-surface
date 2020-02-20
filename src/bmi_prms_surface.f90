@@ -153,6 +153,7 @@
         !temperature
         'tmax_cbh_adj        ', &
         'tmin_cbh_adj        ', &
+        !transp_tindex
         'transp_tmax         ', &
         !for soil2surfac
         'infil               ', &
@@ -1274,7 +1275,9 @@
     case('imperv_stor_max')
         size = sizeof(this%model%model_simulation%runoff%imperv_stor_max(1))
         bmi_status = BMI_SUCCESS
-        
+    case('hru_frac_perv')
+        size = sizeof(this%model%model_simulation%runoff%hru_frac_perv(1))
+        bmi_status = BMI_SUCCESS
         !snowcomp
     case('snarea_curve')
         size = sizeof(this%model%model_simulation%snow%snarea_curve(1))
@@ -1324,6 +1327,13 @@
         select type(model_temp => this%model%model_simulation%model_temp)
             type is(Temperature_Hru)
                 size = sizeof(model_temp%tmin_cbh_adj(1,1))
+        end select
+        bmi_status = BMI_SUCCESS
+        !transp_tindex module
+    case('transp_tmax')
+        select type(transpiration => this%model%model_simulation%transpiration)
+            type is(Transp_tindex)
+                size = sizeof(transpiration%transp_tmax(1))
         end select
         bmi_status = BMI_SUCCESS
     case default
@@ -3177,6 +3187,14 @@
                 model_temp%tmin_cbh_adj = reshape(src, [nhru, nmonths])
         end select
         bmi_status = BMI_SUCCESS
+        !transp_tindex module
+    case('transp_tmax')
+        select type(transpiration => this%model%model_simulation%transpiration)
+            type is(Transp_tindex)
+                transpiration%transp_tmax = src
+        end select
+        bmi_status = BMI_SUCCESS
+
     case default
         bmi_status = BMI_FAILURE
     end select
@@ -3711,6 +3729,19 @@
             end do
         end select
         bmi_status = BMI_SUCCESS
+    case('transp_tmax')
+        select type(transpiration => this%model%model_simulation%transpiration)
+            type is(Transp_tindex)
+            dest = c_loc(transpiration%transp_tmax(1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+        end select
+        bmi_status = BMI_SUCCESS
+
     case default
         bmi_status = BMI_FAILURE
     end select
