@@ -529,7 +529,7 @@
         type = "vector"
         bmi_status = BMI_SUCCESS
     case(5) !@mdpiper - not sure about this dimmed by nhru,nmonths
-        type = "vector"
+        type = "rectilinear"
         bmi_status = BMI_SUCCESS
     case default
         type = "-"
