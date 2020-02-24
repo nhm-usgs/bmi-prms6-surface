@@ -9,7 +9,7 @@ program irf_test
   integer :: s, i
   double precision :: time, time0, time1
   character (len=BMI_MAX_UNITS_NAME) :: time_units
-  character (len=*), parameter :: control_file= 'control.simple1'
+  character (len=*), parameter :: control_file= './pipestem/control.simple1'
 
   write (*,"(a)",advance="no") "Initializing..."
   s = m%initialize(control_file)
@@ -55,7 +55,7 @@ program irf_test
   s = m%get_current_time(time1)
   write (*,"(a30, f8.2)") "Stop time: ", time1
 
-  write (*,"(a)", advance="no") "Finalizing..."
+write (*,"(a)", advance="no") "Finalizing..."
   s = m%finalize()
   write (*,*) "Done"
 
