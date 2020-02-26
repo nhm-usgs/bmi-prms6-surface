@@ -577,6 +577,25 @@
      integer :: bmi_status
     
      select case(grid)
+     case(0)
+         shape(:) = [this%model%model_simulation%model_basin%nhru]
+         bmi_status = BMI_SUCCESS
+     case(1)
+         shape(:) = [this%model%model_simulation%model_basin%nsegment]
+         bmi_status = BMI_SUCCESS
+     case(2)
+         shape(:) = [1]
+         bmi_status = BMI_SUCCESS
+     case(3)
+         shape(:) = [count(this%model%model_simulation%model_basin%active_mask)]
+         bmi_status = BMI_SUCCESS
+     case(4)
+         shape(:) = [this%model%model_simulation%soil%nhrucell]
+         bmi_status = BMI_SUCCESS
+     case(5)
+         shape(:) = [this%model%model_simulation%model_basin%nhru, &
+            this%model%model_simulation%model_basin%nmonths]
+         bmi_status = BMI_SUCCESS
      case default
         shape(:) = -1
         bmi_status = BMI_FAILURE
