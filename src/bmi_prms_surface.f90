@@ -536,7 +536,7 @@
     case(4)
         type = "vector"
         bmi_status = BMI_SUCCESS
-    case(5) !@mdpiper - not sure about this dimmed by nhru,nmonths
+    case(5)
         type = "rectilinear"
         bmi_status = BMI_SUCCESS
     case default
@@ -684,14 +684,14 @@
     case(1) 
         bmi_status = this%get_value('nhm_seg', x)
     case(2)
-        x = -1 !mdpiper ?
+        x = -1.d0
         bmi_status = BMI_SUCCESS
     case(3)
         bmi_status = this%get_value('hru_route_order', x)
     case(5)
         bmi_status = this%get_value('hru_id', x)
     case default
-        x = [-1.0]
+        x(:) = -1.d0
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_x
@@ -708,20 +708,20 @@
         y = this%model%model_simulation%model_basin%hru_y
         bmi_status = BMI_SUCCESS
     case(1) 
-        y = -1.0
+        y(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(2)
-        y = [-1.0] !mdpiper ?
+        y = -1.d0
         bmi_status = BMI_SUCCESS
     case(3)
-        y = -1.0
+        y(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(5)
         y = [1.0,2.0,3.0,4.0,5.0,6.0, &
             7.0,8.0,9.0,10.0,11.0,12.0]
         bmi_status = BMI_SUCCESS
     case default
-        y = [-1.0]
+        y(:) = -1.d0
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_y
@@ -738,19 +738,19 @@
         z = this%model%model_simulation%model_basin%hru_elev
         bmi_status = BMI_SUCCESS
     case(1) 
-        z = -1.0
+        z(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(2)
-        z = [-1] !mdpiper ?
+        z = -1.d0
         bmi_status = BMI_SUCCESS
     case(3)
-        z = -1.0
+        z(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(5)
-        z = -1.0
+        z(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case default
-        z = [-1.0]
+        z(:) = -1.d0
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_z
