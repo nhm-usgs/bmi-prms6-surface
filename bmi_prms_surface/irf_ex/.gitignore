@@ -1,4 +1,5 @@
 output/
+pipestem/
 *.out
 *.wbal
 *.bak

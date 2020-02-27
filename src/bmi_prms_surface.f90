@@ -91,7 +91,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 52
-    integer, parameter :: output_item_count = 87
+    integer, parameter :: output_item_count = 91
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !potentially used for gsflow implementation?
@@ -183,6 +183,10 @@
         'active_hrus         ', & !i32 by 1
         'nlake               ', & !i32 by 1
         'nhru                ', & !i32 by 1
+        'nhm_seg             ', & !i32 by nsegment
+        'nhm_id              ', & !i32 by nhru
+        'hru_lat             ', & !r32 by nhru
+        'hru_lon             ', & !r32 by nhru
         'hru_area_dble       ', & ! r64 by nhru
         'nmonths             ', & !i32 by 1
         'active_mask         ', & !logical by nhru
@@ -445,7 +449,8 @@
 
     select case(name)
     case('hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', &
-        'hru_y', 'hru_elev', 'hru_actet', 'hortonian_lakes', &
+        'hru_y', 'hru_elev', 'nhm_id', 'hru_lat', 'hru_lon', &
+        'hru_actet', 'hortonian_lakes', &
         'cov_type', 'hru_area', 'hru_type', &
         'dprst_evap_hru', 'dprst_seep_hru', 'infil', &
         'sroff', 'potet', 'transp_on', 'hru_intcpevap', &
@@ -483,6 +488,9 @@
         !transp_tindex
         'transp_tmax')
         grid = 0
+        bmi_status = BMI_SUCCESS
+    case('nhm_seg')
+        grid = 1
         bmi_status = BMI_SUCCESS
     case('cascade_flag', 'dprst_flag', 'gsflow_mode', &
         'print_debug', 'nlake', 'active_hrus', &
@@ -529,7 +537,7 @@
         type = "vector"
         bmi_status = BMI_SUCCESS
     case(5) !@mdpiper - not sure about this dimmed by nhru,nmonths
-        type = "vector"
+        type = "rectilinear"
         bmi_status = BMI_SUCCESS
     case default
         type = "-"
@@ -577,6 +585,25 @@
      integer :: bmi_status
     
      select case(grid)
+     case(0)
+         shape(:) = [this%model%model_simulation%model_basin%nhru]
+         bmi_status = BMI_SUCCESS
+     case(1)
+         shape(:) = [this%model%model_simulation%model_basin%nsegment]
+         bmi_status = BMI_SUCCESS
+     case(2)
+         shape(:) = [1]
+         bmi_status = BMI_SUCCESS
+     case(3)
+         shape(:) = [count(this%model%model_simulation%model_basin%active_mask)]
+         bmi_status = BMI_SUCCESS
+     !case(4)
+     !    shape(:) = [this%model%model_simulation%soil%nhrucell]
+     !    bmi_status = BMI_SUCCESS
+     case(5)
+         shape(:) = [this%model%model_simulation%model_basin%nhru, &
+            this%model%model_simulation%model_basin%nmonths]
+         bmi_status = BMI_SUCCESS
      case default
         shape(:) = -1
         bmi_status = BMI_FAILURE
@@ -654,6 +681,15 @@
     case(0)
         x = this%model%model_simulation%model_basin%hru_x
         bmi_status = BMI_SUCCESS
+    case(1) 
+        bmi_status = this%get_value('nhm_seg', x)
+    case(2)
+        x = -1 !mdpiper ?
+        bmi_status = BMI_SUCCESS
+    case(3)
+        bmi_status = this%get_value('hru_route_order', x)
+    case(5)
+        bmi_status = this%get_value('hru_id', x)
     case default
         x = [-1.0]
         bmi_status = BMI_FAILURE
@@ -671,6 +707,19 @@
     case(0)
         y = this%model%model_simulation%model_basin%hru_y
         bmi_status = BMI_SUCCESS
+    case(1) 
+        y = -1.0
+        bmi_status = BMI_SUCCESS
+    case(2)
+        y = [-1.0] !mdpiper ?
+        bmi_status = BMI_SUCCESS
+    case(3)
+        y = -1.0
+        bmi_status = BMI_SUCCESS
+    case(5)
+        y = [1.0,2.0,3.0,4.0,5.0,6.0, &
+            7.0,8.0,9.0,10.0,11.0,12.0]
+        bmi_status = BMI_SUCCESS
     case default
         y = [-1.0]
         bmi_status = BMI_FAILURE
@@ -687,6 +736,18 @@
     select case(grid)
     case(0)
         z = this%model%model_simulation%model_basin%hru_elev
+        bmi_status = BMI_SUCCESS
+    case(1) 
+        z = -1.0
+        bmi_status = BMI_SUCCESS
+    case(2)
+        z = [-1] !mdpiper ?
+        bmi_status = BMI_SUCCESS
+    case(3)
+        z = -1.0
+        bmi_status = BMI_SUCCESS
+    case(5)
+        z = -1.0
         bmi_status = BMI_SUCCESS
     case default
         z = [-1.0]
@@ -801,6 +862,7 @@
 
     select case(name)
     case("hru_ppt", "hru_snow", "hru_rain",  &
+        'hru_lat', 'hru_lon', &
         "hru_actet", 'hru_area', 'dprst_evap_hru', 'infil', &
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', 'snowcov_area', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
@@ -844,7 +906,7 @@
         case("nlake", 'active_hrus', 'nowtime', 'cov_type', 'hru_type', &
         'hru_route_order', 'cascade_flag', 'dprst_flag', 'print_debug', &
         'gsflow_mode', 'cascadegw_flag', 'nhru', 'newsnow', 'pptmix', &
-        'nmonths')
+        'nmonths', 'nhm_seg', 'nhm_id')
         type = "integer"
         bmi_status = BMI_SUCCESS
     case('srunoff_updated_soil', 'use_transfer_intcp', 'use_sroff_transfer', &
@@ -919,6 +981,9 @@
     case('dday_intcp')
         units = 'degree-day'
         bmi_status = BMI_SUCCESS
+    case('hru_lat', 'hru_lon')
+        units = 'decimal degrees'
+        bmi_status = BMI_SUCCESS
     case default
         units = "-"
         bmi_status = BMI_FAILURE
@@ -962,6 +1027,12 @@
 		bmi_status = BMI_SUCCESS
     case('nhru')
         size = sizeof(this%model%model_simulation%model_basin%nhru)
+        bmi_status = BMI_SUCCESS
+    case('nhm_seg')
+        size = sizeof(this%model%model_simulation%model_basin%nhm_seg(1))
+        bmi_status = BMI_SUCCESS
+    case('nhm_id')
+        size = sizeof(this%model%model_simulation%model_basin%nhm_id(1))
         bmi_status = BMI_SUCCESS
     case('nmonths')
         size = sizeof(this%model%model_simulation%model_basin%nmonths)
@@ -1403,6 +1474,12 @@
         bmi_status = BMI_SUCCESS
     case('nhru')
         dest = [this%model%model_simulation%model_basin%nhru]
+        bmi_status = BMI_SUCCESS
+    case('nhm_id')
+        dest = [this%model%model_simulation%model_basin%nhm_id]
+        bmi_status = BMI_SUCCESS
+    case('nhm_seg')
+        dest = [this%model%model_simulation%model_basin%nhm_seg]
         bmi_status = BMI_SUCCESS
     case('nmonths')
         dest = [this%model%model_simulation%model_basin%nmonths]
