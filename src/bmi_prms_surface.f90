@@ -529,7 +529,7 @@
         bmi_status = BMI_SUCCESS
     case(2)
         type = 'scalar'
-        bmi_status = BMI_FAILURE
+        bmi_status = BMI_SUCCESS
     case(3)
         type = "vector"
         bmi_status = BMI_SUCCESS
