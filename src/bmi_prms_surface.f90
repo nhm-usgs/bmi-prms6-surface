@@ -675,21 +675,28 @@
     class (bmi_prms_surface), intent(in) :: this
     integer, intent(in) :: grid
     double precision, dimension(:), intent(out) :: x
+    integer, allocatable, dimension(:) :: tmp_x
+    integer :: npts
     integer :: bmi_status
-
+    npts =  size(x)
+    allocate(tmp_x(npts))
+    
     select case(grid)
     case(0)
         x = this%model%model_simulation%model_basin%hru_x
         bmi_status = BMI_SUCCESS
     case(1) 
-        bmi_status = this%get_value('nhm_seg', x)
+        bmi_status = this%get_value('nhm_seg', tmp_x)
+        x = dble(tmp_x)
     case(2)
         x = -1 !mdpiper ?
         bmi_status = BMI_SUCCESS
     case(3)
-        bmi_status = this%get_value('hru_route_order', x)
+        bmi_status = this%get_value('hru_route_order', tmp_x)
+        x = dble(tmp_x)
     case(5)
-        bmi_status = this%get_value('hru_id', x)
+        bmi_status = this%get_value('hru_id', tmp_x)
+        x = dble(tmp_x)
     case default
         x = [-1.0]
         bmi_status = BMI_FAILURE
