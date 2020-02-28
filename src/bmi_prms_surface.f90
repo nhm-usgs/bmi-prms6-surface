@@ -636,6 +636,7 @@
     case(5) !for vars dim by nhru,nmonths
         size = this%model%model_simulation%model_basin%nhru * &
             this%model%model_simulation%model_basin%nmonths
+        bmi_status = BMI_SUCCESS
     case default
         size = -1
         bmi_status = BMI_FAILURE
