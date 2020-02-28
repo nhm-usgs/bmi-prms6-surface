@@ -674,12 +674,16 @@
     function prms_grid_x(this, grid, x) result (bmi_status)
     class (bmi_prms_surface), intent(in) :: this
     integer, intent(in) :: grid
+    integer, parameter :: tsize = 1
     double precision, dimension(:), intent(out) :: x
     integer, allocatable, dimension(:) :: tmp_x
-    integer :: npts
-    integer :: bmi_status
+    integer, allocatable, dimension(:,:) :: tmp_x_2d
+    integer :: npts, index, nhru(tsize), nmonths(tsize)
+    integer :: i,j
+    integer :: bmi_status, status
     npts =  size(x)
     allocate(tmp_x(npts))
+    index = 0
     
     select case(grid)
     case(0)
@@ -695,8 +699,16 @@
         bmi_status = this%get_value('hru_route_order', tmp_x)
         x = dble(tmp_x)
     case(5)
-        bmi_status = this%get_value('hru_id', tmp_x)
-        x = dble(tmp_x)
+        status = this%get_value('nhru', nhru)
+        status = this%get_value('nmonths', nmonths)
+        allocate(tmp_x_2d(nhru(1), nmonths(1)))
+        do i = 1,nhru(1)
+            do j = 1,nmonths(1)
+                tmp_x_2d(i,j) = i
+            end do
+        end do
+        x = reshape(tmp_x_2d, [nhru(1)*nmonths(1)])
+        bmi_status = BMI_SUCCESS
     case default
         x = [-1.0]
         bmi_status = BMI_FAILURE
