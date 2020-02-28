@@ -690,7 +690,9 @@
     case(3)
         bmi_status = this%get_value('hru_route_order', x)
     case(5)
-        bmi_status = this%get_value('hru_id', x)
+        x = dble([1.0,2.0,3.0,4.0,5.0,6.0, &
+            7.0,8.0,9.0,10.0,11.0,12.0])
+        bmi_status = BMI_SUCCESS
     case default
         x(:) = -1.d0
         bmi_status = BMI_FAILURE
@@ -718,9 +720,7 @@
         y(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(5)
-        y = [1.0,2.0,3.0,4.0,5.0,6.0, &
-            7.0,8.0,9.0,10.0,11.0,12.0]
-        bmi_status = BMI_SUCCESS
+        bmi_status = this%get_value('hru_id', y)
     case default
         y(:) = -1.d0
         bmi_status = BMI_FAILURE
