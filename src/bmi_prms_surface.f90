@@ -1449,7 +1449,7 @@
 
         select case(name)
         case default
-           location = "face"
+           location = "node"
            bmi_status = BMI_SUCCESS
         end select
     end function prms_var_location
