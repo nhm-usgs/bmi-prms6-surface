@@ -783,6 +783,9 @@
       integer :: bmi_status
 
       select case(grid)
+      case (0:4)
+         bmi_status = this%get_grid_node_count(grid, count)
+         count = count - 1
       case default
          count = -1
          bmi_status = BMI_FAILURE
@@ -797,6 +800,9 @@
       integer :: bmi_status
 
       select case(grid)
+      case (0:4)
+         count = 0
+         bmi_status = BMI_SUCCESS
       case default
          count = -1
          bmi_status = BMI_FAILURE
