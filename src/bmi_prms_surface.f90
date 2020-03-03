@@ -704,7 +704,7 @@
     class (bmi_prms_surface), intent(in) :: this
     integer, intent(in) :: grid
     double precision, dimension(:), intent(out) :: y
-    integer :: bmi_status
+    integer :: bmi_status, i
 
     select case(grid)
     case(0)
@@ -720,7 +720,10 @@
         y(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(5)
-        bmi_status = this%get_value('hru_id', y)
+        do i = 1, size(y)
+           y(i) = i
+        end do
+        bmi_status = BMI_SUCCESS
     case default
         y(:) = -1.d0
         bmi_status = BMI_FAILURE
