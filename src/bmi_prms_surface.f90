@@ -998,7 +998,7 @@
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
-        bmi_status = BMI_FAILURE
+        bmi_status = BMI_SUCCESS
     end select
     end function prms_var_units
 
