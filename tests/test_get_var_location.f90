@@ -6,7 +6,7 @@ program test_get_var_location
 
   implicit none
 
-  character (len=*), parameter :: expected_location = "face"
+  character (len=*), parameter :: expected_location = "node"
 
   type (bmi_prms_surface) :: m
   character (len=BMI_MAX_UNITS_NAME) :: var_location

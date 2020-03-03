@@ -7,7 +7,7 @@ program test_get_grid_edge_count
   implicit none
 
   integer, parameter :: grid_id = 0
-  integer, parameter :: expected = -1
+  integer, parameter :: expected = 13
   type (bmi_prms_surface) :: m
   integer :: count
 
