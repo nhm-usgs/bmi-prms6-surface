@@ -767,10 +767,8 @@
       integer :: bmi_status
 
       select case(grid)
-      case(5)
-         count = this%model%model_simulation%model_basin%nhru * &
-              this%model%model_simulation%model_basin%nmonths
-         bmi_status = BMI_SUCCESS
+      case(0:5)
+         bmi_status = this%get_grid_size(grid, count)
       case default
          count = -1
          bmi_status = BMI_FAILURE
