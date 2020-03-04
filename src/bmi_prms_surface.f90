@@ -1012,11 +1012,7 @@
         bmi_status = BMI_SUCCESS
     case('covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
-<<<<<<< Updated upstream
-        'radmax', 'va_clos_exp')
-=======
         'radmax', 'va_clos_exp', 'snarea_curve')
->>>>>>> Stashed changes
         units = 'decimal-fraction'
         bmi_status = BMI_SUCCESS
     case('snow_intcp')
