@@ -529,14 +529,14 @@
         bmi_status = BMI_SUCCESS
     case(2)
         type = 'scalar'
-        bmi_status = BMI_FAILURE
+        bmi_status = BMI_SUCCESS
     case(3)
         type = "vector"
         bmi_status = BMI_SUCCESS
     case(4)
         type = "vector"
         bmi_status = BMI_SUCCESS
-    case(5) !@mdpiper - not sure about this dimmed by nhru,nmonths
+    case(5)
         type = "rectilinear"
         bmi_status = BMI_SUCCESS
     case default
@@ -636,6 +636,7 @@
     case(5) !for vars dim by nhru,nmonths
         size = this%model%model_simulation%model_basin%nhru * &
             this%model%model_simulation%model_basin%nmonths
+        bmi_status = BMI_SUCCESS
     case default
         size = -1
         bmi_status = BMI_FAILURE
@@ -684,14 +685,16 @@
     case(1) 
         bmi_status = this%get_value('nhm_seg', x)
     case(2)
-        x = -1 !mdpiper ?
+        x = -1.d0
         bmi_status = BMI_SUCCESS
     case(3)
         bmi_status = this%get_value('hru_route_order', x)
     case(5)
-        bmi_status = this%get_value('hru_id', x)
+        x = dble([1.0,2.0,3.0,4.0,5.0,6.0, &
+            7.0,8.0,9.0,10.0,11.0,12.0])
+        bmi_status = BMI_SUCCESS
     case default
-        x = [-1.0]
+        x(:) = -1.d0
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_x
@@ -701,27 +704,28 @@
     class (bmi_prms_surface), intent(in) :: this
     integer, intent(in) :: grid
     double precision, dimension(:), intent(out) :: y
-    integer :: bmi_status
+    integer :: bmi_status, i
 
     select case(grid)
     case(0)
         y = this%model%model_simulation%model_basin%hru_y
         bmi_status = BMI_SUCCESS
     case(1) 
-        y = -1.0
+        y(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(2)
-        y = [-1.0] !mdpiper ?
+        y = -1.d0
         bmi_status = BMI_SUCCESS
     case(3)
-        y = -1.0
+        y(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(5)
-        y = [1.0,2.0,3.0,4.0,5.0,6.0, &
-            7.0,8.0,9.0,10.0,11.0,12.0]
+        do i = 1, size(y)
+           y(i) = i
+        end do
         bmi_status = BMI_SUCCESS
     case default
-        y = [-1.0]
+        y(:) = -1.d0
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_y
@@ -738,19 +742,19 @@
         z = this%model%model_simulation%model_basin%hru_elev
         bmi_status = BMI_SUCCESS
     case(1) 
-        z = -1.0
+        z(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(2)
-        z = [-1] !mdpiper ?
+        z = -1.d0
         bmi_status = BMI_SUCCESS
     case(3)
-        z = -1.0
+        z(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case(5)
-        z = -1.0
+        z(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case default
-        z = [-1.0]
+        z(:) = -1.d0
         bmi_status = BMI_FAILURE
     end select
     end function prms_grid_z
@@ -763,6 +767,8 @@
       integer :: bmi_status
 
       select case(grid)
+      case(0:5)
+         bmi_status = this%get_grid_size(grid, count)
       case default
          count = -1
          bmi_status = BMI_FAILURE
@@ -777,6 +783,9 @@
       integer :: bmi_status
 
       select case(grid)
+      case (0:4)
+         bmi_status = this%get_grid_node_count(grid, count)
+         count = count - 1
       case default
          count = -1
          bmi_status = BMI_FAILURE
@@ -791,6 +800,9 @@
       integer :: bmi_status
 
       select case(grid)
+      case (0:4)
+         count = 0
+         bmi_status = BMI_SUCCESS
       case default
          count = -1
          bmi_status = BMI_FAILURE
@@ -986,7 +998,7 @@
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
-        bmi_status = BMI_FAILURE
+        bmi_status = BMI_SUCCESS
     end select
     end function prms_var_units
 
@@ -1443,7 +1455,7 @@
 
         select case(name)
         case default
-           location = "face"
+           location = "node"
            bmi_status = BMI_SUCCESS
         end select
     end function prms_var_location

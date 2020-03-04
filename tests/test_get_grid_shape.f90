@@ -8,7 +8,7 @@ program test_get_grid_shape
 
   integer, parameter :: grid_id = 0
   integer, parameter :: rank = 1
-  integer, dimension(rank), parameter :: expected_shape = [-1]
+  integer, dimension(rank), parameter :: expected_shape = [14]
 
   type (bmi_prms_surface) :: m
   integer, dimension(rank) :: grid_shape

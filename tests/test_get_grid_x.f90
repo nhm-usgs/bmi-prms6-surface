@@ -7,8 +7,10 @@ program test_get_grid_x
   implicit none
 
   integer, parameter :: grid_id = 0
-  ! integer, parameter :: nx = 1
-  ! double precision, parameter, dimension(nx) :: expected_x = (/ 0.0 /)
+  integer, parameter :: nx = 14
+  integer, parameter, dimension(nx) :: expected_x = [ &
+       -255338, -244755, -272161, -279352, -239341, -234624, -262778, &
+       -260845, -253183, -252164, -242704, -238578, -226690, -238430 ]
 
   type (bmi_prms_surface) :: m
   integer :: grid_size
@@ -21,12 +23,12 @@ program test_get_grid_x
   status = m%get_grid_x(grid_id, grid_x)
   status = m%finalize()
 
-  ! do i = 1, nx
-  !    if (grid_x(i) /= expected_x(i)) then
-  !       write(*,*) grid_x
-  !       stop BMI_FAILURE
-  !    end if
-  ! end do
+  do i = 1, nx
+     if (int(grid_x(i)) /= expected_x(i)) then
+        write(*,*) grid_x
+        stop BMI_FAILURE
+     end if
+  end do
 
   deallocate(grid_x)
 end program test_get_grid_x
