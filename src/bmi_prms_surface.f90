@@ -470,6 +470,9 @@
         'covden_win', 'jh_coef_hru', &
         !runoff
         
+        !surface depression storage
+        'va_clos_exp', &
+        
         !intcp
         'snow_intcp', 'srain_intcp', 'wrain_intcp', 'canopy_covden', &
         'gain_inches', 'intcp_changeover', 'intcp_evap', &
@@ -501,6 +504,9 @@
         bmi_status = BMI_SUCCESS
     case('hru_route_order')
         grid = 3 ! nhru_active
+        bmi_status = BMI_SUCCESS
+    case('snarea_curve')
+        grid = 4 ! ndepval
         bmi_status = BMI_SUCCESS
     case('epan_coef', 'jh_coef', 'tmax_allrain_offset', 'tmax_allsnow', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'cecn_coef', 'radmax', 'dday_slope', 'tmax_index', &
@@ -597,9 +603,9 @@
      case(3)
          shape(:) = [count(this%model%model_simulation%model_basin%active_mask)]
          bmi_status = BMI_SUCCESS
-     !case(4)
-     !    shape(:) = [this%model%model_simulation%soil%nhrucell]
-     !    bmi_status = BMI_SUCCESS
+     case(4)
+         shape(:) = [this%model%model_simulation%snow%ndeplval]
+         bmi_status = BMI_SUCCESS
      case(5)
          shape(:) = [this%model%model_simulation%model_basin%nhru, &
             this%model%model_simulation%model_basin%nmonths]
@@ -904,7 +910,9 @@
         !temperature
         'tmax_cbh_adj', 'tmin_cbh_adj', &
         !transp_tindex
-        'transp_tmax')
+        'transp_tmax', &
+        !surface depression storage
+        'va_clos_exp')
         type = "real"
         bmi_status = BMI_SUCCESS
         case( &
@@ -963,7 +971,7 @@
         bmi_status = BMI_SUCCESS
     case('covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
-        'radmax')
+        'radmax', 'va_clos_exp')
         units = 'decimal-fraction'
         bmi_status = BMI_SUCCESS
     case('snow_intcp')
