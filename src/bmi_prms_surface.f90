@@ -698,7 +698,7 @@
     class (bmi_prms_surface), intent(in) :: this
     integer, intent(in) :: grid
     double precision, dimension(:), intent(out) :: x
-    integer :: bmi_status
+    integer :: bmi_status, i
 
     select case(grid)
     case(0)
@@ -716,8 +716,9 @@
             7.0,8.0,9.0,10.0,11.0])
         bmi_status = BMI_SUCCESS
     case(5)
-        x = dble([1.0,2.0,3.0,4.0,5.0,6.0, &
-            7.0,8.0,9.0,10.0,11.0,12.0])
+        do i = 1, size(x)
+           x(i) = i
+        end do
         bmi_status = BMI_SUCCESS
     case(6)
         x = dble([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
