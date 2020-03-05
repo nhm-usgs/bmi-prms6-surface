@@ -470,6 +470,9 @@
         'covden_win', 'jh_coef_hru', &
         !runoff
         
+        !surface depression storage
+        'va_clos_exp', &
+        
         !intcp
         'snow_intcp', 'srain_intcp', 'wrain_intcp', 'canopy_covden', &
         'gain_inches', 'intcp_changeover', 'intcp_evap', &
@@ -479,8 +482,9 @@
         !climate_flow
         'soil_moist_max', &
         !runoff
-        'va_open_exp', 'dprst_seep_rate_close', 'smidx_exp', 'snowinfil_max', &
+        'va_open_exp', 'dprst_seep_rate_clos', 'smidx_exp', 'snowinfil_max', &
         'dprst_depth_avg', 'carea_max', 'va_close_exp', 'imperv_stor_max', 'dprst_flow_coef', &
+        'smidx_coef', &
         !snowcomp
         'rad_trncf', 'snarea_thresh', &
         !solar radiation
@@ -489,7 +493,7 @@
         'transp_tmax')
         grid = 0
         bmi_status = BMI_SUCCESS
-    case('nhm_seg')
+    case('nhm_seg', 'strm_seg_in')
         grid = 1
         bmi_status = BMI_SUCCESS
     case('cascade_flag', 'dprst_flag', 'gsflow_mode', &
@@ -502,10 +506,16 @@
     case('hru_route_order')
         grid = 3 ! nhru_active
         bmi_status = BMI_SUCCESS
+    case('snarea_curve')
+        grid = 4 ! ndepval
+        bmi_status = BMI_SUCCESS
     case('epan_coef', 'jh_coef', 'tmax_allrain_offset', 'tmax_allsnow', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'cecn_coef', 'radmax', 'dday_slope', 'tmax_index', &
         'dday_intcp', 'tmax_cbh_adj', 'tmin_cbh_adj')
         grid = 5 ! by nhru, nmonth
+        bmi_status = BMI_SUCCESS
+    case('nowtime')
+        grid = 6
         bmi_status = BMI_SUCCESS
     case default
         grid = -1
@@ -539,6 +549,9 @@
     case(5)
         type = "rectilinear"
         bmi_status = BMI_SUCCESS
+    case(6)
+        type = "vector"
+        bmi_status = BMI_SUCCESS
     case default
         type = "-"
         bmi_status = BMI_FAILURE
@@ -571,6 +584,9 @@
     case(5)
         rank = 2
         bmi_status = BMI_SUCCESS
+    case(6)
+        rank = 1
+        bmi_status = BMI_SUCCESS
     case default
         rank = -1
         bmi_status = BMI_FAILURE
@@ -597,14 +613,17 @@
      case(3)
          shape(:) = [count(this%model%model_simulation%model_basin%active_mask)]
          bmi_status = BMI_SUCCESS
-     !case(4)
-     !    shape(:) = [this%model%model_simulation%soil%nhrucell]
-     !    bmi_status = BMI_SUCCESS
-     case(5)
-         shape(:) = [this%model%model_simulation%model_basin%nhru, &
-            this%model%model_simulation%model_basin%nmonths]
+     case(4)
+         shape(:) = [this%model%model_simulation%snow%ndeplval]
          bmi_status = BMI_SUCCESS
-     case default
+     case(5)
+         shape(:) = [this%model%model_simulation%model_basin%nmonths, &
+            this%model%model_simulation%model_basin%nhru]
+         bmi_status = BMI_SUCCESS
+      case(6)
+         shape(:) = [6]
+         bmi_status = BMI_SUCCESS
+    case default
         shape(:) = -1
         bmi_status = BMI_FAILURE
      end select
@@ -631,13 +650,16 @@
         size = count(this%model%model_simulation%model_basin%active_mask)
         bmi_status = BMI_SUCCESS
     case(4)
-        size = this%model%model_simulation%soil%nhrucell
+        size = this%model%model_simulation%snow%ndeplval
         bmi_status = BMI_SUCCESS
     case(5) !for vars dim by nhru,nmonths
-        size = this%model%model_simulation%model_basin%nhru * &
-            this%model%model_simulation%model_basin%nmonths
+        size = this%model%model_simulation%model_basin%nmonths * &
+            this%model%model_simulation%model_basin%nhru
         bmi_status = BMI_SUCCESS
-    case default
+     case(6)
+        size = 6
+        bmi_status = BMI_SUCCESS
+   case default
         size = -1
         bmi_status = BMI_FAILURE
     end select
@@ -676,7 +698,7 @@
     class (bmi_prms_surface), intent(in) :: this
     integer, intent(in) :: grid
     double precision, dimension(:), intent(out) :: x
-    integer :: bmi_status
+    integer :: bmi_status, i
 
     select case(grid)
     case(0)
@@ -689,9 +711,17 @@
         bmi_status = BMI_SUCCESS
     case(3)
         bmi_status = this%get_value('hru_route_order', x)
-    case(5)
+    case(4) 
         x = dble([1.0,2.0,3.0,4.0,5.0,6.0, &
-            7.0,8.0,9.0,10.0,11.0,12.0])
+            7.0,8.0,9.0,10.0,11.0])
+        bmi_status = BMI_SUCCESS
+    case(5)
+        do i = 1, size(x)
+           x(i) = i
+        end do
+        bmi_status = BMI_SUCCESS
+    case(6)
+        x = dble([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
         bmi_status = BMI_SUCCESS
     case default
         x(:) = -1.d0
@@ -719,10 +749,16 @@
     case(3)
         y(:) = -1.d0
         bmi_status = BMI_SUCCESS
+    case(4)
+        y(:) = -1.d0
+        bmi_status = BMI_SUCCESS
     case(5)
         do i = 1, size(y)
            y(i) = i
         end do
+        bmi_status = BMI_SUCCESS
+    case(6)
+        y(:) = -1.d0
         bmi_status = BMI_SUCCESS
     case default
         y(:) = -1.d0
@@ -750,10 +786,16 @@
     case(3)
         z(:) = -1.d0
         bmi_status = BMI_SUCCESS
+    case(4)
+        z(:) = -1.d0
+        bmi_status = BMI_SUCCESS
     case(5)
         z(:) = -1.d0
         bmi_status = BMI_SUCCESS
-    case default
+     case(6)
+        z(:) = -1.d0
+        bmi_status = BMI_SUCCESS
+   case default
         z(:) = -1.d0
         bmi_status = BMI_FAILURE
     end select
@@ -767,7 +809,7 @@
       integer :: bmi_status
 
       select case(grid)
-      case(0:5)
+      case(0:6)
          bmi_status = this%get_grid_size(grid, count)
       case default
          count = -1
@@ -786,6 +828,9 @@
       case (0:4)
          bmi_status = this%get_grid_node_count(grid, count)
          count = count - 1
+      case (6)
+         bmi_status = this%get_grid_node_count(grid, count)
+         count = count - 1
       case default
          count = -1
          bmi_status = BMI_FAILURE
@@ -801,6 +846,9 @@
 
       select case(grid)
       case (0:4)
+         count = 0
+         bmi_status = BMI_SUCCESS
+      case (6)
          count = 0
          bmi_status = BMI_SUCCESS
       case default
@@ -895,7 +943,7 @@
         !precipitation
         'tmax_allrain_offset', 'tmax_allsnow', 'adjmix_rain', 'rain_cbh_adj', 'snow_cbh_adj', &
         !runoff
-        'va_open_exp', 'smidx_coef', 'dprst_seep_rate_close', 'smidx_exp', 'snowinfil_max', &
+        'va_open_exp', 'smidx_coef', 'dprst_seep_rate_clos', 'smidx_exp', 'snowinfil_max', &
         'dpsrst_depth_avg', 'carea_max', 'va_xlos_exp', 'import_stor_max', 'dprst_flow_coef', &
         !snow_comp
         'snarea_curve', 'rad_trncf', 'cecn_coef', 'snarea_thresh', &
@@ -904,7 +952,9 @@
         !temperature
         'tmax_cbh_adj', 'tmin_cbh_adj', &
         !transp_tindex
-        'transp_tmax')
+        'transp_tmax', &
+        !surface depression storage
+        'va_clos_exp')
         type = "real"
         bmi_status = BMI_SUCCESS
         case( &
@@ -963,7 +1013,7 @@
         bmi_status = BMI_SUCCESS
     case('covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
-        'radmax')
+        'radmax', 'va_clos_exp', 'snarea_curve')
         units = 'decimal-fraction'
         bmi_status = BMI_SUCCESS
     case('snow_intcp')
