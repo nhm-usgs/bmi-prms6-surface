@@ -211,12 +211,13 @@
         call this%runoff%run(ctl_data, this%model_basin, this%climate, &
                              this%potet, this%intcp, this%snow, this%model_time)
 
-        ! print *, '8'
+        print *, '8'
 
         if (ctl_data%outVarON_OFF%value == 1) then
           call this%model_summary%run(ctl_data, this%model_time, this%model_basin)
         end if
         
+        print *, '9'
         if (ctl_data%print_debug%value == 1) then
           call this%model_waterbal%run(ctl_data, this%model_basin, &
                                        this%climate, this%groundwater, this%intcp, &
