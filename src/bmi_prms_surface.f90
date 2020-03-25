@@ -963,7 +963,7 @@
         'last_intcp_stor', 'hru_area_dble', 'pkwater_ante', 'dprst_in', &
         'dprst_sroff_hru','dprst_stor_ante','dprst_vol_clos','dprst_vol_open', &
         'hru_hortn_cascflow', 'hortonian_flow')
-        type = "double"
+        type = "double precision"
         bmi_status = BMI_SUCCESS
         case("nlake", 'active_hrus', 'nowtime', 'cov_type', 'hru_type', &
         'hru_route_order', 'cascade_flag', 'dprst_flag', 'print_debug', &

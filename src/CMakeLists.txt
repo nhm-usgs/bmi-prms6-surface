@@ -20,4 +20,4 @@ install(
   DESTINATION lib/cmake)
 export(
   TARGETS ${bmiprms6surface_lib}
-  FILE ${bmiprms6_lib}-config.cmake)
+  FILE ${bmiprms6surface_lib}-config.cmake)

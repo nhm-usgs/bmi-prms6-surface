@@ -3,16 +3,16 @@ program irf_test
 
   use bmif_2_0, only: BMI_MAX_UNITS_NAME
   use bmiprmssurface
+  use testing_helpers, only: config_file
   implicit none
 
   type (bmi_prms_surface) :: m
   integer :: s, i
   double precision :: time, time0, time1
   character (len=BMI_MAX_UNITS_NAME) :: time_units
-  character (len=*), parameter :: control_file= './pipestem/control.simple1'
 
   write (*,"(a)",advance="no") "Initializing..."
-  s = m%initialize(control_file)
+  s = m%initialize(config_file)
   write (*,*) "Done."
 
   s = m%get_start_time(time0)
