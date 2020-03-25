@@ -414,9 +414,7 @@
     class (bmi_prms_surface), intent(inout) :: this
     integer :: bmi_status
 
-    write(*,*) "*** bmi_prms_surface%update in"
     call advance_in_time(this%model)
-    write(*,*) "*** bmi_prms_surface%update out"
     bmi_status = BMI_SUCCESS
     end function prms_update
 
