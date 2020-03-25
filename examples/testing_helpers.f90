@@ -1,5 +1,8 @@
 module testing_helpers
 
+    ! character (len=*), parameter :: config_file = "control.simple1x"
+    character (len=*), parameter :: config_file = "control.simple1y"
+
 contains
 
   ! Prints a rank 1 array to the console.
