@@ -32,7 +32,7 @@
 				<Tool Name="VFPreBuildEventTool"/>
 				<Tool Name="VFPostBuildEventTool"/></Configuration>
 		<Configuration Name="Release|x64" ConfigurationType="typeStaticLibrary">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" RuntimeLibrary="rtMultiThreadedDLL"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" AdditionalIncludeDirectories="B:\gitbmi\prms\_build\prmslib\Release;B:\gitbmi\prms\_build\prmslib\Release/$(ConfigurationName);B:\BuildNetcdf\install\include\coretran\Release;B:\BuildNetcdf\install\include\coretran\Release/$(ConfigurationName);B:\BuildNetcdf\install\include;B:\BuildNetcdf\install\include/$(ConfigurationName)" RuntimeLibrary="rtMultiThreadedDLL"/>
 				<Tool Name="VFLibrarianTool"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
