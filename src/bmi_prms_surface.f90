@@ -946,7 +946,7 @@
         !runoff
         'va_open_exp', 'smidx_coef', 'dprst_seep_rate_clos', 'smidx_exp', 'snowinfil_max', &
         'dpsrst_depth_avg', 'carea_max', 'va_xlos_exp', 'import_stor_max', 'dprst_flow_coef', &
-        'hortonian_flow', &
+        'hortonian_flow', 'imperv_stor_max', 'dprst_depth_avg', &
         !snow_comp
         'snarea_curve', 'rad_trncf', 'cecn_coef', 'snarea_thresh', &
         !solar radiation
@@ -1004,7 +1004,7 @@
         'snowmelt', 'dprst_insroff_hru', 'dprst_sroff_hru', &
         'hortonian_flow', 'hru_hortn_cascflow', 'hru_sroffi', 'hru_sroffp', &
         'imporv_stor_ante', 'upslope_ante', 'wrain_intcp', 'srain_intcp', 'imporv_stor_max', &
-        'snarea_thresh')
+        'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg')
         units = "in"
         bmi_status = BMI_SUCCESS
     case('dprst_area_clos', 'dprst_area_max', 'hru_area')
@@ -3199,7 +3199,7 @@
         this%model%model_simulation%runoff%imperv_stor_max = src
         bmi_status = BMI_SUCCESS
     case('dprst_flow_coef')
-        this%model%model_simulation%runoff%dprst_depth_avg = src
+        this%model%model_simulation%runoff%dprst_flow_coef = src
         bmi_status = BMI_SUCCESS
     case('dprst_seep_rate_clos')
         this%model%model_simulation%runoff%dprst_seep_rate_clos = src
@@ -3648,7 +3648,7 @@
         end do
         bmi_status = BMI_SUCCESS
     case('dprst_flow_coef')
-        dest = c_loc(this%model%model_simulation%runoff%dprst_depth_avg(1))
+        dest = c_loc(this%model%model_simulation%runoff%dprst_flow_coef(1))
         status = this%get_var_grid(name, gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(dest, dest_flattened, [n_elements])
