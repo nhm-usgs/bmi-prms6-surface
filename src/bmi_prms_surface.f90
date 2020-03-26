@@ -935,6 +935,7 @@
         'hru_percent_imperv', 'hru_sroffi', 'hru_sroffp', &
         'sro_to_dprst_perv', 'soil_rechr_init_frac', &
         'soil_moist_init_frac', 'soil_rechr_max_frac', &
+        'soil_rechr_chg', &
         !intcp
         'covden_sum', 'snow_intcp', 'covden_win', 'wrain_intcp', 'srain_intcp', &
         'canopy_covden', &
@@ -973,7 +974,7 @@
         type = "integer"
         bmi_status = BMI_SUCCESS
     case('srunoff_updated_soil', 'use_transfer_intcp', 'use_sroff_transfer', &
-        'pptmix_nopack')
+        'pptmix_nopack', 'active_mask', 'transp_on')
         type = 'logical'
         bmi_status = BMI_SUCCESS
     case default
@@ -1014,7 +1015,7 @@
         bmi_status = BMI_SUCCESS
     case('covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
-        'radmax', 'va_clos_exp', 'snarea_curve')
+        'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden')
         units = 'decimal-fraction'
         bmi_status = BMI_SUCCESS
     case('snow_intcp')
@@ -1046,6 +1047,9 @@
         bmi_status = BMI_SUCCESS
     case('hru_lat', 'hru_lon')
         units = 'decimal degrees'
+        bmi_status = BMI_SUCCESS
+    case('nmonths')
+        units = 'months'
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
@@ -1126,6 +1130,12 @@
     case('active_mask')
         size = sizeof(this%model%model_simulation%model_basin%active_mask(1))
         bmi_status = BMI_SUCCESS
+    case('hru_lat')
+        size = sizeof(this%model%model_simulation%model_basin%hru_lat(1))
+        bmi_status = BMI_SUCCESS
+    case('hru_lon')
+        size = sizeof(this%model%model_simulation%model_basin%hru_lon(1))
+        bmi_status = BMI_SUCCESS
     case('hru_ppt')
         size = sizeof(this%model%model_simulation%model_precip%hru_ppt(1))
         bmi_status = BMI_SUCCESS
@@ -1172,6 +1182,10 @@
     case('net_snow')
         size = sizeof(this%model%model_simulation%intcp%net_snow(1))
         bmi_status = BMI_SUCCESS
+    case('canopy_covden')
+        size = sizeof(this%model%model_simulation%intcp%canopy_covden(1))
+        bmi_status = BMI_SUCCESS
+
 
     case('snow_evap')
         size = sizeof(this%model%model_simulation%snow%snow_evap(1))
@@ -1630,6 +1644,12 @@
         bmi_status = BMI_SUCCESS
         
         !basin
+    case('hru_lat')
+         dest = [this%model%model_simulation%model_basin%hru_lat]
+         bmi_status = BMI_SUCCESS
+    case('hru_lon')
+         dest = [this%model%model_simulation%model_basin%hru_lon]
+         bmi_status = BMI_SUCCESS
     case('hru_area')
         dest = [this%model%model_simulation%model_basin%hru_area]
         bmi_status = BMI_SUCCESS
@@ -1970,6 +1990,18 @@
         bmi_status = BMI_SUCCESS
         
         !basin
+    case('hru_lat')
+        src = c_loc(this%model%model_simulation%model_basin%hru_lat(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('hru_lon')
+        src = c_loc(this%model%model_simulation%model_basin%hru_lon(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
     case('hru_area')
         src = c_loc(this%model%model_simulation%model_basin%hru_area(1))
         status = this%get_var_grid(name,gridid)
@@ -2462,6 +2494,24 @@
         bmi_status = BMI_SUCCESS
         
         !basin
+    case('hru_lat')
+        src = c_loc(this%model%model_simulation%model_basin%hru_lat(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('hru_lon')
+        src = c_loc(this%model%model_simulation%model_basin%hru_lon(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
     case('hru_area')
         src = c_loc(this%model%model_simulation%model_basin%hru_area(1))
         status = this%get_var_grid(name,gridid)
