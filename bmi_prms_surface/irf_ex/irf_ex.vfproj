@@ -36,7 +36,7 @@
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
 		<Configuration Name="Release|x64">
 				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" AdditionalIncludeDirectories="B:\gitbmi\bmi-prms6-surface\bmi_prms_surface\bmi_prms_surface\x64\Release" RuntimeLibrary="rtMultiThreadedDLL"/>
-				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="..\bmi_prms_surface\x64\Release;B:\BuildNetcdf\install\lib;B:\BuildNetcdf\install\1.10.5\lib;B:\gitbmi\prms\prmslib\Release" LinkLibraryDependencies="false" SubSystem="subSystemConsole" AdditionalDependencies="bmi_prms_surface.lib prmslib.lib B:\BuildNetcdf\install\lib\coretran.lib B:\BuildNetcdf\install\lib\netcdf.lib B:\BuildNetcdf\install\lib\netcdff.lib libhdf5.lib libhdf5_hl.lib libszip.lib libzlib.lib"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="..\bmi_prms_surface\x64\Release;B:\BuildNetcdf\install\lib;B:\BuildNetcdf\install\1.10.5\lib;B:\gitbmi\prms\prms_project\prmslib\Release" LinkLibraryDependencies="false" SubSystem="subSystemConsole" AdditionalDependencies="bmi_prms_surface.lib prmslib.lib B:\BuildNetcdf\install\lib\coretran.lib B:\BuildNetcdf\install\lib\netcdf.lib B:\BuildNetcdf\install\lib\netcdff.lib libhdf5.lib libhdf5_hl.lib libszip.lib libzlib.lib"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
 				<Tool Name="VFCustomBuildTool"/>

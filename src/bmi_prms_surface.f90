@@ -91,7 +91,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 52
-    integer, parameter :: output_item_count = 91
+    integer, parameter :: output_item_count = 86
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !potentially used for gsflow implementation?
@@ -225,11 +225,11 @@
         'dprst_in            ', & !r64 by hru
         'dprst_insroff_hru   ', & !r32 by hru
         'dprst_sroff_hru     ', & !r64 by hru
-        'dprst_stor_ante     ', & !r64 by hru
+        !'dprst_stor_ante     ', & !r64 by hru
         'dprst_vol_clos      ', & !r64 by hru
         'dprst_vol_open      ', & !r64 by hru
         'dprst_stor_hru      ', & !r64 by nhru
-        'imperv_stor_ante    ', & !r32 by hru
+        !'imperv_stor_ante    ', & !r32 by hru
         'sro_to_dprst_perv   ', & !r32 by hru
         'upslope_hortonian   ', & !r64 by hru
         'hortonian_flow      ', & !r32 by hru
@@ -252,12 +252,12 @@
         'hru_intcpstor       ', & !r32 by hru
         'use_transfer_intcp  ', & ! logical by 1
         'canopy_covden       ', & ! r32 by nhru
-        'gain_inches         ', & ! r32 by nhru
+        !'gain_inches         ', & ! r32 by nhru
         'intcp_changeover    ', & !r32 by hru
         'intcp_evap          ', & !r32 by hru
         'intcp_stor          ', &  !r32 by hru
-        'intcp_stor_ante     ', & !r32 by hru
-        'net_apply           ', & !r32 by hru
+        !'intcp_stor_ante     ', & !r32 by hru
+        !'net_apply           ', & !r32 by hru
         'net_ppt             ', & !r32 by hru
         'net_rain            ', & !r32 by hru
         'net_snow            ', & !r32 by hru
@@ -462,9 +462,9 @@
         'hru_impervstor', 'swrad', 'hru_area_dble', &
         'newsnow', 'pkwater_ante', 'pptmix', 'pptmix_nopack', 'snowmelt', &
         'dprst_area_clos','dprst_area_max','dprst_frac','dprst_in', &
-        'dprst_insroff_hru','dprst_sroff_hru','dprst_stor_ante','dprst_vol_clos', &
+        'dprst_insroff_hru','dprst_sroff_hru','dprst_vol_clos', &
         'dprst_vol_open', 'hru_hortn_cascflow', 'hru_percent_imperv', &
-        'hru_sroffi', 'hru_sroffp', 'imperv_stor_ante', 'sro_to_dprst_perv', &
+        'hru_sroffi', 'hru_sroffp', 'sro_to_dprst_perv', &
         'upslope_hortonian', 'hortonian_flow', 'soil_rechr_init_frac', &
         'soil_rechr_max_frac', 'soil_moist_init_frac', 'covden_sum',  &
         'covden_win', 'jh_coef_hru', &
@@ -475,8 +475,8 @@
         
         !intcp
         'snow_intcp', 'srain_intcp', 'wrain_intcp', 'canopy_covden', &
-        'gain_inches', 'intcp_changeover', 'intcp_evap', &
-        'intcp_stor', 'intcp_stor_ante', 'net_apply', 'net_ppt', 'net_rain', &
+        'intcp_changeover', 'intcp_evap', &
+        'intcp_stor', 'net_ppt', 'net_rain', &
         'net_snow', 'hru_intcpstor', &
         
         !climate_flow
@@ -928,12 +928,12 @@
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'hru_area_perv', 'hru_frac_perv', 'hru_impervevap', 'soil_moist_chg', &
         'soil_rech_chg', 'hru_intcpstor', 'hru_impervstor', 'swrad', &
-        'gain_inches', 'intcp_changeover', 'intcp_evap', &
-        'intcp_stor', 'intcp_stor_ante', 'net_apply', 'net_ppt', 'net_rain', &
+        'intcp_changeover', 'intcp_evap', &
+        'intcp_stor', 'net_ppt', 'net_rain', &
         'net_snow', 'snowmelt', &
         'dprst_area_clos','dprst_area_max','dprst_frac', 'dprst_insroff_hru', &
-        'hru_percent_imperv', 'hru_sroffi', 'hru_sroffp', 'imperv_stor_ante', &
-        'sro_to_dprst_perv', 'upslope_hortonian', 'soil_rechr_init_frac', &
+        'hru_percent_imperv', 'hru_sroffi', 'hru_sroffp', &
+        'sro_to_dprst_perv', 'soil_rechr_init_frac', &
         'soil_moist_init_frac', 'soil_rechr_max_frac', &
         !intcp
         'covden_sum', 'snow_intcp', 'covden_win', 'wrain_intcp', 'srain_intcp', &
@@ -945,6 +945,7 @@
         !runoff
         'va_open_exp', 'smidx_coef', 'dprst_seep_rate_clos', 'smidx_exp', 'snowinfil_max', &
         'dpsrst_depth_avg', 'carea_max', 'va_xlos_exp', 'import_stor_max', 'dprst_flow_coef', &
+        'hortonian_flow', &
         !snow_comp
         'snarea_curve', 'rad_trncf', 'cecn_coef', 'snarea_thresh', &
         !solar radiation
@@ -961,8 +962,8 @@
         "hortonian_lakes", &
         'dprst_seep_hru', 'strm_seg_in', 'pkwater_equiv', 'dprst_stor_hru', &
         'last_intcp_stor', 'hru_area_dble', 'pkwater_ante', 'dprst_in', &
-        'dprst_sroff_hru','dprst_stor_ante','dprst_vol_clos','dprst_vol_open', &
-        'hru_hortn_cascflow', 'hortonian_flow')
+        'dprst_sroff_hru', 'dprst_vol_clos','dprst_vol_open', &
+        'hru_hortn_cascflow', 'upslope_hortonian')
         type = "double precision"
         bmi_status = BMI_SUCCESS
         case("nlake", 'active_hrus', 'nowtime', 'cov_type', 'hru_type', &
@@ -996,10 +997,10 @@
         'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav',  &
         'dprst_seep_hru', &
         'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', 'hru_impervstor', &
-        'swrad', 'last_intcp_stor','gain_inches', 'intcp_changeover', 'intcp_evap', &
-        'intcp_stor', 'intcp_stor_ante', 'net_apply', 'net_ppt', 'net_rain', &
+        'swrad', 'last_intcp_stor', 'intcp_changeover', 'intcp_evap', &
+        'intcp_stor', 'net_ppt', 'net_rain', &
         'net_snow', 'pkwater_ante', &
-        'snowmelt', 'dprst_insroff_hru', 'dprst_sroff_hru', 'dprst_stor_ante', &
+        'snowmelt', 'dprst_insroff_hru', 'dprst_sroff_hru', &
         'hortonian_flow', 'hru_hortn_cascflow', 'hru_sroffi', 'hru_sroffp', &
         'imporv_stor_ante', 'upslope_ante', 'wrain_intcp', 'srain_intcp', 'imporv_stor_max', &
         'snarea_thresh')
@@ -1153,9 +1154,6 @@
         size = sizeof(this%model%model_simulation%intcp%hru_intcpevap(1))
         bmi_status = BMI_SUCCESS
         
-    case('gain_inches')
-        size = sizeof(this%model%model_simulation%intcp%gain_inches(1))
-        bmi_status = BMI_SUCCESS
     case('intcp_changeover')
         size = sizeof(this%model%model_simulation%intcp%intcp_changeover(1))
         bmi_status = BMI_SUCCESS
@@ -1164,12 +1162,6 @@
         bmi_status = BMI_SUCCESS
     case('intcp_stor')
         size = sizeof(this%model%model_simulation%intcp%intcp_stor(1))
-        bmi_status = BMI_SUCCESS
-    case('intcp_stor_ante')
-        size = sizeof(this%model%model_simulation%intcp%intcp_stor_ante(1))
-        bmi_status = BMI_SUCCESS
-    case('net_apply')
-        size = sizeof(this%model%model_simulation%intcp%net_apply(1))
         bmi_status = BMI_SUCCESS
     case('net_ppt')
         size = sizeof(this%model%model_simulation%intcp%net_ppt(1))
@@ -1273,9 +1265,6 @@
     case('hru_sroffp')
         size = sizeof(this%model%model_simulation%runoff%hru_sroffp(1))
         bmi_status = BMI_SUCCESS
-    case('imperv_stor_ante')
-        size = sizeof(this%model%model_simulation%runoff%imperv_stor_ante(1))
-        bmi_status = BMI_SUCCESS
     case('sro_to_dprst_perv')
         size = sizeof(this%model%model_simulation%runoff%sro_to_dprst_perv(1))
         bmi_status = BMI_SUCCESS
@@ -1291,9 +1280,6 @@
         bmi_status = BMI_SUCCESS
     case('dprst_sroff_hru')
         size = sizeof(this%model%model_simulation%runoff%dprst_sroff_hru(1))
-        bmi_status = BMI_SUCCESS
-    case('dprst_stor_ante')
-        size = sizeof(this%model%model_simulation%runoff%dprst_stor_ante(1))
         bmi_status = BMI_SUCCESS
     case('dprst_vol_clos')
         size = sizeof(this%model%model_simulation%runoff%dprst_vol_clos(1))
@@ -1697,9 +1683,6 @@
     case('dprst_insroff_hru')
         dest = [this%model%model_simulation%runoff%dprst_insroff_hru]
         bmi_status = BMI_SUCCESS
-    case('imperv_stor_ante')
-        dest = [this%model%model_simulation%runoff%imperv_stor_ante]
-        bmi_status = BMI_SUCCESS
     case('sro_to_dprst_perv')
         dest = [this%model%model_simulation%runoff%sro_to_dprst_perv]
         bmi_status = BMI_SUCCESS
@@ -1719,9 +1702,6 @@
     case('hru_intcpstor')
         dest = [this%model%model_simulation%intcp%hru_intcpstor]
         bmi_status = BMI_SUCCESS
-    case('gain_inches')
-        dest = [this%model%model_simulation%intcp%gain_inches]
-        bmi_status = BMI_SUCCESS
     case('intcp_changeover')
         dest = [this%model%model_simulation%intcp%intcp_changeover]
         bmi_status = BMI_SUCCESS
@@ -1730,12 +1710,6 @@
         bmi_status = BMI_SUCCESS
     case('intcp_stor')
         dest = [this%model%model_simulation%intcp%intcp_stor]
-        bmi_status = BMI_SUCCESS
-    case('intcp_stor_ante')
-        dest = [this%model%model_simulation%intcp%intcp_stor_ante]
-        bmi_status = BMI_SUCCESS
-    case('net_apply')
-        dest = [this%model%model_simulation%intcp%net_apply]
         bmi_status = BMI_SUCCESS
     case('net_ppt')
         dest = [this%model%model_simulation%intcp%net_ppt]
@@ -1859,9 +1833,6 @@
         bmi_status = BMI_SUCCESS
     case('dprst_sroff_hru')
         dest = [this%model%model_simulation%runoff%dprst_sroff_hru]
-        bmi_status = BMI_SUCCESS
-    case('dprst_stor_ante')
-        dest = [this%model%model_simulation%runoff%dprst_stor_ante]
         bmi_status = BMI_SUCCESS
     case('dprst_vol_clos')
         dest = [this%model%model_simulation%runoff%dprst_vol_clos]
@@ -2097,12 +2068,6 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('imperv_stor_ante')
-        src = c_loc(this%model%model_simulation%runoff%imperv_stor_ante(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
     case('sro_to_dprst_perv')
         src = c_loc(this%model%model_simulation%runoff%sro_to_dprst_perv(1))
         status = this%get_var_grid(name,gridid)
@@ -2137,12 +2102,6 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('gain_inches')
-        src = c_loc(this%model%model_simulation%intcp%gain_inches(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
     case('intcp_changeover')
         src = c_loc(this%model%model_simulation%intcp%intcp_changeover(1))
         status = this%get_var_grid(name,gridid)
@@ -2157,18 +2116,6 @@
         bmi_status = BMI_SUCCESS
     case('intcp_stor')
         src = c_loc(this%model%model_simulation%intcp%intcp_stor(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
-    case('intcp_stor_ante')
-        src = c_loc(this%model%model_simulation%intcp%intcp_stor_ante(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
-    case('net_apply')
-        src = c_loc(this%model%model_simulation%intcp%net_apply(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
@@ -2326,12 +2273,6 @@
         bmi_status = BMI_SUCCESS
     case('dprst_sroff_hru')
         src = c_loc(this%model%model_simulation%runoff%dprst_sroff_hru)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
-    case('dprst_stor_ante')
-        src = c_loc(this%model%model_simulation%runoff%dprst_stor_ante)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
@@ -2667,15 +2608,6 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-    case('imperv_stor_ante')
-        src = c_loc(this%model%model_simulation%runoff%imperv_stor_ante(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
     case('sro_to_dprst_perv')
         src = c_loc(this%model%model_simulation%runoff%sro_to_dprst_perv(1))
         status = this%get_var_grid(name,gridid)
@@ -2735,15 +2667,6 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-    case('gain_inches')
-        src = c_loc(this%model%model_simulation%intcp%gain_inches(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
     case('intcp_changeover')
         src = c_loc(this%model%model_simulation%intcp%intcp_changeover(1))
         status = this%get_var_grid(name,gridid)
@@ -2764,24 +2687,6 @@
         bmi_status = BMI_SUCCESS
     case('intcp_stor')
         src = c_loc(this%model%model_simulation%intcp%intcp_stor(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
-    case('intcp_stor_ante')
-        src = c_loc(this%model%model_simulation%intcp%intcp_stor_ante(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
-    case('net_apply')
-        src = c_loc(this%model%model_simulation%intcp%net_apply(1))
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, src_flattened, [n_elements])
@@ -3033,15 +2938,6 @@
         bmi_status = BMI_SUCCESS
     case('dprst_sroff_hru')
         src = c_loc(this%model%model_simulation%runoff%dprst_sroff_hru)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
-    case('dprst_stor_ante')
-        src = c_loc(this%model%model_simulation%runoff%dprst_stor_ante)
         status = this%get_var_grid(name,gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, src_flattened, [n_elements])

@@ -1,7 +1,7 @@
 module testing_helpers
 
     ! character (len=*), parameter :: config_file = "control.simple1x"
-    character (len=*), parameter :: config_file = "control.simple1y"
+    character (len=*), parameter :: config_file = "pipestem/control.simple1"
 
 contains
 
