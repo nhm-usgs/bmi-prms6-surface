@@ -45,6 +45,7 @@
         !! Ending cpu time value
         real(r64) :: dummy_r64
         real(r32) :: dummy_r32
+        logical :: bmitmax, bmitmin, bmiprcp
     end type prms_surface_model
 
     contains
@@ -107,6 +108,11 @@
         ! 2019-08-08 PAN: This is rather kludgy...
         ! Close the parameter file
         call Control_data%param_file_hdl%close()
+        
+        !initialize logicals to track climate imput
+        model%bmitmax = .false. 
+        model%bmitmin = .false.
+        model%bmiprcp = .false.
 
         write(output_unit, fmt='(a)') repeat('=', 72)
     end associate
@@ -158,6 +164,10 @@
     if(this%model_time%next(ctl_data)) then
         call solve_prms(model)
     endif
+    !always assume prms reads climate forcing from .nc file
+    model%bmitmax = .false.
+    model%bmitmin = .false.
+    model%bmiprcp = .false.
     end associate
     
     end subroutine advance_in_time
@@ -179,10 +189,12 @@
         ! print *, this%model_time%Nowyear, this%model_time%Nowmonth, this%model_time%Nowday
 
         call this%model_basin%run(ctl_data, this%model_time)
-        call this%model_temp%run(ctl_data, this%model_basin, this%model_time, this%model_summary)
+        
+        call this%model_temp%run(ctl_data, this%model_basin, this%model_time, this%model_summary, &
+            model%bmitmax, model%bmitmin)
         ! print *, '1'
         call this%model_precip%run(ctl_data, this%model_basin, this%model_temp, this%model_time, &
-            this%model_summary)
+            this%model_summary, model%bmiprcp)
         ! call this%climate_by_hru%run(ctl_data, param_data, this%model_time, &
         !                              this%model_basin, this%potet, this%model_temp, &
         !                              this%climate)

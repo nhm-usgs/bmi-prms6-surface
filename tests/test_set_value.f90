@@ -20,6 +20,16 @@
         stop BMI_FAILURE
     end if
 
+    retcode = test3()
+    if (retcode.ne.BMI_SUCCESS) then
+        stop BMI_FAILURE
+    end if
+
+    retcode = test4()
+    if (retcode.ne.BMI_SUCCESS) then
+        stop BMI_FAILURE
+    end if
+
     contains
 
   ! Test getting r32 hru_area.
@@ -34,14 +44,17 @@
         0.25,0.25,0.25,0.25,0.25,0.25, &
         0.25,0.25,0.25 /)
 
-    real :: tval(size)
+    real :: tval(size), t2val(size)
     integer :: i, code
 
     status = m%initialize(config_file)
     status = m%update()
     status = m%get_value(var_name, tval)
     status = m%set_value(var_name, setv)
+    status = m%update() !run update to check that values not over-ridden by read in prms
     status = m%get_value(var_name, tval)
+    status = m%update()
+    status = m%get_value(var_name, t2val)
     status = m%finalize()
 
     ! Visual inspection.
@@ -82,7 +95,7 @@
     status = m%finalize()
 
     ! Visual inspection.
-    write(*,*) "Test 5"
+    write(*,*) "Test "
     write(*,*) val
     write(*,*) setv
 
@@ -94,5 +107,91 @@
     end do
   end function test2
 
-  
-end program test_set_value
+  function test3() result(code)
+    character (len=*), parameter :: &
+         var_name = "tmax"
+    integer, parameter :: rank = 1
+    integer, parameter :: size = 14
+    integer, parameter, dimension(rank) :: shape = (/ 14 /)
+    real, parameter, dimension(shape(1)) :: &
+         setv = (/0.25,0.25,0.25,0.25,0.25, &
+        0.25,0.25,0.25,0.25,0.25,0.25, &
+        0.25,0.25,0.25 /)
+    real, parameter, dimension(shape(1)) :: &
+        getv = (/-17.63889, -17.63889, -17.63889, -17.63889, -17.63889, &
+            -17.63889, -17.63889, -17.63889, -17.63889, -17.63889, &
+            -17.63889, -17.63889, -17.63889, -17.63889 /)
+
+    real :: tval(size), t2val(size)
+    integer :: i, code
+
+    !a little weird because input is in F but output is C 
+    status = m%initialize(config_file)
+    status = m%update()
+    status = m%get_value(var_name, tval)
+    status = m%set_value(var_name, setv)
+    status = m%update() !run update to check that values not over-ridden by read in prms
+    status = m%get_value(var_name, tval)
+    status = m%update()
+    status = m%get_value(var_name, t2val)
+    status = m%finalize()
+
+    ! Visual inspection.
+    write(*,*) "Test 3"
+    call print_1darray(tval, shape)
+    do i = 1, shape(1)
+       write(*,*) getv(i)
+    end do
+
+    code = BMI_SUCCESS
+    do i = 1, shape(1)
+       if (isreal4equalreal4(tval(i), getv(i)).neqv..TRUE.) then
+          code = BMI_FAILURE
+          exit
+       end if
+    end do
+  end function test3
+
+  function test4() result(code)
+    character (len=*), parameter :: &
+         var_name = "tmin"
+    integer, parameter :: rank = 1
+    integer, parameter :: size = 14
+    integer, parameter, dimension(rank) :: shape = (/ 14 /)
+    real, parameter, dimension(shape(1)) :: &
+         setv = (/0.25,0.25,0.25,0.25,0.25, &
+        0.25,0.25,0.25,0.25,0.25,0.25, &
+        0.25,0.25,0.25 /)
+    real, parameter, dimension(shape(1)) :: &
+        getv = (/-17.63889, -17.63889, -17.63889, -17.63889, -17.63889, &
+            -17.63889, -17.63889, -17.63889, -17.63889, -17.63889, &
+            -17.63889, -17.63889, -17.63889, -17.63889 /)
+    real :: tval(size), t2val(size)
+    integer :: i, code
+
+    status = m%initialize(config_file)
+    status = m%update()
+    status = m%get_value(var_name, tval)
+    status = m%set_value(var_name, setv)
+    status = m%update() !run update to check that values not over-ridden by read in prms
+    status = m%get_value(var_name, tval)
+    status = m%update()
+    status = m%get_value(var_name, t2val)
+    status = m%finalize()
+
+    ! Visual inspection.
+    write(*,*) "Test 4"
+    call print_1darray(tval, shape)
+    do i = 1, shape(1)
+       write(*,*) getv(i)
+    end do
+
+    code = BMI_SUCCESS
+    do i = 1, shape(1)
+       if (isreal4equalreal4(tval(i), getv(i)).neqv..TRUE.) then
+          code = BMI_FAILURE
+          exit
+       end if
+    end do
+  end function test4
+    end program test_set_value

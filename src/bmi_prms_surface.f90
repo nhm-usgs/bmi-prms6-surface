@@ -94,6 +94,9 @@
     integer, parameter :: output_item_count = 86
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
+        !climate forcings
+        'tmax                ', &
+        'tmin                ', &
         !potentially used for gsflow implementation?
         'hortonian_lakes     ', &
         !climateflow
@@ -117,8 +120,6 @@
         'tmax_allrain_offset ', &
         'tmax_allsnow        ', &
         'hru_ppt             ', &
-        'hru_rain            ', &
-        'hru_snow            ', &
         !precipitation_hru
         'adjmix_rain         ', &
         'rain_cbh_adj        ', &
@@ -448,7 +449,7 @@
     integer :: bmi_status
 
     select case(name)
-    case('hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', &
+    case('tmax', 'tmin', 'hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', &
         'hru_y', 'hru_elev', 'nhm_id', 'hru_lat', 'hru_lon', &
         'hru_actet', 'hortonian_lakes', &
         'cov_type', 'hru_area', 'hru_type', &
@@ -921,7 +922,7 @@
     integer :: bmi_status
 
     select case(name)
-    case("hru_ppt", "hru_snow", "hru_rain",  &
+    case('tmax', 'tmin', "hru_ppt", "hru_snow", "hru_rain",  &
         'hru_lat', 'hru_lon', &
         "hru_actet", 'hru_area', 'dprst_evap_hru', 'infil', &
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', 'snowcov_area', &
@@ -1021,7 +1022,7 @@
     case('snow_intcp')
         units = 'fraction-inches'
         bmi_status = BMI_SUCCESS
-    case('tmax_allrain_offset', 'tmax_allsnow')
+    case('tmax', 'tmin', 'tmax_allrain_offset', 'tmax_allsnow')
         units = 'temp_units'
         bmi_status = BMI_SUCCESS
     case('dprst_seep_rate_clos', 'dprst_flow_coef')
@@ -1135,6 +1136,12 @@
         bmi_status = BMI_SUCCESS
     case('hru_lon')
         size = sizeof(this%model%model_simulation%model_basin%hru_lon(1))
+        bmi_status = BMI_SUCCESS
+    case('tmax')
+        size = sizeof(this%model%model_simulation%model_temp%tmax(1))
+        bmi_status = BMI_SUCCESS
+    case('tmin')
+        size = sizeof(this%model%model_simulation%model_temp%tmin(1))
         bmi_status = BMI_SUCCESS
     case('hru_ppt')
         size = sizeof(this%model%model_simulation%model_precip%hru_ppt(1))
@@ -1615,22 +1622,12 @@
     integer :: bmi_status
 
     select case(name)
-        !case("plate_surface__temperature")
-        !   ! This would be safe, but subject to indexing errors.
-        !   ! do j = 1, this%model%n_y
-        !   !    do i = 1, this%model%n_x
-        !   !       k = j + this%model%n_y*(i-1)
-        !   !       dest(k) = this%model%temperature(j,i)
-        !   !    end do
-        !   ! end do
-        !
-        !   ! This is an equivalent, elementwise copy into `dest`.
-        !   ! See https://stackoverflow.com/a/11800068/1563298
-        !   dest = reshape(this%model%temperature, [this%model%n_x*this%model%n_y])
-        !   bmi_status = BMI_SUCCESS
-        !case("plate_surface__thermal_diffusivity")
-        !   dest = [this%model%alpha]
-        !   bmi_status = BMI_SUCCESS
+    case('tmax')
+        dest = [this%model%model_simulation%model_temp%tmax]
+        bmi_status = BMI_SUCCESS
+    case('tmin')
+        dest = [this%model%model_simulation%model_temp%tmin]
+        bmi_status = BMI_SUCCESS
         
         !precip
     case('hru_ppt')
@@ -1969,6 +1966,19 @@
     integer :: n_elements, gridid, status
 
     select case(name)
+    case('tmax')
+        src = c_loc(this%model%model_simulation%model_temp%tmax(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+    case('tmin')
+        src = c_loc(this%model%model_simulation%model_temp%tmin(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, dest_ptr, [n_elements])
+        bmi_status = BMI_SUCCESS
+
         !precip
     case('hru_ppt')
         src = c_loc(this%model%model_simulation%model_precip%hru_ppt(1))
@@ -2464,6 +2474,25 @@
     integer :: i, n_elements, status, gridid
 
     select case(name)
+    case('tmax')
+        src = c_loc(this%model%model_simulation%model_temp%tmax(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+    case('tmin')
+        src = c_loc(this%model%model_simulation%model_temp%tmin(1))
+        status = this%get_var_grid(name,gridid)
+        status = this%get_grid_size(gridid, n_elements)
+        call c_f_pointer(src, src_flattened, [n_elements])
+        do i = 1,  size(inds)
+            dest(i) = src_flattened(inds(i))
+        end do
+        bmi_status = BMI_SUCCESS
+
         !precip
     case('hru_ppt')
         src = c_loc(this%model%model_simulation%model_precip%hru_ppt(1))
@@ -3146,17 +3175,19 @@
     case('tmax_allsnow')
         this%model%model_simulation%model_precip%tmax_allsnow = reshape(src, [nhru, nmonths])
         bmi_status = BMI_SUCCESS
+    case('tmax')
+        this%model%model_simulation%model_temp%tmax = src
+        this%model%bmitmax = .TRUE.
+        bmi_status = BMI_SUCCESS
+    case('tmin')
+        this%model%model_simulation%model_temp%tmin = src
+        this%model%bmitmin = .TRUE.
+        bmi_status = BMI_SUCCESS
     case('hru_ppt')
         this%model%model_simulation%model_precip%hru_ppt = src
-        bmi_status = BMI_SUCCESS
-    case('hru_rain')
-        this%model%model_simulation%model_precip%hru_rain = src
-        bmi_status = BMI_SUCCESS
-    case('hru_snow')
-        this%model%model_simulation%model_precip%hru_snow = src
+        this%model%bmiprcp = .TRUE.
         bmi_status = BMI_SUCCESS
         
-        !precipitaion_hru not yet implemented
     case('adjmix_rain')
         select type(model_precip => this%model%model_simulation%model_precip)
             type is(Precipitation_hru)
@@ -3517,35 +3548,7 @@
             dest_flattened(inds(i)) = src(i)
         end do
         bmi_status = BMI_SUCCESS
-    case('hru_ppt')
-        dest = c_loc(this%model%model_simulation%model_precip%hru_ppt(1))
-        status = this%get_var_grid(name, gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(dest, dest_flattened, [n_elements])
-        do i = 1, size(inds)
-            dest_flattened(inds(i)) = src(i)
-        end do
-        bmi_status = BMI_SUCCESS
-    case('hru_rain')
-        dest = c_loc(this%model%model_simulation%model_precip%hru_rain(1))
-        status = this%get_var_grid(name, gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(dest, dest_flattened, [n_elements])
-        do i = 1, size(inds)
-            dest_flattened(inds(i)) = src(i)
-        end do
-        bmi_status = BMI_SUCCESS
-    case('hru_snow')
-        dest = c_loc(this%model%model_simulation%model_precip%hru_snow(1))
-        status = this%get_var_grid(name, gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(dest, dest_flattened, [n_elements])
-        do i = 1, size(inds)
-            dest_flattened(inds(i)) = src(i)
-        end do
-        bmi_status = BMI_SUCCESS
-        
-        !precipitaion_hru not yet implemented
+
     case('adjmix_rain')
         select type(model_precip => this%model%model_simulation%model_precip)
             type is(Precipitation_hru)
