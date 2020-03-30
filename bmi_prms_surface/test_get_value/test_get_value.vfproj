@@ -26,12 +26,12 @@
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
 		<Configuration Name="Debug|x64">
 				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" AdditionalIncludeDirectories="B:\gitbmi\bmi-prms6-surface\bmi_prms_surface\bmi_prms_surface\x64\Debug" WarnInterfaces="true" Traceback="true" BoundsCheck="true" StackFrameCheck="true" RuntimeLibrary="rtMultiThreadedDebugDLL"/>
-				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="..\bmi_prms_surface\x64\Debug;B:\BuildNetcdf\install\lib;B:\BuildNetcdf\install\1.10.5\lib" GenerateDebugInformation="true" SubSystem="subSystemConsole" AdditionalDependencies="bmi_prms_surface.lib B:\gitbmi\prms\prms_project\prmslib\Debug\prmslib.lib B:\BuildNetcdf\install\lib\coretran.lib B:\BuildNetcdf\install\lib\netcdf.lib B:\BuildNetcdf\install\lib\netcdff.lib libhdf5.lib libhdf5_hl.lib libszip.lib libzlib.lib"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="..\bmi_prms_surface\x64\Debug;B:\BuildNetcdf\install\lib;B:\BuildNetcdf\install\1.10.5\lib" GenerateDebugInformation="true" SubSystem="subSystemConsole" AdditionalDependencies="bmi_prms_surface.lib B:\gitbmi\prms\_build\prmslib\Debug\prmslib.lib B:\BuildNetcdf\install\lib\coretran.lib B:\BuildNetcdf\install\lib\netcdf.lib B:\BuildNetcdf\install\lib\netcdff.lib libhdf5.lib libhdf5_hl.lib libszip.lib libzlib.lib"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true" TargetEnvironment="midlTargetAMD64"/>
 				<Tool Name="VFCustomBuildTool"/>
 				<Tool Name="VFPreLinkEventTool"/>
-				<Tool Name="VFPreBuildEventTool" CommandLine="xcopy ..\..\..\bmi-test-projects\prms\pipestem .\pipestem /i /e /s /y" Description="Pipstem project in bmi-test-projects repo"/>
+				<Tool Name="VFPreBuildEventTool" CommandLine="xcopy ..\..\..\bmi-test-projects\prms\pipestem  /i /e /s /y" Description="Pipstem project in bmi-test-projects repo"/>
 				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
 		<Configuration Name="Release|x64">

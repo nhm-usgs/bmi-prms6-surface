@@ -1,4 +1,5 @@
 output/
+pipestem/
 *.out
 *.wbal
 *.bak
@@ -7,4 +8,4 @@ control*.*
 *.nc
 *.msgs
 sf_data
-
+.tmax.cbh.swo
