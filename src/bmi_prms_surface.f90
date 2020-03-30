@@ -87,7 +87,7 @@
     public :: bmi_prms_surface
 
     character (len=BMI_MAX_COMPONENT_NAME), target :: &
-        component_name = "prms6-BMI"
+        component_name = "prms6-surface-BMI"
 
     ! Exchange items
     integer, parameter :: input_item_count = 52
