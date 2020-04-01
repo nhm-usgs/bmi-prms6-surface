@@ -1052,6 +1052,9 @@
     case('nmonths')
         units = 'months'
         bmi_status = BMI_SUCCESS
+    case('strm_seg_in')
+        units = 'cfs'
+        bmi_status = BMI_SUCCESS
     case default
         units = "-"
         bmi_status = BMI_SUCCESS
@@ -1231,8 +1234,13 @@
         size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
+            bmi_status = BMI_SUCCESS
+        else
+            size = -1
+            bmi_status = BMI_FAILURE
+        endif
     case('pkwater_equiv') 
         size = sizeof(this%model%model_simulation%climate%pkwater_equiv(1))
         bmi_status = BMI_SUCCESS
@@ -1837,8 +1845,13 @@
         dest = [this%model%model_simulation%runoff%dprst_seep_hru]
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        dest = [this%model%model_simulation%runoff%strm_seg_in]
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            dest = [this%model%model_simulation%runoff%strm_seg_in]
+            bmi_status = BMI_SUCCESS
+        else
+            dest = [-1.d0]
+            bmi_status = BMI_FAILURE
+        endif
     case('dprst_stor_hru')
         dest = [this%model%model_simulation%runoff%dprst_stor_hru]
         bmi_status = BMI_SUCCESS
@@ -2290,11 +2303,15 @@
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, dest_ptr, [n_elements])
+            bmi_status = BMI_SUCCESS
+        else
+            bmi_status = BMI_FAILURE
+        endif
     case('dprst_stor_hru')
         src = c_loc(this%model%model_simulation%runoff%dprst_stor_hru(1))
         status = this%get_var_grid(name,gridid)
@@ -2456,7 +2473,7 @@
         end do
         bmi_status = BMI_SUCCESS
 
-        case default
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_get_at_indices_int
@@ -2980,14 +2997,18 @@
         end do
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+            bmi_status = BMI_SUCCESS
+        else
+            bmi_status = BMI_FAILURE
+        endif
     case('dprst_stor_hru')
         src = c_loc(this%model%model_simulation%runoff%dprst_stor_hru(1))
         status = this%get_var_grid(name,gridid)
@@ -3073,10 +3094,8 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-
-
-
-        case default
+    
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_get_at_indices_double
@@ -3326,15 +3345,19 @@
     select case(name)
         !runoff
     case('strm_seg_in')
-        this%model%model_simulation%runoff%strm_seg_in = src
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            this%model%model_simulation%runoff%strm_seg_in = src
+            bmi_status = BMI_SUCCESS
+        else
+            bmi_status = BMI_FAILURE
+        endif
     case('dprst_vol_clos')
         this%model%model_simulation%runoff%dprst_vol_clos = src
         bmi_status = BMI_SUCCESS
     case('dprst_vol_open')
         this%model%model_simulation%runoff%dprst_vol_open = src
         bmi_status = BMI_SUCCESS
-        case default
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_set_double
@@ -3352,7 +3375,7 @@
     integer :: i
 
     select case(name)
-        case default
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_set_at_indices_int
@@ -3850,14 +3873,18 @@
     select case(name)
         !runoff
     case('strm_seg_in')
-        dest = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
-        status = this%get_var_grid(name, gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(dest, dest_flattened, [n_elements])
-        do i = 1, size(inds)
-            dest_flattened(inds(i)) = src(i)
-        end do
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            dest = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+            status = this%get_var_grid(name, gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(dest, dest_flattened, [n_elements])
+            do i = 1, size(inds)
+                dest_flattened(inds(i)) = src(i)
+            end do
+            bmi_status = BMI_SUCCESS
+        else
+            bmi_status = BMI_FAILURE
+        endif
     case('dprst_vol_clos')
         dest = c_loc(this%model%model_simulation%runoff%dprst_vol_clos(1))
         status = this%get_var_grid(name, gridid)
@@ -3877,7 +3904,7 @@
         end do
         bmi_status = BMI_SUCCESS
 
-        case default
+    case default
         bmi_status = BMI_FAILURE
     end select
     end function prms_set_at_indices_double
