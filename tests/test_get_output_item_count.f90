@@ -6,7 +6,7 @@ program test_get_output_item_count
 
   implicit none
 
-  integer, parameter :: expected = 91
+  integer, parameter :: expected = 86
   type (bmi_prms_surface) :: m
   integer :: count
 
