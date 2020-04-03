@@ -45,7 +45,7 @@
     status = m%update()
     status = m%get_value_at_indices(var_name, tval, indices)
     status = m%set_value_at_indices(var_name, indices, setv)
-    if (status.eqv.1) then 
+    if (status .eq. 1) then 
         code = 0 ! set_value_at_indices not set for hru_ppt 
     else
         code = 1
