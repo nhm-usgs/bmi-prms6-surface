@@ -45,40 +45,11 @@
     status = m%update()
     status = m%get_value_at_indices(var_name, tval, indices)
     status = m%set_value_at_indices(var_name, indices, setv)
-    status = m%get_value_at_indices(var_name, tval, indices)
-    status = m%get_value(var_name, ftval)
-    status = m%finalize()
-    
-    ! Visual inspection.
-    write(*,*) "Test 1"
-    write(*,*) "epected"
-    call print_1darray(setv, shape)
-    write(*,*) "set value"
-    call print_1darray(tval, shape)
-
-    code = BMI_SUCCESS
-    do i = 1, shape(1)
-       if (isreal4equalreal4(setv(i), tval(i)).neqv..TRUE.) then
-          code = BMI_FAILURE
-          exit
-       end if
-    end do
-    
-    ! Visual inspection.
-    write(*,*) "Test 1 full value"
-    write(*,*) "epected"
-    call print_1darray(full_expected, fshape)
-    write(*,*) "set value"
-    call print_1darray(ftval, fshape)
-
-    code = BMI_SUCCESS
-    do i = 1, fshape(1)
-       if (isreal4equalreal4(full_expected(i), ftval(i)).neqv..TRUE.) then
-          code = BMI_FAILURE
-          exit
-       end if
-    end do
-
+    if (status .eq. 1) then 
+        code = 0 ! set_value_at_indices not set for hru_ppt 
+    else
+        code = 1
+    endif
   end function test1
 
   function test2() result(code)

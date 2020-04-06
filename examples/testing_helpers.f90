@@ -1,7 +1,6 @@
 module testing_helpers
 
-    ! character (len=*), parameter :: config_file = "control.simple1x"
-    character (len=*), parameter :: config_file = "control.simple1y"
+  character (len=*), parameter :: config_file = "control_surface.simple1"
 
 contains
 

@@ -7,7 +7,7 @@ program test_get_component_name
   implicit none
 
   character (len=BMI_MAX_COMPONENT_NAME), parameter :: &
-       expected = "prms6-BMI"
+       expected = "prms6-surface-BMI"
   type (bmi_prms_surface) :: m
   character (len=BMI_MAX_COMPONENT_NAME), pointer :: name
 

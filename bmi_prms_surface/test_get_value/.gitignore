@@ -4,9 +4,8 @@ pipestem/
 *.wbal
 *.bak
 *.txt
+control*.*
 *.nc
-control.*
-sf_data
 *.msgs
-*.swo
-
+sf_data
+.tmax.cbh.swo

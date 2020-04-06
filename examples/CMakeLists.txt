@@ -14,3 +14,4 @@ make_example(irf_ex)
 file(
   COPY ${CMAKE_SOURCE_DIR}/projects/pipestem/
   DESTINATION ${CMAKE_BINARY_DIR}/examples)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/examples/output)

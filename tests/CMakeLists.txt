@@ -54,3 +54,4 @@ make_test(test_set_value_at_indices)
 file(
   COPY ${CMAKE_SOURCE_DIR}/projects/pipestem/
   DESTINATION ${CMAKE_BINARY_DIR}/tests)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/tests/output)
