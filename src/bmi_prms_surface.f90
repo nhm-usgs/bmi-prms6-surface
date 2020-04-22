@@ -970,15 +970,13 @@
         bmi_status = BMI_SUCCESS
         case("nlake", 'active_hrus', 'nowtime', 'cov_type', 'hru_type', &
         'hru_route_order', 'cascade_flag', 'dprst_flag', 'print_debug', &
-        'gsflow_mode', 'cascadegw_flag', 'nhru', 'newsnow', 'pptmix', &
+        'cascadegw_flag', 'nhru', 'newsnow', 'pptmix', &
         'nmonths', 'nhm_seg', 'nhm_id')
         type = "integer"
         bmi_status = BMI_SUCCESS
-    case('use_transfer_intcp', 'use_sroff_transfer', &
-        'pptmix_nopack', 'active_mask')
-        type = 'logical'
-        bmi_status = BMI_SUCCESS
-    case('srunoff_updated_soil', 'transp_on')
+    ! vars that are logical but cast as integers for BMI
+    case('use_sroff_transfer', 'srunoff_updated_soil', 'transp_on', &
+        'gsflow_mode', 'active_mask', 'pptmix_nopack', 'use_transfer_intcp')
         type = 'integer'
         bmi_status = BMI_SUCCESS
     case default
@@ -1056,7 +1054,7 @@
         units = 'months'
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        units = 'cfs'
+        units = 'ft3 s-1'
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
@@ -1242,7 +1240,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('pkwater_equiv') 
         size = sizeof(this%model%model_simulation%climate%pkwater_equiv(1))
@@ -1534,8 +1532,7 @@
     character (len=*), intent(in) :: name
     integer, intent(inout) :: dest(:)
     integer :: bmi_status, n_elements, gridid, i, status
-    integer, allocatable, dimension(:) :: intvals
-    
+        
     status = this%get_var_grid(name,gridid)
     status = this%get_grid_size(gridid, n_elements)
 
@@ -1569,7 +1566,13 @@
         dest = [this%model%model_simulation%model_basin%nmonths]
         bmi_status = BMI_SUCCESS
     case('active_mask')
-        dest = [this%model%model_simulation%model_basin%active_mask]
+        do i = 1,n_elements
+            if(this%model%model_simulation%model_basin%active_mask(i).eqv..false.) then
+                dest(i) = 0
+            else
+                dest(i) = 1
+            endif
+        enddo
         bmi_status = BMI_SUCCESS
 
         !prms_time
@@ -1582,7 +1585,11 @@
         dest = [this%model%control_data%dprst_flag%value]
         bmi_status = BMI_SUCCESS
     case('gsflow_mode')
-        dest = [this%model%control_data%gsflow_mode]
+        if(this%model%control_data%gsflow_mode.eqv..false.) then
+            dest = [0]
+        else
+            dest = [1]
+        endif
         bmi_status = BMI_SUCCESS
     case('print_debug')
         dest = [this%model%control_data%print_debug%value]
@@ -1596,24 +1603,27 @@
         
         !runoff
     case('srunoff_updated_soil')
-        ! allocate(intvals(n_elements))
-        ! do i = 1,n_elements
-          if(this%model%model_simulation%runoff%srunoff_updated_soil.eqv..false.) then 
+        if(this%model%model_simulation%runoff%srunoff_updated_soil.eqv..false.) then 
             dest = [0]
-          else 
+        else 
             dest = [1]
-          endif
-        ! enddo
-        ! dest = intvals
-        ! dest = [this%model%model_simulation%runoff%srunoff_updated_soil]
+        endif
         bmi_status = BMI_SUCCESS
     case('use_sroff_transfer')
-        dest = [this%model%model_simulation%runoff%use_sroff_transfer]
+        if(this%model%model_simulation%runoff%use_sroff_transfer.eqv..false.) then
+            dest = [0]
+        else
+            dest = [1]
+        endif
         bmi_status = BMI_SUCCESS
        
         !intcp
     case('use_transfer_intcp')
-        dest = [this%model%model_simulation%intcp%use_transfer_intcp]
+        if(this%model%model_simulation%intcp%use_transfer_intcp.eqv..false.) then
+            dest = [0]
+        else
+            dest = [1]
+        endif
         bmi_status = BMI_SUCCESS
 
         !transpiration
@@ -1636,7 +1646,13 @@
         dest = [this%model%model_simulation%snow%pptmix]
         bmi_status = BMI_SUCCESS
     case('pptmix_nopack')
-        dest = [this%model%model_simulation%snow%pptmix_nopack]
+        do i = 1,n_elements
+            if(this%model%model_simulation%snow%pptmix_nopack(i).eqv..false.) then
+                dest(i) = 0
+            else
+                dest(i) = 1
+            endif
+        enddo
         bmi_status = BMI_SUCCESS
         
     case default
@@ -1707,7 +1723,7 @@
     case('hru_impervstor')
         dest = [this%model%model_simulation%runoff%hru_impervstor]
         bmi_status = BMI_SUCCESS
-   case('hru_percent_imperv')
+    case('hru_percent_imperv')
         dest = [this%model%model_simulation%runoff%hru_percent_imperv]
         bmi_status = BMI_SUCCESS
     case('hru_sroffi')
@@ -1854,7 +1870,7 @@
         bmi_status = BMI_SUCCESS
 
         !intcp
-     case('last_intcp_stor')
+    case('last_intcp_stor')
         dest = [this%model%model_simulation%intcp%last_intcp_stor]
         bmi_status = BMI_SUCCESS
        
@@ -1872,8 +1888,8 @@
             dest = [this%model%model_simulation%runoff%strm_seg_in]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.d0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
         endif
     case('dprst_stor_hru')
         dest = [this%model%model_simulation%runoff%dprst_stor_hru]
@@ -1944,12 +1960,6 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('active_mask')
-        src = c_loc(this%model%model_simulation%model_basin%active_mask(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
 
         !prms_time
         !control
@@ -1979,13 +1989,7 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('pptmix_nopack')
-        src = c_loc(this%model%model_simulation%snow%pptmix_nopack(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
-
+ 
     case default
         bmi_status = BMI_FAILURE
     end select
