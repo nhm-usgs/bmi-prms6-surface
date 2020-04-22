@@ -1009,7 +1009,7 @@
         'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg')
         units = "in"
         bmi_status = BMI_SUCCESS
-    case('dprst_area_clos', 'dprst_area_max', 'hru_area')
+    case('dprst_area_clos', 'dprst_area_max', 'hru_area', 'hru_area_dble')
         units = 'acres'
         bmi_status = BMI_SUCCESS
     case('dprst_in', 'dprst_vol_clos', 'dprst_vol_open')
@@ -1017,7 +1017,9 @@
         bmi_status = BMI_SUCCESS
     case('covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
-        'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden')
+        'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden', &
+        'soil_rechr_init_frac', 'soil_moist_init_frac', 'soil_rechr_max_frac', &
+        'carea_max', 'dprst_frac', 'hru_percent_imperv')
         units = 'decimal-fraction'
         bmi_status = BMI_SUCCESS
     case('snow_intcp')
@@ -1035,7 +1037,7 @@
     case('snowinfil_max')
         units = 'in/day'
         bmi_status = BMI_SUCCESS
-    case('rad_trncf')
+    case('rad_trncf','cecn_coef')
         units = 'calories per degrees celcius > 0'
         bmi_status = BMI_SUCCESS
     case('dday_slope')
@@ -1055,6 +1057,9 @@
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
         units = 'ft3 s-1'
+        bmi_status = BMI_SUCCESS
+    case('jh_coef_hru', 'jh_coef')
+        units = 'per degrees Fahrenheit'
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
