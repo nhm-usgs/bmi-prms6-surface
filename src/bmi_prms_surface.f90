@@ -974,9 +974,12 @@
         'nmonths', 'nhm_seg', 'nhm_id')
         type = "integer"
         bmi_status = BMI_SUCCESS
-    case('srunoff_updated_soil', 'use_transfer_intcp', 'use_sroff_transfer', &
-        'pptmix_nopack', 'active_mask', 'transp_on')
+    case('use_transfer_intcp', 'use_sroff_transfer', &
+        'pptmix_nopack', 'active_mask')
         type = 'logical'
+        bmi_status = BMI_SUCCESS
+    case('srunoff_updated_soil', 'transp_on')
+        type = 'integer'
         bmi_status = BMI_SUCCESS
     case default
         type = "-"
@@ -1530,7 +1533,11 @@
     class (bmi_prms_surface), intent(in) :: this
     character (len=*), intent(in) :: name
     integer, intent(inout) :: dest(:)
-    integer :: bmi_status
+    integer :: bmi_status, n_elements, gridid, i, status
+    integer, allocatable, dimension(:) :: intvals
+    
+    status = this%get_var_grid(name,gridid)
+    status = this%get_grid_size(gridid, n_elements)
 
     select case(name)
         !basin
@@ -1589,7 +1596,16 @@
         
         !runoff
     case('srunoff_updated_soil')
-        dest = [this%model%model_simulation%runoff%srunoff_updated_soil]
+        ! allocate(intvals(n_elements))
+        ! do i = 1,n_elements
+          if(this%model%model_simulation%runoff%srunoff_updated_soil.eqv..false.) then 
+            dest = [0]
+          else 
+            dest = [1]
+          endif
+        ! enddo
+        ! dest = intvals
+        ! dest = [this%model%model_simulation%runoff%srunoff_updated_soil]
         bmi_status = BMI_SUCCESS
     case('use_sroff_transfer')
         dest = [this%model%model_simulation%runoff%use_sroff_transfer]
@@ -1602,7 +1618,14 @@
 
         !transpiration
     case('transp_on')
-        dest = [this%model%model_simulation%transpiration%transp_on]
+        do i = 1,n_elements
+            if(this%model%model_simulation%transpiration%transp_on(i).eqv..false.) then
+                dest(i) = 0
+            else
+                dest(i) = 1
+            endif
+        enddo
+        ! dest = [this%model%model_simulation%transpiration%transp_on]
         bmi_status = BMI_SUCCESS
         
         !snow
