@@ -1006,10 +1006,12 @@
         'snowmelt', 'dprst_insroff_hru', 'dprst_sroff_hru', &
         'hortonian_flow', 'hru_hortn_cascflow', 'hru_sroffi', 'hru_sroffp', &
         'imporv_stor_ante', 'upslope_ante', 'wrain_intcp', 'srain_intcp', 'imporv_stor_max', &
-        'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg')
+        'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg', 'upslope_hortonian', &
+        'hru_impervevap', 'soil_moist_chg')
         units = "in"
         bmi_status = BMI_SUCCESS
-    case('dprst_area_clos', 'dprst_area_max', 'hru_area', 'hru_area_dble')
+    case('dprst_area_clos', 'dprst_area_max', 'hru_area', 'hru_area_dble', &
+        'hru_area_perv')
         units = 'acres'
         bmi_status = BMI_SUCCESS
     case('dprst_in', 'dprst_vol_clos', 'dprst_vol_open')
@@ -1019,7 +1021,7 @@
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
         'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden', &
         'soil_rechr_init_frac', 'soil_moist_init_frac', 'soil_rechr_max_frac', &
-        'carea_max', 'dprst_frac', 'hru_percent_imperv')
+        'carea_max', 'dprst_frac', 'hru_percent_imperv', 'snowcov_area')
         units = 'decimal-fraction'
         bmi_status = BMI_SUCCESS
     case('snow_intcp')
@@ -1113,6 +1115,7 @@
         bmi_status = BMI_SUCCESS
     case('nmonths')
         size = sizeof(this%model%model_simulation%model_basin%nmonths)
+        bmi_status = BMI_SUCCESS
     case('use_transfer_intcp')
         size = sizeof(this%model%model_simulation%intcp%use_transfer_intcp)
         bmi_status = BMI_SUCCESS
