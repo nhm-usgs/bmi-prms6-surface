@@ -91,7 +91,7 @@
 
     ! Exchange items
     integer, parameter :: input_item_count = 52
-    integer, parameter :: output_item_count = 86
+    integer, parameter :: output_item_count = 88
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !climate forcings
@@ -272,6 +272,9 @@
         'hru_snow            ', & !r32 by hru
         'hru_rain            ', & !r32 by hru
         'hru_ppt             ', & !r32 by hru
+
+        'tmax                ', &
+        'tmin                ', &
 
         !prms_time
         'nowtime             ', & !i32(6)
@@ -3238,6 +3241,10 @@
         this%model%bmitmin = .TRUE.
         bmi_status = BMI_SUCCESS
     case('hru_ppt')
+        ! select type(model_precip => this%model%model_simulation%model_precip)
+        !     type is(Precipitation_hru)
+        !         model_precip%hru_ppt = src 
+        ! end select
         this%model%model_simulation%model_precip%hru_ppt = src
         this%model%bmiprcp = .TRUE.
         bmi_status = BMI_SUCCESS
