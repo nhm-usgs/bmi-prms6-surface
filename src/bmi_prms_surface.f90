@@ -90,8 +90,8 @@
         component_name = "prms6-surface-BMI"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 52
-    integer, parameter :: output_item_count = 88
+    integer, parameter :: input_item_count = 50
+    integer, parameter :: output_item_count = 84
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !climate forcings
@@ -112,7 +112,7 @@
         'wrain_intcp         ', &
         'srain_intcp         ', &
         !potet
-        'epan_coef           ', &
+        ! 'epan_coef           ', & !not yet implemented in prms6
         !potet_jh
         'jh_coef_hru         ', &
         'jh_coef             ', &
@@ -160,8 +160,8 @@
         'infil               ', &
         'sroff               ', &
         'soil_rechr          ', &
-        'soil_moist          ', &
-        'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
+        'soil_moist          '/)
+        ! 'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
     
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(output_item_count) :: &
@@ -207,11 +207,11 @@
 
         !runoff
         'soil_rechr_chg      ', & !r32 by nhru
-        'soil_moist_chg      ', & !r32 by nhru
+        ! 'soil_moist_chg      ', & !r32 by nhru !conditional will leave out for now
         'hru_impervevap      ', & !r32 by nhru
         'hru_frac_perv       ', & !r32 by nhru
         'hru_area_perv       ', & !r32 by nhru
-        'hru_hortn_cascflow  ', & !r64 by hru
+        ! 'hru_hortn_cascflow  ', & !r64 by hru !conditional will leave out for now
         'hru_percent_imperv  ', & !r32 by hru
         'hru_sroffi          ', & !r32 by hru
         'hru_sroffp          ', & !r32 by hru
@@ -232,11 +232,11 @@
         'dprst_stor_hru      ', & !r64 by nhru
         !'imperv_stor_ante    ', & !r32 by hru
         'sro_to_dprst_perv   ', & !r32 by hru
-        'upslope_hortonian   ', & !r64 by hru
+        ! 'upslope_hortonian   ', & !r64 by hru !conditional not yet implemented
         'hortonian_flow      ', & !r32 by hru
         'use_sroff_transfer  ', & !logical by 1
         'hortonian_lakes     ', & !r64 by nhru
-        'strm_seg_in         ', & !r64 by nsegment
+        ! 'strm_seg_in         ', & !r64 by nsegment !conditional not yet implemented
         'srunoff_updated_soil', & !logical by 1
             
         !snow
@@ -1329,7 +1329,13 @@
         size = sizeof(this%model%model_simulation%runoff%dprst_vol_open(1))
         bmi_status = BMI_SUCCESS
     case('hru_hortn_cascflow')
-        size = sizeof(this%model%model_simulation%runoff%hru_hortn_cascflow(1))
+        if(this%model%control_data%cascade_flag%value == 1) then
+            size = sizeof(this%model%model_simulation%runoff%hru_hortn_cascflow(1))
+            bmi_status = BMI_SUCCESS
+        else
+            size = -1
+            bmi_status = BMI_SUCCESS
+        endif
         bmi_status = BMI_SUCCESS
         
     !case('soil_moist_max') already here
@@ -1885,8 +1891,14 @@
         dest = [this%model%model_simulation%runoff%dprst_vol_open]
         bmi_status = BMI_SUCCESS
     case('hru_hortn_cascflow')
-        dest = [this%model%model_simulation%runoff%hru_hortn_cascflow]
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            dest = [this%model%model_simulation%runoff%hru_hortn_cascflow]
+            bmi_status = BMI_SUCCESS
+        else
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
+        endif   
+
         
         !snow
     case('pkwater_ante')
@@ -2351,11 +2363,15 @@
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
     case('hru_hortn_cascflow')
-        src = c_loc(this%model%model_simulation%runoff%hru_hortn_cascflow)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            src = c_loc(this%model%model_simulation%runoff%hru_hortn_cascflow)
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, dest_ptr, [n_elements])
+            bmi_status = BMI_SUCCESS
+        else
+            bmi_status = BMI_FAILURE
+        endif
         
         !potet
 
@@ -3066,14 +3082,18 @@
         end do
         bmi_status = BMI_SUCCESS
     case('hru_hortn_cascflow')
-        src = c_loc(this%model%model_simulation%runoff%hru_hortn_cascflow)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            src = c_loc(this%model%model_simulation%runoff%hru_hortn_cascflow(1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+            bmi_status = BMI_SUCCESS
+        else
+            bmi_status = BMI_FAILURE
+        endif
         
         !climate
     case('pkwater_equiv')
