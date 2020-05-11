@@ -1577,13 +1577,7 @@
         dest = [this%model%model_simulation%model_basin%nmonths]
         bmi_status = BMI_SUCCESS
     case('active_mask')
-        do i = 1,n_elements
-            if(this%model%model_simulation%model_basin%active_mask(i).eqv..false.) then
-                dest(i) = 0
-            else
-                dest(i) = 1
-            endif
-        enddo
+        dest = [this%model%model_simulation%model_basin%active_mask]
         bmi_status = BMI_SUCCESS
 
         !prms_time
@@ -1596,11 +1590,7 @@
         dest = [this%model%control_data%dprst_flag%value]
         bmi_status = BMI_SUCCESS
     case('gsflow_mode')
-        if(this%model%control_data%gsflow_mode.eqv..false.) then
-            dest = [0]
-        else
-            dest = [1]
-        endif
+        dest = [this%model%control_data%gsflow_mode]
         bmi_status = BMI_SUCCESS
     case('print_debug')
         dest = [this%model%control_data%print_debug%value]
@@ -1614,39 +1604,20 @@
         
         !runoff
     case('srunoff_updated_soil')
-        if(this%model%model_simulation%runoff%srunoff_updated_soil.eqv..false.) then 
-            dest = [0]
-        else 
-            dest = [1]
-        endif
+        dest = [this%model%model_simulation%runoff%srunoff_updated_soil]
         bmi_status = BMI_SUCCESS
     case('use_sroff_transfer')
-        if(this%model%model_simulation%runoff%use_sroff_transfer.eqv..false.) then
-            dest = [0]
-        else
-            dest = [1]
-        endif
+        dest = [this%model%model_simulation%runoff%use_sroff_transfer]
         bmi_status = BMI_SUCCESS
        
         !intcp
     case('use_transfer_intcp')
-        if(this%model%model_simulation%intcp%use_transfer_intcp.eqv..false.) then
-            dest = [0]
-        else
-            dest = [1]
-        endif
+        dest = [this%model%model_simulation%intcp%use_transfer_intcp]
         bmi_status = BMI_SUCCESS
 
         !transpiration
     case('transp_on')
-        do i = 1,n_elements
-            if(this%model%model_simulation%transpiration%transp_on(i).eqv..false.) then
-                dest(i) = 0
-            else
-                dest(i) = 1
-            endif
-        enddo
-        ! dest = [this%model%model_simulation%transpiration%transp_on]
+        dest = [this%model%model_simulation%transpiration%transp_on]
         bmi_status = BMI_SUCCESS
         
         !snow
@@ -1657,15 +1628,8 @@
         dest = [this%model%model_simulation%snow%pptmix]
         bmi_status = BMI_SUCCESS
     case('pptmix_nopack')
-        do i = 1,n_elements
-            if(this%model%model_simulation%snow%pptmix_nopack(i).eqv..false.) then
-                dest(i) = 0
-            else
-                dest(i) = 1
-            endif
-        enddo
+        dest = [this%model%model_simulation%snow%pptmix_nopack]
         bmi_status = BMI_SUCCESS
-        
     case default
         dest = [-1]
         bmi_status = BMI_FAILURE
