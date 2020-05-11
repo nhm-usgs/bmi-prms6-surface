@@ -931,7 +931,7 @@
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', 'snowcov_area', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'hru_area_perv', 'hru_frac_perv', 'hru_impervevap', 'soil_moist_chg', &
-        'soil_rech_chg', 'hru_intcpstor', 'hru_impervstor', 'swrad', &
+        'hru_intcpstor', 'hru_impervstor', 'swrad', &
         'intcp_changeover', 'intcp_evap', &
         'intcp_stor', 'net_ppt', 'net_rain', &
         'net_snow', 'snowmelt', &
@@ -1000,7 +1000,7 @@
         "hru_actet","seg_gwflow", 'dprst_evap_hru', 'infil', &
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
-        'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav',  &
+        'soil_moist_chg', 'soil_rechr_chg', 'gwwsm_grav',  &
         'dprst_seep_hru', &
         'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', 'hru_impervstor', &
         'swrad', 'last_intcp_stor', 'intcp_changeover', 'intcp_evap', &
@@ -1010,7 +1010,7 @@
         'hortonian_flow', 'hru_hortn_cascflow', 'hru_sroffi', 'hru_sroffp', &
         'imporv_stor_ante', 'upslope_ante', 'wrain_intcp', 'srain_intcp', 'imporv_stor_max', &
         'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg', 'upslope_hortonian', &
-        'hru_impervevap', 'soil_moist_chg')
+        'hru_impervevap')
         units = "in"
         bmi_status = BMI_SUCCESS
     case('dprst_area_clos', 'dprst_area_max', 'hru_area', 'hru_area_dble', &
@@ -1024,7 +1024,8 @@
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
         'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden', &
         'soil_rechr_init_frac', 'soil_moist_init_frac', 'soil_rechr_max_frac', &
-        'carea_max', 'dprst_frac', 'hru_percent_imperv', 'snowcov_area')
+        'carea_max', 'dprst_frac', 'hru_percent_imperv', 'snowcov_area', &
+        'hru_frac_perv', 'sro_to_dprst_perv')
         units = 'decimal-fraction'
         bmi_status = BMI_SUCCESS
     case('snow_intcp')
@@ -1066,9 +1067,16 @@
     case('jh_coef_hru', 'jh_coef')
         units = 'per degrees Fahrenheit'
         bmi_status = BMI_SUCCESS
+    case('cascade_flag', 'nhru', 'print_debug', 'cov_type', 'use_transfer_intcp', &
+        'cascadegw_flag', 'newsnow', 'va_open_exp', 'pptmix_nopack', 'pptmix', &
+        'nowtime', 'nlake', 'active_mask', 'dprst_flag', 'hru_type', 'gsflow_mode',&
+        'srunoff_updated_soil', 'active_hrus', 'transp_on', 'hru_route_order', &
+        'nhm_id', 'nhm_seg', 'use_sroff_transfer')
+        units = '-'
+        bmi_status = BMI_SUCCESS
     case default
         units = "-"
-        bmi_status = BMI_SUCCESS
+        bmi_status = BMI_FAILURE
     end select
     end function prms_var_units
 
