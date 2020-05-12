@@ -1556,11 +1556,8 @@
     class (bmi_prms_surface), intent(in) :: this
     character (len=*), intent(in) :: name
     integer, intent(inout) :: dest(:)
-    integer :: bmi_status, n_elements, gridid, i, status
+    integer :: bmi_status
         
-    status = this%get_var_grid(name,gridid)
-    status = this%get_grid_size(gridid, n_elements)
-
     select case(name)
         !basin
     case("nlake")
