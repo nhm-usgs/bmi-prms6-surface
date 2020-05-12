@@ -90,8 +90,8 @@
         component_name = "prms6-surface-BMI"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 52
-    integer, parameter :: output_item_count = 86
+    integer, parameter :: input_item_count = 50
+    integer, parameter :: output_item_count = 84
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !climate forcings
@@ -112,7 +112,7 @@
         'wrain_intcp         ', &
         'srain_intcp         ', &
         !potet
-        'epan_coef           ', &
+        ! 'epan_coef           ', & !not yet implemented in prms6
         !potet_jh
         'jh_coef_hru         ', &
         'jh_coef             ', &
@@ -160,8 +160,8 @@
         'infil               ', &
         'sroff               ', &
         'soil_rechr          ', &
-        'soil_moist          ', &
-        'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
+        'soil_moist          '/)
+        ! 'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
     
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(output_item_count) :: &
@@ -207,11 +207,11 @@
 
         !runoff
         'soil_rechr_chg      ', & !r32 by nhru
-        'soil_moist_chg      ', & !r32 by nhru
+        ! 'soil_moist_chg      ', & !r32 by nhru !conditional will leave out for now
         'hru_impervevap      ', & !r32 by nhru
         'hru_frac_perv       ', & !r32 by nhru
         'hru_area_perv       ', & !r32 by nhru
-        'hru_hortn_cascflow  ', & !r64 by hru
+        ! 'hru_hortn_cascflow  ', & !r64 by hru !conditional will leave out for now
         'hru_percent_imperv  ', & !r32 by hru
         'hru_sroffi          ', & !r32 by hru
         'hru_sroffp          ', & !r32 by hru
@@ -232,11 +232,11 @@
         'dprst_stor_hru      ', & !r64 by nhru
         !'imperv_stor_ante    ', & !r32 by hru
         'sro_to_dprst_perv   ', & !r32 by hru
-        'upslope_hortonian   ', & !r64 by hru
+        ! 'upslope_hortonian   ', & !r64 by hru !conditional not yet implemented
         'hortonian_flow      ', & !r32 by hru
         'use_sroff_transfer  ', & !logical by 1
         'hortonian_lakes     ', & !r64 by nhru
-        'strm_seg_in         ', & !r64 by nsegment
+        ! 'strm_seg_in         ', & !r64 by nsegment !conditional not yet implemented
         'srunoff_updated_soil', & !logical by 1
             
         !snow
@@ -272,6 +272,9 @@
         'hru_snow            ', & !r32 by hru
         'hru_rain            ', & !r32 by hru
         'hru_ppt             ', & !r32 by hru
+
+        'tmax                ', &
+        'tmin                ', &
 
         !prms_time
         'nowtime             ', & !i32(6)
@@ -928,7 +931,7 @@
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', 'snowcov_area', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
         'hru_area_perv', 'hru_frac_perv', 'hru_impervevap', 'soil_moist_chg', &
-        'soil_rech_chg', 'hru_intcpstor', 'hru_impervstor', 'swrad', &
+        'hru_intcpstor', 'hru_impervstor', 'swrad', &
         'intcp_changeover', 'intcp_evap', &
         'intcp_stor', 'net_ppt', 'net_rain', &
         'net_snow', 'snowmelt', &
@@ -970,13 +973,14 @@
         bmi_status = BMI_SUCCESS
         case("nlake", 'active_hrus', 'nowtime', 'cov_type', 'hru_type', &
         'hru_route_order', 'cascade_flag', 'dprst_flag', 'print_debug', &
-        'gsflow_mode', 'cascadegw_flag', 'nhru', 'newsnow', 'pptmix', &
+        'cascadegw_flag', 'nhru', 'newsnow', 'pptmix', &
         'nmonths', 'nhm_seg', 'nhm_id')
         type = "integer"
         bmi_status = BMI_SUCCESS
-    case('srunoff_updated_soil', 'use_transfer_intcp', 'use_sroff_transfer', &
-        'pptmix_nopack', 'active_mask', 'transp_on')
-        type = 'logical'
+    ! vars that are logical but cast as integers for BMI
+    case('use_sroff_transfer', 'srunoff_updated_soil', 'transp_on', &
+        'gsflow_mode', 'active_mask', 'pptmix_nopack', 'use_transfer_intcp')
+        type = 'integer'
         bmi_status = BMI_SUCCESS
     case default
         type = "-"
@@ -996,7 +1000,7 @@
         "hru_actet","seg_gwflow", 'dprst_evap_hru', 'infil', &
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
-        'soil_moist_ch', 'soil_rechr_chg', 'gwwsm_grav',  &
+        'soil_moist_chg', 'soil_rechr_chg', 'gwwsm_grav',  &
         'dprst_seep_hru', &
         'pkwater_equiv', 'hru_intcpstor', 'dprst_stor_hru', 'hru_impervstor', &
         'swrad', 'last_intcp_stor', 'intcp_changeover', 'intcp_evap', &
@@ -1005,10 +1009,12 @@
         'snowmelt', 'dprst_insroff_hru', 'dprst_sroff_hru', &
         'hortonian_flow', 'hru_hortn_cascflow', 'hru_sroffi', 'hru_sroffp', &
         'imporv_stor_ante', 'upslope_ante', 'wrain_intcp', 'srain_intcp', 'imporv_stor_max', &
-        'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg')
+        'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg', 'upslope_hortonian', &
+        'hru_impervevap')
         units = "in"
         bmi_status = BMI_SUCCESS
-    case('dprst_area_clos', 'dprst_area_max', 'hru_area')
+    case('dprst_area_clos', 'dprst_area_max', 'hru_area', 'hru_area_dble', &
+        'hru_area_perv')
         units = 'acres'
         bmi_status = BMI_SUCCESS
     case('dprst_in', 'dprst_vol_clos', 'dprst_vol_open')
@@ -1016,7 +1022,10 @@
         bmi_status = BMI_SUCCESS
     case('covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
-        'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden')
+        'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden', &
+        'soil_rechr_init_frac', 'soil_moist_init_frac', 'soil_rechr_max_frac', &
+        'carea_max', 'dprst_frac', 'hru_percent_imperv', 'snowcov_area', &
+        'hru_frac_perv', 'sro_to_dprst_perv')
         units = 'decimal-fraction'
         bmi_status = BMI_SUCCESS
     case('snow_intcp')
@@ -1034,7 +1043,7 @@
     case('snowinfil_max')
         units = 'in/day'
         bmi_status = BMI_SUCCESS
-    case('rad_trncf')
+    case('rad_trncf','cecn_coef')
         units = 'calories per degrees celcius > 0'
         bmi_status = BMI_SUCCESS
     case('dday_slope')
@@ -1053,11 +1062,21 @@
         units = 'months'
         bmi_status = BMI_SUCCESS
     case('strm_seg_in')
-        units = 'cfs'
+        units = 'ft3 s-1'
+        bmi_status = BMI_SUCCESS
+    case('jh_coef_hru', 'jh_coef')
+        units = 'per degrees Fahrenheit'
+        bmi_status = BMI_SUCCESS
+    case('cascade_flag', 'nhru', 'print_debug', 'cov_type', 'use_transfer_intcp', &
+        'cascadegw_flag', 'newsnow', 'va_open_exp', 'pptmix_nopack', 'pptmix', &
+        'nowtime', 'nlake', 'active_mask', 'dprst_flag', 'hru_type', 'gsflow_mode',&
+        'srunoff_updated_soil', 'active_hrus', 'transp_on', 'hru_route_order', &
+        'nhm_id', 'nhm_seg', 'use_sroff_transfer')
+        units = '-'
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
-        bmi_status = BMI_SUCCESS
+        bmi_status = BMI_FAILURE
     end select
     end function prms_var_units
 
@@ -1107,6 +1126,7 @@
         bmi_status = BMI_SUCCESS
     case('nmonths')
         size = sizeof(this%model%model_simulation%model_basin%nmonths)
+        bmi_status = BMI_SUCCESS
     case('use_transfer_intcp')
         size = sizeof(this%model%model_simulation%intcp%use_transfer_intcp)
         bmi_status = BMI_SUCCESS
@@ -1239,7 +1259,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_FAILURE
+            bmi_status = BMI_SUCCESS
         endif
     case('pkwater_equiv') 
         size = sizeof(this%model%model_simulation%climate%pkwater_equiv(1))
@@ -1317,7 +1337,13 @@
         size = sizeof(this%model%model_simulation%runoff%dprst_vol_open(1))
         bmi_status = BMI_SUCCESS
     case('hru_hortn_cascflow')
-        size = sizeof(this%model%model_simulation%runoff%hru_hortn_cascflow(1))
+        if(this%model%control_data%cascade_flag%value == 1) then
+            size = sizeof(this%model%model_simulation%runoff%hru_hortn_cascflow(1))
+            bmi_status = BMI_SUCCESS
+        else
+            size = -1
+            bmi_status = BMI_SUCCESS
+        endif
         bmi_status = BMI_SUCCESS
         
     !case('soil_moist_max') already here
@@ -1531,7 +1557,7 @@
     character (len=*), intent(in) :: name
     integer, intent(inout) :: dest(:)
     integer :: bmi_status
-
+        
     select case(name)
         !basin
     case("nlake")
@@ -1615,7 +1641,6 @@
     case('pptmix_nopack')
         dest = [this%model%model_simulation%snow%pptmix_nopack]
         bmi_status = BMI_SUCCESS
-        
     case default
         dest = [-1]
         bmi_status = BMI_FAILURE
@@ -1684,7 +1709,7 @@
     case('hru_impervstor')
         dest = [this%model%model_simulation%runoff%hru_impervstor]
         bmi_status = BMI_SUCCESS
-   case('hru_percent_imperv')
+    case('hru_percent_imperv')
         dest = [this%model%model_simulation%runoff%hru_percent_imperv]
         bmi_status = BMI_SUCCESS
     case('hru_sroffi')
@@ -1831,7 +1856,7 @@
         bmi_status = BMI_SUCCESS
 
         !intcp
-     case('last_intcp_stor')
+    case('last_intcp_stor')
         dest = [this%model%model_simulation%intcp%last_intcp_stor]
         bmi_status = BMI_SUCCESS
        
@@ -1849,8 +1874,8 @@
             dest = [this%model%model_simulation%runoff%strm_seg_in]
             bmi_status = BMI_SUCCESS
         else
-            dest = [-1.d0]
-            bmi_status = BMI_FAILURE
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
         endif
     case('dprst_stor_hru')
         dest = [this%model%model_simulation%runoff%dprst_stor_hru]
@@ -1871,8 +1896,14 @@
         dest = [this%model%model_simulation%runoff%dprst_vol_open]
         bmi_status = BMI_SUCCESS
     case('hru_hortn_cascflow')
-        dest = [this%model%model_simulation%runoff%hru_hortn_cascflow]
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            dest = [this%model%model_simulation%runoff%hru_hortn_cascflow]
+            bmi_status = BMI_SUCCESS
+        else
+            dest(:) = -1.d0
+            bmi_status = BMI_SUCCESS
+        endif   
+
         
         !snow
     case('pkwater_ante')
@@ -1921,12 +1952,6 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('active_mask')
-        src = c_loc(this%model%model_simulation%model_basin%active_mask(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
 
         !prms_time
         !control
@@ -1956,13 +1981,7 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('pptmix_nopack')
-        src = c_loc(this%model%model_simulation%snow%pptmix_nopack(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
-
+ 
     case default
         bmi_status = BMI_FAILURE
     end select
@@ -2349,11 +2368,15 @@
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
     case('hru_hortn_cascflow')
-        src = c_loc(this%model%model_simulation%runoff%hru_hortn_cascflow)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            src = c_loc(this%model%model_simulation%runoff%hru_hortn_cascflow)
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, dest_ptr, [n_elements])
+            bmi_status = BMI_SUCCESS
+        else
+            bmi_status = BMI_FAILURE
+        endif
         
         !potet
 
@@ -3064,14 +3087,18 @@
         end do
         bmi_status = BMI_SUCCESS
     case('hru_hortn_cascflow')
-        src = c_loc(this%model%model_simulation%runoff%hru_hortn_cascflow)
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
+        if(this%model%control_data%cascade_flag%value == 1) then
+            src = c_loc(this%model%model_simulation%runoff%hru_hortn_cascflow(1))
+            status = this%get_var_grid(name,gridid)
+            status = this%get_grid_size(gridid, n_elements)
+            call c_f_pointer(src, src_flattened, [n_elements])
+            do i = 1,  size(inds)
+                dest(i) = src_flattened(inds(i))
+            end do
+            bmi_status = BMI_SUCCESS
+        else
+            bmi_status = BMI_FAILURE
+        endif
         
         !climate
     case('pkwater_equiv')
@@ -3203,6 +3230,10 @@
         this%model%bmitmin = .TRUE.
         bmi_status = BMI_SUCCESS
     case('hru_ppt')
+        ! select type(model_precip => this%model%model_simulation%model_precip)
+        !     type is(Precipitation_hru)
+        !         model_precip%hru_ppt = src 
+        ! end select
         this%model%model_simulation%model_precip%hru_ppt = src
         this%model%bmiprcp = .TRUE.
         bmi_status = BMI_SUCCESS
