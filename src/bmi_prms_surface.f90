@@ -90,8 +90,8 @@
         component_name = "prms6-surface-BMI"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 50
-    integer, parameter :: output_item_count = 84
+    integer, parameter :: input_item_count = 51
+    integer, parameter :: output_item_count = 83
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !climate forcings
@@ -160,8 +160,8 @@
         'infil               ', &
         'sroff               ', &
         'soil_rechr          ', &
-        'soil_moist          '/)
-        ! 'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
+        'soil_moist          ', &
+        'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
     
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(output_item_count) :: &
@@ -173,7 +173,6 @@
         'dprst_flag          ', & !iscalar by 1
         'cascade_flag        ', & !iscalar by 1
         'cascadegw_flag      ', & !iscalar by 1
-        'cascadegw_flag      ', & !int by 1
         'print_debug         ', & !iscalar by 1
 
         !basin
@@ -206,7 +205,7 @@
         'transp_on           ', & !logical by nhru
 
         !runoff
-        'soil_rechr_chg      ', & !r32 by nhru
+        ! 'soil_rechr_chg      ', & !r32 by nhru !conditional will leave out for now
         ! 'soil_moist_chg      ', & !r32 by nhru !conditional will leave out for now
         'hru_impervevap      ', & !r32 by nhru
         'hru_frac_perv       ', & !r32 by nhru
@@ -236,7 +235,7 @@
         'hortonian_flow      ', & !r32 by hru
         'use_sroff_transfer  ', & !logical by 1
         'hortonian_lakes     ', & !r64 by nhru
-        ! 'strm_seg_in         ', & !r64 by nsegment !conditional not yet implemented
+        'strm_seg_in         ', & !r64 by nsegment !conditional not yet implemented
         'srunoff_updated_soil', & !logical by 1
             
         !snow
@@ -1259,7 +1258,7 @@
             bmi_status = BMI_SUCCESS
         else
             size = -1
-            bmi_status = BMI_SUCCESS
+            bmi_status = BMI_FAILURE
         endif
     case('pkwater_equiv') 
         size = sizeof(this%model%model_simulation%climate%pkwater_equiv(1))
@@ -1874,8 +1873,8 @@
             dest = [this%model%model_simulation%runoff%strm_seg_in]
             bmi_status = BMI_SUCCESS
         else
-            dest(:) = -1.d0
-            bmi_status = BMI_SUCCESS
+            dest = [-1.d0]
+            bmi_status = BMI_FAILURE
         endif
     case('dprst_stor_hru')
         dest = [this%model%model_simulation%runoff%dprst_stor_hru]
