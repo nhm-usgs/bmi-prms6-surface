@@ -244,7 +244,7 @@ dyn_covtype_flag
 covtype_dynamic
 1
 4
-none
+dyn_cov_type.param
 ####
 dyn_imperv_flag
 1
@@ -254,7 +254,7 @@ dyn_imperv_flag
 imperv_frac_dynamic
 1
 4
-none
+dyn_hru_percent_imperv.param
 ####
 imperv_stor_dynamic
 1
@@ -310,3 +310,13 @@ covden_win_dynamic
 1
 4
 none
+####
+humidity_module
+1
+4
+humidity_none
+####
+wind_module
+1
+4
+wind_none
