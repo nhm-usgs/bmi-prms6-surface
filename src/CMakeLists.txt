@@ -1,3 +1,7 @@
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	set(CMAKE_MACOSX_RPATH 1)
+endif()
+
 add_library(${bmiprms6surface_lib} SHARED
   bmi.f90 bmi_prms_surface.f90 m_prms_surface.f90)
 target_link_libraries(${bmiprms6surface_lib} ${EXTRA_LIBS})
