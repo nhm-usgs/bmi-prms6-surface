@@ -12,7 +12,7 @@ contains
 
     do j = 1, dims(1)
        do i = 1, dims(2)
-          write (*,"(f6.1)", advance="no") array(j + dims(1)*(i-1))
+         write (*,"(f6.1)", advance="no") array(j + dims(1)*(i-1))
        end do
        write (*,*)
     end do

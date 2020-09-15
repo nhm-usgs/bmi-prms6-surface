@@ -16,7 +16,7 @@
     ! use ieee_features
     implicit none
     type :: prms_surface_model
-        character(len=:), allocatable :: control_filename
+        !character(len=:), allocatable :: control_filename
         !! Name of the control file
         type(Control) :: control_data
         !! Class of control file related parameters
@@ -67,8 +67,8 @@
         start_ct => model%start_ct, end_ct => model%end_ct, &
         control_data => model%control_data, &
         parameter_data => model%parameter_data, &
-        model_simulation => model%model_simulation, &
-        control_filename => model%control_filename)
+        model_simulation => model%model_simulation)
+        ! , control_filename => model%control_filename)
         call system_clock(count=start_rtc, count_rate=rate_rtc, count_max=max_rtc)
         call cpu_time(time=start_ct)
 
@@ -161,7 +161,7 @@
         !else
         !    call solve_prms(model) 
         !endif
-    if(this%model_time%next(ctl_data)) then
+    if(this%model_time%next()) then
         call solve_prms(model)
     endif
     !always assume prms reads climate forcing from .nc file

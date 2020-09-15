@@ -6,6 +6,7 @@ pipestem/
 *.txt
 *.swo
 control*.*
+*.simple1
 *.nc
 sf_data
 *.msgs

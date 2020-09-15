@@ -5,6 +5,7 @@ pipestem/
 *.bak
 *.txt
 control*.*
+*.simple1
 *.nc
 *.msgs
 sf_data
