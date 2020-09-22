@@ -1009,7 +1009,7 @@
         'hortonian_flow', 'hru_hortn_cascflow', 'hru_sroffi', 'hru_sroffp', &
         'imporv_stor_ante', 'upslope_ante', 'wrain_intcp', 'srain_intcp', 'imporv_stor_max', &
         'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg', 'upslope_hortonian', &
-        'hru_impervevap')
+        'hru_impervevap', 'snow_intcp')
         units = "in"
         bmi_status = BMI_SUCCESS
     case('dprst_area_clos', 'dprst_area_max', 'hru_area', 'hru_area_dble', &
@@ -1026,9 +1026,6 @@
         'carea_max', 'dprst_frac', 'hru_percent_imperv', 'snowcov_area', &
         'hru_frac_perv', 'sro_to_dprst_perv')
         units = 'decimal-fraction'
-        bmi_status = BMI_SUCCESS
-    case('snow_intcp')
-        units = 'fraction-inches'
         bmi_status = BMI_SUCCESS
     case('tmax', 'tmin', 'tmax_allrain_offset', 'tmax_allsnow')
         units = 'temp_units'
