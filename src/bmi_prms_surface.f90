@@ -1009,7 +1009,7 @@
         'hortonian_flow', 'hru_hortn_cascflow', 'hru_sroffi', 'hru_sroffp', &
         'imporv_stor_ante', 'upslope_ante', 'wrain_intcp', 'srain_intcp', 'imporv_stor_max', &
         'snarea_thresh', 'imperv_stor_max', 'dprst_depth_avg', 'upslope_hortonian', &
-        'hru_impervevap')
+        'hru_impervevap', 'snow_intcp')
         units = "in"
         bmi_status = BMI_SUCCESS
     case('dprst_area_clos', 'dprst_area_max', 'hru_area', 'hru_area_dble', &
@@ -1019,22 +1019,26 @@
     case('dprst_in', 'dprst_vol_clos', 'dprst_vol_open')
         units = 'acre-inches'
         bmi_status = BMI_SUCCESS
-    case('covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
+    case('rad_trncf','covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
         'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden', &
         'soil_rechr_init_frac', 'soil_moist_init_frac', 'soil_rechr_max_frac', &
         'carea_max', 'dprst_frac', 'hru_percent_imperv', 'snowcov_area', &
         'hru_frac_perv', 'sro_to_dprst_perv')
-        units = 'decimal-fraction'
-        bmi_status = BMI_SUCCESS
-    case('snow_intcp')
-        units = 'fraction-inches'
+        units = '1'
         bmi_status = BMI_SUCCESS
     case('tmax', 'tmin', 'tmax_allrain_offset', 'tmax_allsnow')
-        units = 'temp_units'
+        select type(model_temp => this%model%model_simulation%model_temp)
+        type is(Temperature_Hru)
+            if(model_temp%temp_units.eq.0) then
+                units = 'degree_f'
+            else    
+                units = 'degree_c'
+            endif
+    end select
         bmi_status = BMI_SUCCESS
     case('dprst_seep_rate_clos', 'dprst_flow_coef')
-        units = 'fraction/day'
+        units = '1/day'
         bmi_status = BMI_SUCCESS
     case('smidx_exp')
         units = '1/in'
@@ -1042,20 +1046,38 @@
     case('snowinfil_max')
         units = 'in/day'
         bmi_status = BMI_SUCCESS
-    case('rad_trncf','cecn_coef')
-        units = 'calories per degrees celcius > 0'
+    case('cecn_coef')
+        units = 'thermochemical_calorie'
         bmi_status = BMI_SUCCESS
     case('dday_slope')
-        units = 'degree-day/temp_units'
+        select type(model_temp => this%model%model_simulation%model_temp)
+        type is(Temperature_Hru)
+            if(model_temp%temp_units.eq.0) then
+                units = 'degree_f s/degree_f'
+            else    
+                units = 'degree_c s/degree_c'
+            endif
+        end select
         bmi_status = BMI_SUCCESS
     case('tmax_index', 'tmax_cbh_adj', 'tmin_cbh_adj', 'transp_tmax')
-        units = 'temp_units'
+        select type(model_temp => this%model%model_simulation%model_temp)
+            type is(Temperature_Hru)
+                if(model_temp%temp_units.eq.0) then
+                    units = 'degree_f'
+                else    
+                    units = 'degree_c'
+                endif
+        end select
+        ! units = 'temp_units'
         bmi_status = BMI_SUCCESS
     case('dday_intcp')
-        units = 'degree-day'
+        units = 'degree_f day'
         bmi_status = BMI_SUCCESS
-    case('hru_lat', 'hru_lon')
-        units = 'decimal degrees'
+    case('hru_lat')
+        units = 'degree_east'
+        bmi_status = BMI_SUCCESS
+    case('hru_lon')
+        units = 'degree_north'
         bmi_status = BMI_SUCCESS
     case('nmonths')
         units = 'months'
@@ -1064,14 +1086,14 @@
         units = 'ft3 s-1'
         bmi_status = BMI_SUCCESS
     case('jh_coef_hru', 'jh_coef')
-        units = 'per degrees Fahrenheit'
+        units = '1/degree_f'
         bmi_status = BMI_SUCCESS
     case('cascade_flag', 'nhru', 'print_debug', 'cov_type', 'use_transfer_intcp', &
         'cascadegw_flag', 'newsnow', 'va_open_exp', 'pptmix_nopack', 'pptmix', &
         'nowtime', 'nlake', 'active_mask', 'dprst_flag', 'hru_type', 'gsflow_mode',&
         'srunoff_updated_soil', 'active_hrus', 'transp_on', 'hru_route_order', &
         'nhm_id', 'nhm_seg', 'use_sroff_transfer')
-        units = '-'
+        units = '1'
         bmi_status = BMI_SUCCESS
     case default
         units = "-"
