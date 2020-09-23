@@ -90,8 +90,8 @@
         component_name = "prms6-surface-BMI"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 51
-    integer, parameter :: output_item_count = 83
+    integer, parameter :: input_item_count = 50
+    integer, parameter :: output_item_count = 82
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !climate forcings
@@ -160,8 +160,8 @@
         'infil               ', &
         'sroff               ', &
         'soil_rechr          ', &
-        'soil_moist          ', &
-        'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
+        'soil_moist          '/)
+        ! 'strm_seg_in         '/) ! this one not yet implemented in prms6 gwflow and soilzone
     
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(output_item_count) :: &
@@ -235,7 +235,7 @@
         'hortonian_flow      ', & !r32 by hru
         'use_sroff_transfer  ', & !logical by 1
         'hortonian_lakes     ', & !r64 by nhru
-        'strm_seg_in         ', & !r64 by nsegment !conditional not yet implemented
+        ! 'strm_seg_in         ', & !r64 by nsegment !conditional not yet implemented
         'srunoff_updated_soil', & !logical by 1
             
         !snow
@@ -496,7 +496,7 @@
         'transp_tmax')
         grid = 0
         bmi_status = BMI_SUCCESS
-    case('nhm_seg', 'strm_seg_in')
+    case('nhm_seg')! 'strm_seg_in'
         grid = 1
         bmi_status = BMI_SUCCESS
     case('cascade_flag', 'dprst_flag', 'gsflow_mode', &
@@ -964,7 +964,7 @@
         bmi_status = BMI_SUCCESS
         case( &
         "hortonian_lakes", &
-        'dprst_seep_hru', 'strm_seg_in', 'pkwater_equiv', 'dprst_stor_hru', &
+        'dprst_seep_hru', 'pkwater_equiv', 'dprst_stor_hru', &
         'last_intcp_stor', 'hru_area_dble', 'pkwater_ante', 'dprst_in', &
         'dprst_sroff_hru', 'dprst_vol_clos','dprst_vol_open', &
         'hru_hortn_cascflow', 'upslope_hortonian')
@@ -1082,9 +1082,9 @@
     case('nmonths')
         units = 'months'
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        units = 'ft3 s-1'
-        bmi_status = BMI_SUCCESS
+    ! case('strm_seg_in')
+    !     units = 'ft3 s-1'
+    !     bmi_status = BMI_SUCCESS
     case('jh_coef_hru', 'jh_coef')
         units = '1/degree_f'
         bmi_status = BMI_SUCCESS
@@ -1274,14 +1274,14 @@
     case('dprst_seep_hru')
         size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        if(this%model%control_data%cascade_flag%value == 1) then
-            size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
-            bmi_status = BMI_SUCCESS
-        else
-            size = -1
-            bmi_status = BMI_FAILURE
-        endif
+    ! case('strm_seg_in')
+    !     if(this%model%control_data%cascade_flag%value == 1) then
+    !         size = sizeof(this%model%model_simulation%runoff%strm_seg_in(1))
+    !         bmi_status = BMI_SUCCESS
+    !     else
+    !         size = -1
+    !         bmi_status = BMI_FAILURE
+    !     endif
     case('pkwater_equiv') 
         size = sizeof(this%model%model_simulation%climate%pkwater_equiv(1))
         bmi_status = BMI_SUCCESS
@@ -1890,14 +1890,14 @@
     case('dprst_seep_hru')
         dest = [this%model%model_simulation%runoff%dprst_seep_hru]
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        if(this%model%control_data%cascade_flag%value == 1) then
-            dest = [this%model%model_simulation%runoff%strm_seg_in]
-            bmi_status = BMI_SUCCESS
-        else
-            dest = [-1.d0]
-            bmi_status = BMI_FAILURE
-        endif
+    ! case('strm_seg_in')
+    !     if(this%model%control_data%cascade_flag%value == 1) then
+    !         dest = [this%model%model_simulation%runoff%strm_seg_in]
+    !         bmi_status = BMI_SUCCESS
+    !     else
+    !         dest = [-1.d0]
+    !         bmi_status = BMI_FAILURE
+    !     endif
     case('dprst_stor_hru')
         dest = [this%model%model_simulation%runoff%dprst_stor_hru]
         bmi_status = BMI_SUCCESS
@@ -2342,16 +2342,16 @@
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(src, dest_ptr, [n_elements])
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        if(this%model%control_data%cascade_flag%value == 1) then
-            src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
-            status = this%get_var_grid(name,gridid)
-            status = this%get_grid_size(gridid, n_elements)
-            call c_f_pointer(src, dest_ptr, [n_elements])
-            bmi_status = BMI_SUCCESS
-        else
-            bmi_status = BMI_FAILURE
-        endif
+    ! case('strm_seg_in')
+    !     if(this%model%control_data%cascade_flag%value == 1) then
+    !         src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+    !         status = this%get_var_grid(name,gridid)
+    !         status = this%get_grid_size(gridid, n_elements)
+    !         call c_f_pointer(src, dest_ptr, [n_elements])
+    !         bmi_status = BMI_SUCCESS
+    !     else
+    !         bmi_status = BMI_FAILURE
+    !     endif
     case('dprst_stor_hru')
         src = c_loc(this%model%model_simulation%runoff%dprst_stor_hru(1))
         status = this%get_var_grid(name,gridid)
@@ -3040,19 +3040,19 @@
             dest(i) = src_flattened(inds(i))
         end do
         bmi_status = BMI_SUCCESS
-    case('strm_seg_in')
-        if(this%model%control_data%cascade_flag%value == 1) then
-            src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
-            status = this%get_var_grid(name,gridid)
-            status = this%get_grid_size(gridid, n_elements)
-            call c_f_pointer(src, src_flattened, [n_elements])
-            do i = 1,  size(inds)
-                dest(i) = src_flattened(inds(i))
-            end do
-            bmi_status = BMI_SUCCESS
-        else
-            bmi_status = BMI_FAILURE
-        endif
+    ! case('strm_seg_in')
+    !     if(this%model%control_data%cascade_flag%value == 1) then
+    !         src = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+    !         status = this%get_var_grid(name,gridid)
+    !         status = this%get_grid_size(gridid, n_elements)
+    !         call c_f_pointer(src, src_flattened, [n_elements])
+    !         do i = 1,  size(inds)
+    !             dest(i) = src_flattened(inds(i))
+    !         end do
+    !         bmi_status = BMI_SUCCESS
+    !     else
+    !         bmi_status = BMI_FAILURE
+    !     endif
     case('dprst_stor_hru')
         src = c_loc(this%model%model_simulation%runoff%dprst_stor_hru(1))
         status = this%get_var_grid(name,gridid)
@@ -3396,13 +3396,13 @@
 
     select case(name)
         !runoff
-    case('strm_seg_in')
-        if(this%model%control_data%cascade_flag%value == 1) then
-            this%model%model_simulation%runoff%strm_seg_in = src
-            bmi_status = BMI_SUCCESS
-        else
-            bmi_status = BMI_FAILURE
-        endif
+    ! case('strm_seg_in')
+    !     if(this%model%control_data%cascade_flag%value == 1) then
+    !         this%model%model_simulation%runoff%strm_seg_in = src
+    !         bmi_status = BMI_SUCCESS
+    !     else
+    !         bmi_status = BMI_FAILURE
+    !     endif
     case('dprst_vol_clos')
         this%model%model_simulation%runoff%dprst_vol_clos = src
         bmi_status = BMI_SUCCESS
@@ -3924,19 +3924,19 @@
 
     select case(name)
         !runoff
-    case('strm_seg_in')
-        if(this%model%control_data%cascade_flag%value == 1) then
-            dest = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
-            status = this%get_var_grid(name, gridid)
-            status = this%get_grid_size(gridid, n_elements)
-            call c_f_pointer(dest, dest_flattened, [n_elements])
-            do i = 1, size(inds)
-                dest_flattened(inds(i)) = src(i)
-            end do
-            bmi_status = BMI_SUCCESS
-        else
-            bmi_status = BMI_FAILURE
-        endif
+    ! case('strm_seg_in')
+    !     if(this%model%control_data%cascade_flag%value == 1) then
+    !         dest = c_loc(this%model%model_simulation%runoff%strm_seg_in(1))
+    !         status = this%get_var_grid(name, gridid)
+    !         status = this%get_grid_size(gridid, n_elements)
+    !         call c_f_pointer(dest, dest_flattened, [n_elements])
+    !         do i = 1, size(inds)
+    !             dest_flattened(inds(i)) = src(i)
+    !         end do
+    !         bmi_status = BMI_SUCCESS
+    !     else
+    !         bmi_status = BMI_FAILURE
+    !     endif
     case('dprst_vol_clos')
         dest = c_loc(this%model%model_simulation%runoff%dprst_vol_clos(1))
         status = this%get_var_grid(name, gridid)
