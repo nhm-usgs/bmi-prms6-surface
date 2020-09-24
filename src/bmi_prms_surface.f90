@@ -90,19 +90,15 @@
         component_name = "prms6-surface-BMI"
 
     ! Exchange items
-    integer, parameter :: input_item_count = 50
-    integer, parameter :: output_item_count = 82
+    integer, parameter :: input_item_count = 47
+    integer, parameter :: output_item_count = 81
     character (len=BMI_MAX_VAR_NAME), target, &
         dimension(input_item_count) :: input_items =(/ &
         !climate forcings
         'tmax                ', &
         'tmin                ', &
-        !potentially used for gsflow implementation?
-        'hortonian_lakes     ', &
         !climateflow
         'soil_moist_max      ', &
-        'soil_rechr_init_frac', &
-        'soil_moist_init_frac', &
         'soil_rechr_max_frac ', &
 
         !intcp
@@ -234,7 +230,6 @@
         ! 'upslope_hortonian   ', & !r64 by hru !conditional not yet implemented
         'hortonian_flow      ', & !r32 by hru
         'use_sroff_transfer  ', & !logical by 1
-        'hortonian_lakes     ', & !r64 by nhru
         ! 'strm_seg_in         ', & !r64 by nsegment !conditional not yet implemented
         'srunoff_updated_soil', & !logical by 1
             
@@ -453,7 +448,7 @@
     select case(name)
     case('tmax', 'tmin', 'hru_ppt', 'hru_rain', 'hru_snow', 'hru_x', &
         'hru_y', 'hru_elev', 'nhm_id', 'hru_lat', 'hru_lon', &
-        'hru_actet', 'hortonian_lakes', &
+        'hru_actet', &
         'cov_type', 'hru_area', 'hru_type', &
         'dprst_evap_hru', 'dprst_seep_hru', 'infil', &
         'sroff', 'potet', 'transp_on', 'hru_intcpevap', &
@@ -468,8 +463,8 @@
         'dprst_insroff_hru','dprst_sroff_hru','dprst_vol_clos', &
         'dprst_vol_open', 'hru_hortn_cascflow', 'hru_percent_imperv', &
         'hru_sroffi', 'hru_sroffp', 'sro_to_dprst_perv', &
-        'upslope_hortonian', 'hortonian_flow', 'soil_rechr_init_frac', &
-        'soil_rechr_max_frac', 'soil_moist_init_frac', 'covden_sum',  &
+        'upslope_hortonian', 'hortonian_flow',  &
+        'soil_rechr_max_frac', 'covden_sum',  &
         'covden_win', 'jh_coef_hru', &
         !runoff
         
@@ -936,8 +931,8 @@
         'net_snow', 'snowmelt', &
         'dprst_area_clos','dprst_area_max','dprst_frac', 'dprst_insroff_hru', &
         'hru_percent_imperv', 'hru_sroffi', 'hru_sroffp', &
-        'sro_to_dprst_perv', 'soil_rechr_init_frac', &
-        'soil_moist_init_frac', 'soil_rechr_max_frac', &
+        'sro_to_dprst_perv', &
+        'soil_rechr_max_frac', &
         'soil_rechr_chg', &
         !intcp
         'covden_sum', 'snow_intcp', 'covden_win', 'wrain_intcp', 'srain_intcp', &
@@ -963,7 +958,6 @@
         type = "real"
         bmi_status = BMI_SUCCESS
         case( &
-        "hortonian_lakes", &
         'dprst_seep_hru', 'pkwater_equiv', 'dprst_stor_hru', &
         'last_intcp_stor', 'hru_area_dble', 'pkwater_ante', 'dprst_in', &
         'dprst_sroff_hru', 'dprst_vol_clos','dprst_vol_open', &
@@ -995,7 +989,7 @@
     integer :: bmi_status
 
     select case(name)
-    case("hru_ppt", "hru_snow", "hru_rain", "hortonian_lakes", &
+    case("hru_ppt", "hru_snow", "hru_rain", &
         "hru_actet","seg_gwflow", 'dprst_evap_hru', 'infil', &
         'sroff', 'potet', 'hru_intcpevap', 'snow_evap', &
         'soil_rechr', 'soil_rechr_max', 'soil_moist', 'soil_moist_max', &
@@ -1022,7 +1016,7 @@
     case('rad_trncf','covden_sum', 'covden_win', 'epan_coef', 'adjmix_rain', &
         'rain_cbh_adj', 'snow_cbh_adj', 'smidx_coef', &
         'radmax', 'va_clos_exp', 'snarea_curve', 'canopy_covden', &
-        'soil_rechr_init_frac', 'soil_moist_init_frac', 'soil_rechr_max_frac', &
+        'soil_rechr_max_frac', &
         'carea_max', 'dprst_frac', 'hru_percent_imperv', 'snowcov_area', &
         'hru_frac_perv', 'sro_to_dprst_perv')
         units = '1'
@@ -1268,9 +1262,6 @@
     case('soil_rechr_chg')
         size = sizeof(this%model%model_simulation%runoff%soil_rechr_chg(1))
         bmi_status = BMI_SUCCESS
-    case('hortonian_lakes')
-        size = sizeof(this%model%model_simulation%runoff%hortonian_lakes(1))
-        bmi_status = BMI_SUCCESS
     case('dprst_seep_hru')
         size = sizeof(this%model%model_simulation%runoff%dprst_seep_hru(1))
         bmi_status = BMI_SUCCESS
@@ -1369,12 +1360,6 @@
         
     !case('soil_moist_max') already here
         !climateflow module
-    case('soil_rechr_init_frac')
-        size = sizeof(this%model%model_simulation%climate%soil_rechr_init_frac)
-        bmi_status = BMI_SUCCESS
-    case('soil_moist_init_frac')
-        size = sizeof(this%model%model_simulation%climate%soil_moist_init_frac)
-        bmi_status = BMI_SUCCESS
     case('soil_rechr_max_frac ')
         size = sizeof(this%model%model_simulation%climate%soil_rechr_max_frac)
         bmi_status = BMI_SUCCESS
@@ -1884,9 +1869,7 @@
         !potet
         
         !runoff
-    case('hortonian_lakes')
-        dest = [this%model%model_simulation%runoff%hortonian_lakes]
-        bmi_status = BMI_SUCCESS
+
     case('dprst_seep_hru')
         dest = [this%model%model_simulation%runoff%dprst_seep_hru]
         bmi_status = BMI_SUCCESS
@@ -2330,12 +2313,7 @@
         !basin
         
         !runoff
-    case('hortonian_lakes')
-        src = c_loc(this%model%model_simulation%runoff%hortonian_lakes(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, dest_ptr, [n_elements])
-        bmi_status = BMI_SUCCESS
+ 
     case('dprst_seep_hru')
         src = c_loc(this%model%model_simulation%runoff%dprst_seep_hru(1))
         status = this%get_var_grid(name,gridid)
@@ -3022,15 +3000,6 @@
     select case(name)
         
         !runoff
-    case('hortonian_lakes')
-        src = c_loc(this%model%model_simulation%runoff%hortonian_lakes(1))
-        status = this%get_var_grid(name,gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(src, src_flattened, [n_elements])
-        do i = 1,  size(inds)
-            dest(i) = src_flattened(inds(i))
-        end do
-        bmi_status = BMI_SUCCESS
     case('dprst_seep_hru')
         src = c_loc(this%model%model_simulation%runoff%dprst_seep_hru(1))
         status = this%get_var_grid(name,gridid)
@@ -3188,12 +3157,6 @@
         !climateflow module
     case('soil_moist_max')
         this%model%model_simulation%climate%soil_moist_max = src
-        bmi_status = BMI_SUCCESS
-    case('soil_rechr_init_frac')
-        this%model%model_simulation%climate%soil_rechr_init_frac = src
-        bmi_status = BMI_SUCCESS
-    case('soil_moist_init_frac')
-        this%model%model_simulation%climate%soil_moist_init_frac = src
         bmi_status = BMI_SUCCESS
     case('soil_rechr_max_frac ')
         this%model%model_simulation%climate%soil_rechr_max_frac = src
@@ -3485,24 +3448,6 @@
         !climateflow module
     case('soil_moist_max')
         dest = c_loc(this%model%model_simulation%climate%soil_moist_max(1))
-        status = this%get_var_grid(name, gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(dest, dest_flattened, [n_elements])
-        do i = 1, size(inds)
-            dest_flattened(inds(i)) = src(i)
-        end do
-        bmi_status = BMI_SUCCESS
-    case('soil_rechr_init_frac')
-        dest = c_loc(this%model%model_simulation%climate%soil_rechr_init_frac(1))
-        status = this%get_var_grid(name, gridid)
-        status = this%get_grid_size(gridid, n_elements)
-        call c_f_pointer(dest, dest_flattened, [n_elements])
-        do i = 1, size(inds)
-            dest_flattened(inds(i)) = src(i)
-        end do
-        bmi_status = BMI_SUCCESS
-    case('soil_moist_init_frac')
-        dest = c_loc(this%model%model_simulation%climate%soil_moist_init_frac(1))
         status = this%get_var_grid(name, gridid)
         status = this%get_grid_size(gridid, n_elements)
         call c_f_pointer(dest, dest_flattened, [n_elements])
