@@ -124,10 +124,10 @@
     status = m%finalize()
 
     ! Visual inspection.
-    write(*,*) "Test 6 get values"
-    call print_1darray(tval, shape(2))
-    write(*,*) "Test 6 expected values"
-    call print_1darray(expected, shape(2))
+    ! write(*,*) "Test 6 get values"
+    ! call print_1darray(tval, shape(2))
+    ! write(*,*) "Test 6 expected values"
+    ! call print_1darray(expected, shape(2))
 
     code = BMI_SUCCESS
     do i = 1, shape(2)
